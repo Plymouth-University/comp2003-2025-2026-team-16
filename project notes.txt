@@ -22,11 +22,15 @@
 	- 
 
 3. mindfeast games
-
+	- Would you prefer a website or an app to generate the files?
+	- If we get the project can you provide an example of the level files?
+	- Do you want the AI to fully create its own levels or do you want it to assist a human in making them?
+	- Is there a way to preview the level before loading it into the game?
 
 4. Friary mill
 	- do you have a preference between web based or an app?
 	-  
+
 
 
 
