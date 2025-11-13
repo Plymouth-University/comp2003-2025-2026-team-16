@@ -7,20 +7,17 @@
     <meta name="description" content="Agent login page for the Spy Database — kid-friendly, accessible login for classroom activity.">
   </head>
     <body>
-        <div>
-            <h1 id="welcome">D.O.V.E.S Database — Agent Login</h1>
+        <div id= "welcome">
+            <h1 id="agent login">D.O.V.E.S Database — Agent Login</h1>
             <p class="lead">Welcome, Agent.</p>
         </div>
 
       <aside class="panel-right" aria-labelledby="login-title">
         <h2 id="login-title">Agent Login</h2>
         <form id="loginForm" action="/login" method="POST" novalidate>
-          <div>
+          <div id= "login">
             <label for="codename">Codename</label>
             <input id="codename" name="codename" type="text" inputmode="text" autocomplete="username" placeholder="e.g. Agent Sparrow" required minlength="3" aria-describedby="codenameHelp">
-          </div>
-
-          <div>
             <label for="secret">Password</label>
               <input id="secret" name="password" type="password" autocomplete="current-password" placeholder="Enter secret phrase" required minlength="6" class="grow" aria-describedby="secretHelp">
               <button type="button" id="togglePass" class="btn secondary" aria-pressed="false" aria-label="Show or hide secret">Show</button>
