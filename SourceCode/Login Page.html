@@ -3,17 +3,20 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@100;200;300&display=swap" rel="stylesheet">
     <title>Spy Database — Agent Login</title>
     <meta name="description" content="Agent login page for the Spy Database — kid-friendly, accessible login for classroom activity.">
   </head>
+
     <body>
-        <div id= "welcome">
-            <h1 id="agent login">D.O.V.E.S Database — Agent Login</h1>
-            <p class="lead">Welcome, Agent.</p>
+      <div id= "welcome">
+            <h1>D.O.V.E.S Database — Agent Login</h1>
+            <p>Welcome, Agent.</p>
         </div>
 
       <aside class="panel-right" aria-labelledby="login-title">
-        <h2 id="login-title">Agent Login</h2>
+        <h2>Agent Login</h2>
         <form id="loginForm" action="/login" method="POST" novalidate>
           <div id= "login">
             <label for="codename">Codename</label>
@@ -23,6 +26,7 @@
               <button type="button" id="togglePass" class="btn secondary" aria-pressed="false" aria-label="Show or hide secret">Show</button>
             </div>
           </div>
+
           <div class="meta">
             <label class="remember"><input id="remember" name="remember" type="checkbox"> Remember agent</label>
             <div class="error" id="errorMsg" role="status" aria-live="polite"></div>

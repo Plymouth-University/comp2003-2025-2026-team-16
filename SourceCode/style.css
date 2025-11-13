@@ -1,0 +1,37 @@
+body { 
+    margin-left: 0%;
+    margin-top: 0%;
+    margin-right: 0%;
+    background-color: #0D1117; 
+    color: #00E5FF; 
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 200;
+    text-shadow:
+    0 0 2px #7DE3FF,
+    0 0 4px #7DE3FF,
+    0 0 8px #7DE3FF;
+    background-image: radial-gradient(rgba(45, 90, 140, 0.35) 0.5px, transparent 0.5px);
+    background-size: 4px 5px;
+    background-repeat: repeat;
+}
+
+#welcome {
+    text-align: center;
+    padding: 20px;
+}
+
+.panel-right {
+    text-align: center;
+}
+
+#login {
+  display: flex;
+  flex-direction: column; 
+  gap: 10px;  
+  align-items: center; /* center children horizontally instead of stretching */
+}
+
+#login input {
+  width: 300px; /* optional fixed width */
+  max-width: 100%; /* prevents overflow on small screens */
+}
