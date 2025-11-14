@@ -13,31 +13,33 @@
       <div id= "welcome">
             <img src = "DOVE LOGO.png" alt = "The D.O.V.E.S logo" class = "logo">
             <h1>D.O.V.E.S Database</h1>
-            <p>Welcome, Agent.</p>
+            <h2>Welcome, Agent.</h2>
         </div>
 
-      <aside class="panel-right" aria-labelledby="login-title">
-        <h2>Agent Login</h2>
         <form id="loginForm" action="/login" method="POST" novalidate>
           <div id= "login">
-            <label for="codename">Codename</label>
-            <input id="codename" name="codename" type="text" inputmode="text" autocomplete="username" placeholder="e.g. Agent Sparrow" required minlength="3" aria-describedby="codenameHelp">
-            <label for="secret">Password</label>
-              <input id="secret" name="password" type="password" autocomplete="current-password" placeholder="Enter secret phrase" required minlength="6" class="grow" aria-describedby="secretHelp">
-              <button type="button" id="togglePass" class="btn secondary" aria-pressed="false" aria-label="Show or hide secret">Show</button>
+            <label for="username">Username</label>
+            <input id="username" name="username" type="text" inputmode="text" autocomplete="username" placeholder="e.g. Agent Sparrow" required minlength="3" aria-describedby="codenameHelp">
+            <div id ="passwordWrapper">
+              <label for="password">Password</label>
+            </div>
+              <div id ="passwordContainer">
+                <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter secret phrase" required minlength="6" class="grow" aria-describedby="secretHelp">
+                <button type="button" id="showPassword" aria-pressed="false" aria-label="Show or hide secret">Show</button>
+            </div>
+          
+
+            <div class="meta">
+              <label class="remember"><input id="remember" name="remember" type="checkbox"> Remember agent</label>
+              <div class="error" id="errorMsg" role="status" aria-live="polite"></div>
+            </div>
+
+            <div class="button-row">
+              <button type="submit" class="btn">Enter</button>
             </div>
           </div>
-
-          <div class="meta">
-            <label class="remember"><input id="remember" name="remember" type="checkbox"> Remember agent</label>
-            <div class="error" id="errorMsg" role="status" aria-live="polite"></div>
-          </div>
-
-          <div class="button-row">
-            <button type="submit" class="btn">Enter</button>
-          </div>
         </form>
-      </aside>
+      
     </main>
   </body>
 </html>

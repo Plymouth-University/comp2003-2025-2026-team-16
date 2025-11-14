@@ -6,10 +6,7 @@ body {
     color: #00E5FF; 
     font-family: 'Montserrat', sans-serif;
     font-weight: 200;
-    text-shadow:
-    0 0 2px #7DE3FF,
-    0 0 4px #7DE3FF,
-    0 0 8px #7DE3FF;
+    text-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
     background-image: radial-gradient(rgba(45, 90, 140, 0.35) 0.5px, transparent 0.5px);
     background-size: 4px 5px;
     background-repeat: repeat;
@@ -17,27 +14,74 @@ body {
 
 #welcome {
     text-align: center;
-    padding: 20px;
+    padding: 10px;
 }
 
 .logo {
     width: 300px;
     height: auto;
-    margin-bottom: 10px;
 }
 
-.panel-right {
-    text-align: center;
+h2 {
+    font-size: 20px;
+    margin-top: 10px;
 }
 
 #login {
   display: flex;
   flex-direction: column; 
-  gap: 10px;  
-  align-items: center; /* center children horizontally instead of stretching */
+  gap: 15px;  
+  align-items: center; 
 }
 
-#login input {
-  width: 300px; /* optional fixed width */
-  max-width: 100%; /* prevents overflow on small screens */
+#username {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  outline: none;
+  color: white;
+  border: 1px solid #00E5FF;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+}
+
+#password {
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  outline: none;
+  color: white;
+  border: 1px solid #00E5FF;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+}
+
+#showPassword {
+  padding: 10px 20px;               
+  background-color: rgba(255, 255, 255, 0.05);        
+  color: #00E5FF;   
+  text-shadow: 0 0 6px #7DE3FF, 0 0 8px #7DE3FF;                    
+  border:1px solid #00E5FF;                      
+  border-radius: 25px;              
+  cursor: pointer;                   
+  font-size: 8px;
+}
+
+#showPassword:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
+}
+
+.btn {
+  padding: 10px 20px;               
+  background-color: rgba(255, 255, 255, 0.05);        
+  color: #00E5FF;   
+  text-shadow: 0 0 6px #7DE3FF, 0 0 8px #7DE3FF;                    
+  border:1px solid #00E5FF;                      
+  border-radius: 25px;              
+  cursor: pointer;                   
+  font-size: 16px;
+  width: 130px;
+  height: auto;
+}
+
+.btn:hover {
+  background-color: rgba(255, 255, 255, 0.1); 
 }
