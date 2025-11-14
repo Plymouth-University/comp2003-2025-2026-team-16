@@ -20,6 +20,12 @@ body {
     padding: 20px;
 }
 
+.logo {
+    width: 300px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
 .panel-right {
     text-align: center;
 }
