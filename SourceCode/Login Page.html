@@ -18,14 +18,15 @@
 
         <form id="loginForm" action="/login" method="POST" novalidate>
           <div id= "login">
-            <label for="username">Username</label>
-            <input id="username" name="username" type="text" inputmode="text" autocomplete="username" placeholder="e.g. Agent Sparrow" required minlength="3" aria-describedby="codenameHelp">
-            <div id ="passwordWrapper">
-              <label for="password">Password</label>
+            <div class="formRow">
+              <label for="username">Username</label>
+              <input id="username" name="username" type="text" inputmode="text" autocomplete="username" placeholder="e.g. Agent Sparrow" required minlength="3" aria-describedby="codenameHelp">
+              <span class="placeholder"></span>
             </div>
-              <div id ="passwordContainer">
-                <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter secret phrase" required minlength="6" class="grow" aria-describedby="secretHelp">
-                <button type="button" id="showPassword" aria-pressed="false" aria-label="Show or hide secret">Show</button>
+            <div class ="formRow">
+              <label for="password">Password</label>
+              <input id="password" name="password" type="password" autocomplete="current-password" placeholder="Enter secret phrase" required minlength="6" class="grow" aria-describedby="secretHelp">
+              <button type="button" id="showPassword" aria-pressed="false" aria-label="Show or hide secret">Show</button>
             </div>
           
 

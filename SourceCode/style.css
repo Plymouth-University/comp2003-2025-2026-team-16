@@ -27,11 +27,24 @@ h2 {
     margin-top: 10px;
 }
 
-#login {
+#loginForm {
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center;
+}
+
+#login{
   display: flex;
   flex-direction: column; 
   gap: 15px;  
   align-items: center; 
+  justify-content: center;
+  border: 1px solid #00E5FF;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+  border-radius: 10px;
+  width: 600px;
+  height: 300px;
 }
 
 #username {
@@ -52,6 +65,18 @@ h2 {
   border: 1px solid #00E5FF;
   border-radius: 6px;
   box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+}
+
+.formRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.placeholder {
+  width: 60px; 
+  
 }
 
 #showPassword {
