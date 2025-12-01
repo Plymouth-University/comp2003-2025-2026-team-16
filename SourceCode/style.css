@@ -3,10 +3,10 @@ body {
     margin-top: 0%;
     margin-right: 0%;
     background-color: #0D1117; 
-    color: #00E5FF; 
-    font-family: 'Montserrat', sans-serif;
+    color: #350bee; 
+    font-family: "Science Gothic", sans-serif;
     font-weight: 200;
-    text-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+    text-shadow: 0 0 2px #6f63f3, 0 0 4px #589eef, 0 0 8px #bcd5db;
     background-image: radial-gradient(rgba(45, 90, 140, 0.35) 0.5px, transparent 0.5px);
     background-size: 4px 5px;
     background-repeat: repeat;
