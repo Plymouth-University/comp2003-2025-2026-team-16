@@ -1,0 +1,56 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&display=swap" rel="stylesheet">
+    <title>D.O.V.E.S Database — Main</title>
+    <meta name="description" content="Search agents and locations in the D.O.V.E.S database.">
+
+  </head>
+
+  <body>
+    <!-- Header with Logo and Title -->
+    <div id="header">
+      <img src="DOVE LOGO.png" alt="The D.O.V.E.S logo" class="logo">
+      <h1 id="headerTitle">D.O.V.E.S Database</h1>
+    </div>
+
+    <!-- Navigation Bar -->
+    <div id="navbar">
+      <button class="navBtn active" data-type="agents">Search Agents</button>
+      <button class="navBtn" data-type="locations">Search Locations</button>
+      <button class="navBtn" data-type="deparments">Search Departments</button>
+      <button class="navBtn" data-type="archives">Search Archive</button>
+    </div>
+
+    <!-- Search Container -->
+    <div id="searchContainer">
+      <input 
+        type="text" 
+        id="searchBar" 
+        placeholder="Enter agent or location name..." 
+        aria-label="Search database"
+      >
+    </div>
+
+    <!-- Main Content Area -->
+    <div id="mainContent">
+      <div id="searchResults" class="contentSection active">
+        <p>Start searching to find agents or locations in the database</p>
+      </div>
+    </div>
+
+    <!-- Previous Searches Section -->
+    <div id="previousSearches">
+      <h3>Your Previous Searches</h3>
+      <div id="searchHistory" class="searchHistoryContainer">
+        <div id="emptyState">No previous searches yet</div>
+      </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
