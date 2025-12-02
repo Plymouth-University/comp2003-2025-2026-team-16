@@ -5,7 +5,7 @@ body {
     background-color: #0D1117; 
     color: #24d3d3; 
     font-family: "Science Gothic", sans-serif;
-    font-weight: 200;
+    font-weight: 500px;
     text-shadow: 0 0 2px #3b2cde, 0 0 4px #589eef, 0 0 8px #bcd5db;
     background-image: radial-gradient(rgba(45, 90, 140, 0.35) 0.5px, transparent 0.5px);
     background-size: 4px 5px;
@@ -121,7 +121,7 @@ h2 {
   }
 
 #headerTitle {
-    margin-top: 80px;
+    margin-top: 90px;
 }
 
 #navbar {
@@ -133,24 +133,24 @@ h2 {
 
 #searchContainer {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
   }
 
 #mainContent {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
   }
 
 #previousSearches {
     text-align: center;
-    margin-top: 30px;
+    margin-top: 1px;
   }
 
 #searchBar {
-    width: 400px;
-    padding: 10px;
-    border: 1px solid #00E5FF;
-    border-radius: 6px;
+    width: 600px;
+    padding: 20px;
+    border: 2px solid #00E5FF;
+    border-radius: 7px;
     box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
     background-color: rgba(255, 255, 255, 0.05);
     color: white;
@@ -161,9 +161,9 @@ h2 {
     padding: 10px 20px;               
     background-color: rgba(255, 255, 255, 0.05);        
     color: #00E5FF;   
-    text-shadow: 0 0 3px #7DE3FF, 0 0 4px #7DE3FF;                    
+    text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;                    
     border:1px solid #00E5FF;                      
     border-radius: 25px;              
     cursor: pointer;                   
-    font-size: 16px;
+    font-size: 23px;
 }
