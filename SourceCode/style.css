@@ -3,7 +3,7 @@ body {
     margin-top: 0%;
     margin-right: 0%;
     background-color: #0D1117; 
-    color: #07b7b7; 
+    color: #24d3d3; 
     font-family: "Science Gothic", sans-serif;
     font-weight: 200;
     text-shadow: 0 0 2px #3b2cde, 0 0 4px #589eef, 0 0 8px #bcd5db;
@@ -108,7 +108,7 @@ h2 {
 }
 
 .btn:hover {
-  background-color: rgba(255, 255, 255, 0.1); 
+  background-color: rgba(77, 19, 104, 0.037); 
 }
 
 #header {
