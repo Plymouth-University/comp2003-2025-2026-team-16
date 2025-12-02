@@ -112,6 +112,58 @@ h2 {
 }
 
 #header {
+    display: flex ;
+    justify-content: row;
     text-align: center;
     padding: 10px;
+    background-color: rgba(255, 255, 255, 0.05);
+    margin-bottom: 30px;
   }
+
+#headerTitle {
+    margin-top: 80px;
+}
+
+#navbar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
+
+#searchContainer {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+#mainContent {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+#previousSearches {
+    text-align: center;
+    margin-top: 30px;
+  }
+
+#searchBar {
+    width: 400px;
+    padding: 10px;
+    border: 1px solid #00E5FF;
+    border-radius: 6px;
+    box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: white;
+    outline: none;
+}
+
+.navBtn {
+    padding: 10px 20px;               
+    background-color: rgba(255, 255, 255, 0.05);        
+    color: #00E5FF;   
+    text-shadow: 0 0 3px #7DE3FF, 0 0 4px #7DE3FF;                    
+    border:1px solid #00E5FF;                      
+    border-radius: 25px;              
+    cursor: pointer;                   
+    font-size: 16px;
+}
