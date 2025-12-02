@@ -5,7 +5,7 @@ body {
     background-color: #0D1117; 
     color: #24d3d3; 
     font-family: "Science Gothic", sans-serif;
-    font-weight: 500px;
+    font-weight: 200;
     text-shadow: 0 0 2px #3b2cde, 0 0 4px #589eef, 0 0 8px #bcd5db;
     background-image: radial-gradient(rgba(45, 90, 140, 0.35) 0.5px, transparent 0.5px);
     background-size: 4px 5px;
@@ -143,7 +143,7 @@ h2 {
 
 #previousSearches {
     text-align: center;
-    margin-top: 1px;
+    margin-top: 100px;
   }
 
 #searchBar {
