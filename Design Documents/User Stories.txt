@@ -1,0 +1,16 @@
+﻿User Stories
+
+
+As an agent (child) I want to utilise the database to view files of characters and their personal files so that I can work through the mission. 
+
+
+As an agent (child) I would like to have the option to look at previously viewed files to help keep track of the mission and for ease of navigation.
+
+
+As an admin I would like to be able to add new files to the database when I assign new missions to agents so they can find it to help them solve the case.
+
+
+As an agent (child) I would like to progress with the mission by completing puzzles (minigames).
+
+
+As an admin I would like to have permissions to view all of the files and make any edits to the database to keep the world building in order.
