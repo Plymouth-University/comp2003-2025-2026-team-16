@@ -15,13 +15,32 @@
           navBtns.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           currentSearchType = btn.dataset.type;
-          searchBar.placeholder = currentSearchType === 'agents' 
-            ? 'Search for an agent...' 
-            : 'Search for a location...';
+          const placeholderMap = {
+            agents: 'Search for an agent...',
+            locations: 'Search for a location...',
+            deparments: 'Search for a department...',
+            archives: 'Search the archive...'
+          };
+          searchBar.placeholder = placeholderMap[currentSearchType] || 'Search the database...';
           searchBar.focus();
           updateSearchResults();
         });
       });
+
+      // Ensure one nav button is active on load
+      if (![...navBtns].some(b => b.classList.contains('active'))) {
+        if (navBtns.length > 0) {
+          navBtns[0].classList.add('active');
+          currentSearchType = navBtns[0].dataset.type || currentSearchType;
+          const placeholderMap = {
+            agents: 'Search for an agent...',
+            locations: 'Search for a location...',
+            deparments: 'Search for a department...',
+            archives: 'Search the archive...'
+          };
+          searchBar.placeholder = placeholderMap[currentSearchType] || 'Search the database...';
+        }
+      }
 
       // Search Bar Event Listener
       searchBar.addEventListener('keydown', (e) => {

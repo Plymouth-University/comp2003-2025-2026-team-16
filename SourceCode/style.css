@@ -165,5 +165,20 @@ h2 {
     border:1px solid #00E5FF;                      
     border-radius: 25px;              
     cursor: pointer;                   
-    font-size: 23px;
+    font-size: 20px;
+    display: inline-block;
+    transform-origin: center center;
+    transition: transform 160ms cubic-bezier(.2,.9,.2,1), box-shadow 160ms ease, background-color 160ms ease;
+    will-change: transform;
+}
+
+.navBtn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(0,229,255,0.06), 0 0 6px #7DE3FF;
+}
+
+.navBtn.active {
+  transform: scale(1.08);
+  background-color: rgba(0, 229, 255, 0.12);
+  box-shadow: 0 8px 22px rgba(0,229,255,0.12), 0 0 8px #7DE3FF, inset 0 0 6px rgba(0,229,255,0.05);
 }
