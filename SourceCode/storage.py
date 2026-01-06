@@ -56,3 +56,14 @@ def initialise_database():
 
     conn.commit()
     conn.close()
+
+
+def insert_test_agent(name, description):
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO Agents (name, description)
+        VALUES (?, ?)
+    ''', (name, description))
+    conn.commit()
+    conn.close()

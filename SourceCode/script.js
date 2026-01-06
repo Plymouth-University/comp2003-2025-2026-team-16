@@ -76,11 +76,25 @@
             updateSearchHistory();
           }
           
-          // Update results (you would connect to backend here)
-          searchResults.innerHTML = `
-            <p>Searching for <strong>${query}</strong> in ${currentSearchType}...</p>
-            <p style="opacity: 0.6; font-size: 14px;">Results would appear here when connected to database</p>
-          `;
+          // Fetch results from backend
+          searchResults.innerHTML = `<p>Searching for <strong>${query}</strong> in ${currentSearchType}...</p>`;
+          fetch(`http://localhost:5000/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(currentSearchType)}`)
+            .then(response => response.json())
+            .then(results => {
+              if (results.length === 0) {
+                searchResults.innerHTML = `<p>No results found for <strong>${query}</strong> in ${currentSearchType}.</p>`;
+              } else {
+                searchResults.innerHTML = results.map(item => `
+                  <div class="searchResultItem">
+                    <strong>${item.name || item.title}</strong><br>
+                    <span>${item.description || item.content || ''}</span>
+                  </div>
+                `).join('');
+              }
+            })
+            .catch(() => {
+              searchResults.innerHTML = `<p>Error searching database.</p>`;
+            });
         }
       }
 
