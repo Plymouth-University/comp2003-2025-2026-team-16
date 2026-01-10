@@ -22,7 +22,8 @@ def initialise_database():
         CREATE TABLE IF NOT EXISTS Agents (
             agent_id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL UNIQUE,
-            description TEXT
+            description TEXT,
+            min_rank_required TEXT DEFAULT 'rookie'
         )
     ''')
 
@@ -30,7 +31,8 @@ def initialise_database():
         CREATE TABLE IF NOT EXISTS Locations (
             location_id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL UNIQUE,
-            description TEXT
+            description TEXT,
+            min_rank_required TEXT DEFAULT 'rookie'
         )
     ''')
 
@@ -38,7 +40,8 @@ def initialise_database():
         CREATE TABLE IF NOT EXISTS Departments (
             department_id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL UNIQUE,
-            description TEXT
+            description TEXT,
+            min_rank_required TEXT DEFAULT 'rookie'
         )
     ''')
 
@@ -49,6 +52,7 @@ def initialise_database():
             content TEXT,
             agent_id INTEGER,
             location_id INTEGER,
+            min_rank_required TEXT DEFAULT 'rookie',
             FOREIGN KEY(agent_id) REFERENCES Agents(agent_id),
             FOREIGN KEY(location_id) REFERENCES Locations(location_id)
         )
@@ -57,13 +61,32 @@ def initialise_database():
     conn.commit()
     conn.close()
 
-
-def insert_test_agent(name, description):
+def insert_user(username, password, role='User', rank='rookie'):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
     cursor.execute('''
-        INSERT INTO Agents (name, description)
-        VALUES (?, ?)
-    ''', (name, description))
+        INSERT INTO Users (username, password, role, rank)
+        VALUES (?, ?, ?, ?)
+    ''', (username, password, role, rank))
+    conn.commit()
+    conn.close()
+
+def insert_test_agent(name, description, min_rank_required):
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO Agents (name, description, min_rank_required)
+        VALUES (?, ?, ?)
+    ''', (name, description, min_rank_required))
+    conn.commit()
+    conn.close()
+
+def insert_test_location(name, description, min_rank_required):
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute('''
+        INSERT INTO Locations (name, description, min_rank_required)
+        VALUES (?, ?, ?)
+    ''', (name, description, min_rank_required))
     conn.commit()
     conn.close()

@@ -115,7 +115,7 @@
         } else {
           searchHistory_container.innerHTML = searchHistory.map((item, index) => `
             <div class="searchItem" data-index="${index}">
-              <div class="searchItem-type">${item.type === 'agents' ? '🕵️ Agent' : '📍 Location'}</div>
+              <div class="searchItem-type">${item.type === 'agents' ? '🕵️ Agent' : 'locations' ? '📍 Location' : 'departments' ? '🏢 Department' : 'archives' ? '📚 Archive' : ''}</div>
               <div class="searchItem-name">${item.name}</div>
               <div style="font-size: 11px; opacity: 0.6; margin-top: 8px;">${item.timestamp}</div>
             </div>
