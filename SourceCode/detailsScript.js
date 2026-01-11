@@ -18,7 +18,9 @@ document.addEventListener('DOMContentLoaded', () => {
   detailsTitle.textContent = 'Loading...';
   detailsContent.textContent = '';
 
-  fetch(`http://localhost:5000/search?q=${encodeURIComponent(name)}&type=${encodeURIComponent(type)}`)
+  const user = JSON.parse(localStorage.getItem('doveUser') || '{}');
+  const userRank = user.rank || 'rookie';
+  fetch(`http://localhost:5000/search?q=${encodeURIComponent(name)}&type=${encodeURIComponent(type)}&rank=${encodeURIComponent(userRank)}`)
     .then(response => response.json())
     .then(results => {
       if (!results || results.length === 0) {
