@@ -1,246 +1,251 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <title>Circuit Breaker — D.O.V.E.S</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="utf-8">
+    <title>Circuit Breaker — D.O.V.E.S</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
 
-  <style>
-    #gameContainer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+    <style>
+        #gameContainer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
 
-    #instructions {
-      opacity: 0.8;
-      margin-bottom: 6px;
-      font-size: 14px;
-    }
+        #instructions {
+            opacity: 0.8;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
 
-    #retryHint {
-      opacity: 0.6;
-      font-size: 12px;
-      margin-bottom: 10px;
-    }
+        #retryHint {
+            opacity: 0.6;
+            font-size: 12px;
+            margin-bottom: 10px;
+        }
 
-    canvas {
-      background-color: rgba(255, 255, 255, 0.03);
-      border: 2px solid #00E5FF;
-      box-shadow: 0 0 6px #7DE3FF, 0 0 12px #3b2cde;
-    }
+        canvas {
+            background-color: rgba(255, 255, 255, 0.03);
+            border: 2px solid #00E5FF;
+            box-shadow: 0 0 6px #7DE3FF, 0 0 12px #3b2cde;
+        }
 
-    #status {
-      margin-top: 15px;
-      font-size: 16px;
-      letter-spacing: 1px;
-    }
-  </style>
+        #status {
+            margin-top: 15px;
+            font-size: 16px;
+            letter-spacing: 1px;
+        }
+    </style>
 </head>
 
 <body>
 
-  <div id="header">
-    <img src="DOVE LOGO.png" alt="The D.O.V.E.S logo" class="logo">
-    <h1 id="headerTitle">CIRCUIT BREAKER</h1>
-  </div>
-
-  <div id="gameContainer">
-
-    <div id="instructions">
-      WASD to route signal · Reach the connection node · Avoid firewalls
-    </div>
-    <div id="retryHint">
-      Press R to reboot circuit
+    <div id="header">
+        <img src="DOVE LOGO.png" alt="The D.O.V.E.S logo" class="logo">
+        <h1 id="headerTitle">CIRCUIT BREAKER</h1>
     </div>
 
-    <canvas id="game" width="520" height="520"></canvas>
+    <div id="gameContainer">
 
-    <div id="status">Circuit offline</div>
-  </div>
+        <div id="instructions">
+            WASD to route signal · Reach the connection node · Avoid firewalls
+        </div>
+        <div id="retryHint">
+            Press R to reboot circuit
+        </div>
 
-  <script>
-    const canvas = document.getElementById("game");
-    const ctx = canvas.getContext("2d");
+        <canvas id="game" width="520" height="520"></canvas>
 
-    const tileSize = 20;
-    const tiles = canvas.width / tileSize;
+        <div id="status">Circuit offline</div>
+    </div>
 
-    let direction;
-    let snake;
-    let running;
-    let walls;
+    <script>
+        const canvas = document.getElementById("game");
+        const ctx = canvas.getContext("2d");
 
-    const goal = { x: tiles - 2, y: tiles - 2 };
+        const tileSize = 20;
+        const tiles = canvas.width / tileSize;
 
-    function generateMazeWalls() {
-      const maze = Array.from({ length: tiles }, () =>
-        Array(tiles).fill(true)
-      );
+        let direction;
+        let snake;
+        let running;
+        let walls;
 
-      function shuffle(arr) {
-        return arr.sort(() => Math.random() - 0.5);
-      }
+        const goal = { x: tiles - 2, y: tiles - 2 };
 
-      function carve(x, y) {
-        maze[y][x] = false;
+        function generateMazeWalls() {
+            const logicalWidth = Math.floor(tiles / 2);
+            const logicalHeight = Math.floor(tiles / 2);
 
-        const dirs = shuffle([
-          [1, 0],
-          [-1, 0],
-          [0, 1],
-          [0, -1]
-        ]);
+            const maze = Array.from({ length: logicalHeight }, () =>
+                Array(logicalWidth).fill(true)
+            );
 
-        for (const [dx, dy] of dirs) {
-          const nx = x + dx * 2;
-          const ny = y + dy * 2;
-
-          if (
-            nx > 0 && ny > 0 &&
-            nx < tiles - 1 && ny < tiles - 1 &&
-            maze[ny][nx]
-          ) {
-            maze[y + dy][x + dx] = false;
-            carve(nx, ny);
-          }
-        }
-      }
-
-      carve(1, 1);
-
-      const clearZone = (cx, cy, r = 1) => {
-        for (let y = cy - r; y <= cy + r; y++) {
-          for (let x = cx - r; x <= cx + r; x++) {
-            if (x >= 0 && y >= 0 && x < tiles && y < tiles) {
-              maze[y][x] = false;
+            function shuffle(arr) {
+                return arr.sort(() => Math.random() - 0.5);
             }
-          }
+
+            function carve(x, y) {
+                maze[y][x] = false;
+
+                const dirs = shuffle([
+                    [1, 0],
+                    [-1, 0],
+                    [0, 1],
+                    [0, -1]
+                ]);
+
+                for (const [dx, dy] of dirs) {
+                    const nx = x + dx * 2;
+                    const ny = y + dy * 2;
+
+                    if (
+                        nx > 0 && ny > 0 &&
+                        nx < logicalWidth - 1 &&
+                        ny < logicalHeight - 1 &&
+                        maze[ny][nx]
+                    ) {
+                        maze[y + dy][x + dx] = false;
+                        carve(nx, ny);
+                    }
+                }
+            }
+
+            carve(1, 1);
+
+            walls = [];
+
+            for (let y = 0; y < logicalHeight; y++) {
+                for (let x = 0; x < logicalWidth; x++) {
+                    if (maze[y][x]) {
+                        for (let dy = 0; dy < 2; dy++) {
+                            for (let dx = 0; dx < 2; dx++) {
+                                const wx = x * 2 + dx;
+                                const wy = y * 2 + dy;
+
+                                if (
+                                    (wx <= 4 && wy <= 4) ||
+                                    (Math.abs(wx - goal.x) <= 2 && Math.abs(wy - goal.y) <= 2)
+                                ) continue;
+
+                                walls.push({ x: wx, y: wy });
+                            }
+                        }
+                    }
+                }
+            }
         }
-      };
 
-      clearZone(1, 1, 3);
-      clearZone(goal.x, goal.y, 1);
 
-      walls = [];
-      for (let y = 0; y < tiles; y++) {
-        for (let x = 0; x < tiles; x++) {
-          if (maze[y][x]) {
-            walls.push({ x, y });
-          }
+        function resetGame() {
+            direction = { x: 1, y: 0 };
+            snake = [{ x: 1, y: 1 }];
+            running = true;
+            generateMazeWalls();
+
+            const status = document.getElementById("status");
+            status.textContent = "Circuit offline";
+            status.style.color = "#24d3d3";
         }
-      }
-    walls = walls.filter(() => Math.random() > 0.20);
 
-    }
+        function drawWall(w) {
+            ctx.fillStyle = "#589eef";
+            ctx.fillRect(w.x * tileSize, w.y * tileSize, tileSize, tileSize);
+        }
 
-    function resetGame() {
-      direction = { x: 1, y: 0 };
-      snake = [{ x: 1, y: 1 }];
-      running = true;
-      generateMazeWalls();
+        function drawCircle(x, y, radius, color, glow = false) {
+            ctx.beginPath();
+            ctx.arc(
+                x * tileSize + tileSize / 2,
+                y * tileSize + tileSize / 2,
+                radius,
+                0,
+                Math.PI * 2
+            );
+            ctx.fillStyle = color;
 
-      const status = document.getElementById("status");
-      status.textContent = "Circuit offline";
-      status.style.color = "#24d3d3";
-    }
+            if (glow) {
+                ctx.shadowColor = color;
+                ctx.shadowBlur = 15;
+            }
 
-    function drawWall(w) {
-      ctx.fillStyle = "#589eef";
-      ctx.fillRect(w.x * tileSize, w.y * tileSize, tileSize, tileSize);
-    }
+            ctx.fill();
+            ctx.shadowBlur = 0;
+        }
 
-    function drawCircle(x, y, radius, color, glow = false) {
-      ctx.beginPath();
-      ctx.arc(
-        x * tileSize + tileSize / 2,
-        y * tileSize + tileSize / 2,
-        radius,
-        0,
-        Math.PI * 2
-      );
-      ctx.fillStyle = color;
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-      if (glow) {
-        ctx.shadowColor = color;
-        ctx.shadowBlur = 15;
-      }
+            walls.forEach(drawWall);
+            drawCircle(goal.x, goal.y, tileSize / 2.3, "#00E5FF", true);
 
-      ctx.fill();
-      ctx.shadowBlur = 0;
-    }
+            snake.forEach((s, i) => {
+                drawCircle(
+                    s.x,
+                    s.y,
+                    tileSize / 2.8,
+                    i === 0 ? "#24d3d3" : "#589eef"
+                );
+            });
+        }
 
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+        function update() {
+            if (!running) return;
 
-      walls.forEach(drawWall);
-      drawCircle(goal.x, goal.y, tileSize / 2.3, "#00E5FF", true);
+            const head = {
+                x: snake[0].x + direction.x,
+                y: snake[0].y + direction.y
+            };
 
-      snake.forEach((s, i) => {
-        drawCircle(
-          s.x,
-          s.y,
-          tileSize / 2.8,
-          i === 0 ? "#24d3d3" : "#589eef"
-        );
-      });
-    }
+            if (head.x < 0 || head.y < 0 || head.x >= tiles || head.y >= tiles) {
+                endGame("Signal lost — out of bounds");
+                return;
+            }
 
-    function update() {
-      if (!running) return;
+            if (walls.some(w => w.x === head.x && w.y === head.y)) {
+                endGame("Firewall breach detected");
+                return;
+            }
 
-      const head = {
-        x: snake[0].x + direction.x,
-        y: snake[0].y + direction.y
-      };
+            snake.unshift(head);
+            snake.pop();
 
-      if (head.x < 0 || head.y < 0 || head.x >= tiles || head.y >= tiles) {
-        endGame("Signal lost — out of bounds");
-        return;
-      }
+            if (head.x === goal.x && head.y === goal.y) {
+                endGame("Circuit complete — access granted", true);
+            }
+        }
 
-      if (walls.some(w => w.x === head.x && w.y === head.y)) {
-        endGame("Firewall breach detected");
-        return;
-      }
+        function endGame(message, win = false) {
+            running = false;
+            const status = document.getElementById("status");
+            status.textContent = message;
+            status.style.color = win ? "#00ffcc" : "#ff4d6d";
+        }
 
-      snake.unshift(head);
-      snake.pop();
+        document.addEventListener("keydown", e => {
+            if (e.key === "r") {
+                resetGame();
+                return;
+            }
 
-      if (head.x === goal.x && head.y === goal.y) {
-        endGame("Circuit complete — access granted", true);
-      }
-    }
+            if (!running) return;
 
-    function endGame(message, win = false) {
-      running = false;
-      const status = document.getElementById("status");
-      status.textContent = message;
-      status.style.color = win ? "#00ffcc" : "#ff4d6d";
-    }
+            if (e.key === "w" && direction.y === 0) direction = { x: 0, y: -1 };
+            if (e.key === "s" && direction.y === 0) direction = { x: 0, y: 1 };
+            if (e.key === "a" && direction.x === 0) direction = { x: -1, y: 0 };
+            if (e.key === "d" && direction.x === 0) direction = { x: 1, y: 0 };
+        });
 
-    document.addEventListener("keydown", e => {
-      if (e.key === "r") {
         resetGame();
-        return;
-      }
 
-      if (!running) return;
-
-      if (e.key === "w" && direction.y === 0) direction = { x: 0, y: -1 };
-      if (e.key === "s" && direction.y === 0) direction = { x: 0, y: 1 };
-      if (e.key === "a" && direction.x === 0) direction = { x: -1, y: 0 };
-      if (e.key === "d" && direction.x === 0) direction = { x: 1, y: 0 };
-    });
-
-    resetGame();
-
-    setInterval(() => {
-      update();
-      draw();
-    }, 250);
-  </script>
+        setInterval(() => {
+            update();
+            draw();
+        }, 250);
+    </script>
 
 </body>
+
 </html>
