@@ -45,7 +45,10 @@
       // Search Bar Event Listener
       searchBar.addEventListener('keydown', (e) => {
         if (e.key === 'Enter') {
-          performSearch();
+          const query = searchBar.value.trim();
+          if (query.length > 0) {
+            window.location.href = `details.html?type=${encodeURIComponent(currentSearchType)}&name=${encodeURIComponent(query)}`;
+          }
         }
       });
 
@@ -84,12 +87,31 @@
               if (results.length === 0) {
                 searchResults.innerHTML = `<p>No results found for <strong>${query}</strong> in ${currentSearchType}.</p>`;
               } else {
-                searchResults.innerHTML = results.map(item => `
-                  <div class="searchResultItem">
-                    <strong>${item.name || item.title}</strong><br>
-                    <span>${item.description || item.content || ''}</span>
-                  </div>
-                `).join('');
+                searchResults.innerHTML = results.map((item, idx) => {
+                  // Try to get id or ID field
+                  const entryId = item.id || item.ID || idx; // fallback to index if no id
+                  const displayName = item.name || item.title || 'Details';
+                  const description = item.description || item.content || '';
+                  return `<div class="searchResultItem" data-id="${entryId}" data-type="${currentSearchType}" data-name="${displayName}" style="cursor:pointer;">
+                    <strong>${displayName}</strong><br>
+                    <span>${description}</span>
+                  </div>`;
+                }).join('');
+                // Add click handlers for details navigation
+                document.querySelectorAll('.searchResultItem').forEach(item => {
+                  item.addEventListener('click', () => {
+                    const type = item.getAttribute('data-type');
+                    const name = item.getAttribute('data-name');
+                    window.location.href = `details.html?type=${encodeURIComponent(type)}&name=${encodeURIComponent(name)}`;
+                  });
+                });
+                // If only one result and Enter was pressed, auto-redirect
+                if (results.length === 1 && performSearch._enterPressed) {
+                  const item = results[0];
+                  const type = currentSearchType;
+                  const name = item.name || item.title || '';
+                  window.location.href = `details.html?type=${encodeURIComponent(type)}&name=${encodeURIComponent(name)}`;
+                }
               }
             })
             .catch(() => {
