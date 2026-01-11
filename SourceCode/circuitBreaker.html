@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Circuit Breaker — D.O.V.E.S</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    #gameContainer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    #instructions {
+      opacity: 0.8;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    #retryHint {
+      opacity: 0.6;
+      font-size: 12px;
+      margin-bottom: 10px;
+    }
+
+    canvas {
+      background-color: rgba(255, 255, 255, 0.03);
+      border: 2px solid #00E5FF;
+      box-shadow: 0 0 6px #7DE3FF, 0 0 12px #3b2cde;
+    }
+
+    #status {
+      margin-top: 15px;
+      font-size: 16px;
+      letter-spacing: 1px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="header">
+    <img src="DOVE LOGO.png" alt="The D.O.V.E.S logo" class="logo">
+    <h1 id="headerTitle">CIRCUIT BREAKER</h1>
+  </div>
+
+  <div id="gameContainer">
+
+    <div id="instructions">
+      WASD to route signal · Reach the connection node · Avoid firewalls
+    </div>
+    <div id="retryHint">
+      Press R to reboot circuit
+    </div>
+
+    <canvas id="game" width="520" height="520"></canvas>
+
+    <div id="status">Circuit offline</div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    const tileSize = 20;
+    const tiles = canvas.width / tileSize;
+
+    let direction;
+    let snake;
+    let running;
+    let walls;
+
+    const goal = { x: tiles - 3, y: tiles - 3 };
+
+    function isBlocked(x, y) {
+      return walls.some(w => w.x === x && w.y === y);
+    }
+
+    function generateMazeWalls() {
+      walls = [];
+      const wallLines = 20;
+      const minLength = 5;
+      const maxLength = 20;
+
+      for (let i = 0; i < wallLines; i++) {
+        const horizontal = Math.random() < 0.5;
+        const length =
+          Math.floor(Math.random() * (maxLength - minLength + 1)) + minLength;
+
+        let startX, startY;
+        let attempts = 0;
+
+        do {
+          startX = Math.floor(Math.random() * tiles);
+          startY = Math.floor(Math.random() * tiles);
+          attempts++;
+        } while (
+          attempts < 50 && (
+            (startX < 4 && startY < 4) ||
+            (Math.abs(startX - goal.x) < 3 && Math.abs(startY - goal.y) < 3) ||
+            isBlocked(startX, startY)
+          )
+        );
+
+        for (let j = 0; j < length; j++) {
+          const x = startX + (horizontal ? j : 0);
+          const y = startY + (horizontal ? 0 : j);
+
+          if (
+            x < 0 || y < 0 || x >= tiles || y >= tiles ||
+            (x < 4 && y < 4) ||
+            (Math.abs(x - goal.x) < 3 && Math.abs(y - goal.y)) ||
+            isBlocked(x, y)
+          ) break;
+
+          walls.push({ x, y });
+        }
+      }
+    }
+
+    function resetGame() {
+      direction = { x: 1, y: 0 };
+      snake = [{ x: 2, y: 2 }];
+      running = true;
+      generateMazeWalls();
+
+      const status = document.getElementById("status");
+      status.textContent = "Circuit offline";
+      status.style.color = "#24d3d3";
+    }
+
+    function drawWall(w) {
+      ctx.fillStyle = "#589eef";
+      ctx.fillRect(w.x * tileSize, w.y * tileSize, tileSize, tileSize);
+    }
+
+    function drawCircle(x, y, radius, color, glow = false) {
+      ctx.beginPath();
+      ctx.arc(
+        x * tileSize + tileSize / 2,
+        y * tileSize + tileSize / 2,
+        radius,
+        0,
+        Math.PI * 2
+      );
+      ctx.fillStyle = color;
+
+      if (glow) {
+        ctx.shadowColor = color;
+        ctx.shadowBlur = 15;
+      }
+
+      ctx.fill();
+      ctx.shadowBlur = 0;
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      walls.forEach(drawWall);
+      drawCircle(goal.x, goal.y, tileSize / 2.3, "#00E5FF", true);
+
+      snake.forEach((s, i) => {
+        drawCircle(
+          s.x,
+          s.y,
+          tileSize / 2.8,
+          i === 0 ? "#24d3d3" : "#589eef"
+        );
+      });
+    }
+
+    function update() {
+      if (!running) return;
+
+      const head = {
+        x: snake[0].x + direction.x,
+        y: snake[0].y + direction.y
+      };
+
+      if (head.x < 0 || head.y < 0 || head.x >= tiles || head.y >= tiles) {
+        endGame("Signal lost — out of bounds");
+        return;
+      }
+
+      if (walls.some(w => w.x === head.x && w.y === head.y)) {
+        endGame("Firewall breach detected");
+        return;
+      }
+
+      snake.unshift(head);
+      snake.pop();
+
+      if (head.x === goal.x && head.y === goal.y) {
+        endGame("Circuit complete — access granted", true);
+      }
+    }
+
+    function endGame(message, win = false) {
+      running = false;
+      const status = document.getElementById("status");
+      status.textContent = message;
+      status.style.color = win ? "#00ffcc" : "#ff4d6d";
+    }
+
+    document.addEventListener("keydown", e => {
+      if (e.key === "r") {
+        resetGame();
+        return;
+      }
+
+      if (!running) return;
+
+      if (e.key === "w" && direction.y === 0) direction = { x: 0, y: -1 };
+      if (e.key === "s" && direction.y === 0) direction = { x: 0, y: 1 };
+      if (e.key === "a" && direction.x === 0) direction = { x: -1, y: 0 };
+      if (e.key === "d" && direction.x === 0) direction = { x: 1, y: 0 };
+    });
+
+    resetGame();
+
+    setInterval(() => {
+      update();
+      draw();
+    }, 200);
+  </script>
+
+</body>
+</html>
