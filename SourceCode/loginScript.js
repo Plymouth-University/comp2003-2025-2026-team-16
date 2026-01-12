@@ -3,15 +3,18 @@ document.addEventListener('DOMContentLoaded', function () {
 	const showPasswordBtn = document.getElementById('showPassword');
 	const loginForm = document.getElementById('loginForm');
 
-	// Show password for 1 second
+	// Toggle show/hide password
 	if (showPasswordBtn && passwordInput) {
 		showPasswordBtn.addEventListener('click', function () {
-			passwordInput.type = 'text';
-			showPasswordBtn.setAttribute('aria-pressed', 'true');
-			setTimeout(function () {
+			if (passwordInput.type === 'password') {
+				passwordInput.type = 'text';
+				showPasswordBtn.textContent = 'Hide';
+				showPasswordBtn.setAttribute('aria-pressed', 'true');
+			} else {
 				passwordInput.type = 'password';
+				showPasswordBtn.textContent = 'Show';
 				showPasswordBtn.setAttribute('aria-pressed', 'false');
-			}, 1000);
+			}
 		});
 	}
 

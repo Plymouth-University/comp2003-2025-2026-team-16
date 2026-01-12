@@ -47,7 +47,12 @@
         if (e.key === 'Enter') {
           const query = searchBar.value.trim();
           if (query.length > 0) {
-            window.location.href = `details.html?type=${encodeURIComponent(currentSearchType)}&name=${encodeURIComponent(query)}`;
+            // Check if searching for circuitbreak in archives
+            if (currentSearchType === 'archives' && query.toLowerCase() === 'circuitbreak') {
+              window.location.href = 'circuitBreaker.html';
+            } else {
+              window.location.href = `details.html?type=${encodeURIComponent(currentSearchType)}&name=${encodeURIComponent(query)}`;
+            }
           }
         }
       });
