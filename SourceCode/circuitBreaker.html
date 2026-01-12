@@ -71,6 +71,7 @@
         let direction;
         let snake;
         let running;
+        let paused = true;
         let walls;
 
         const goal = { x: tiles - 2, y: tiles - 2 };
@@ -143,8 +144,17 @@
             direction = { x: 1, y: 0 };
             snake = [{ x: 1, y: 1 }];
             running = true;
+            paused = true;
             generateMazeWalls();
 
+            const status = document.getElementById("status");
+            status.textContent = "Press any key to start the game";
+            status.style.color = "#24d3d3";
+        }
+
+        function startGame() {
+            if (!running) return;
+            paused = false;
             const status = document.getElementById("status");
             status.textContent = "Circuit offline";
             status.style.color = "#24d3d3";
@@ -179,7 +189,7 @@
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
             walls.forEach(drawWall);
-            drawCircle(goal.x, goal.y, tileSize / 2.3, "#00E5FF", true);
+            drawCircle(goal.x, goal.y, tileSize / 2, "#00E5FF", true);
 
             snake.forEach((s, i) => {
                 drawCircle(
@@ -230,6 +240,11 @@
                 return;
             }
 
+            if (paused) {
+                startGame();
+                return;
+            }
+
             if (!running) return;
 
             if (e.key === "w" && direction.y === 0) direction = { x: 0, y: -1 };
@@ -241,9 +256,13 @@
         resetGame();
 
         setInterval(() => {
-            update();
-            draw();
-        }, 250);
+            if (!paused) {
+                update();
+                draw();
+            } else {
+                draw();
+            }
+        }, 200);
     </script>
 
 </body>
