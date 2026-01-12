@@ -47,11 +47,17 @@
         if (e.key === 'Enter') {
           const query = searchBar.value.trim();
           if (query.length > 0) {
+            // Add to search history and perform search
+            performSearch();
             // Check if searching for circuitbreak in archives
             if (currentSearchType === 'archives' && query.toLowerCase() === 'circuitbreak') {
-              window.location.href = 'circuitBreaker.html';
+              setTimeout(() => {
+                window.location.href = 'circuitBreaker.html';
+              }, 100);
             } else {
-              window.location.href = `details.html?type=${encodeURIComponent(currentSearchType)}&name=${encodeURIComponent(query)}`;
+              setTimeout(() => {
+                window.location.href = `details.html?type=${encodeURIComponent(currentSearchType)}&name=${encodeURIComponent(query)}`;
+              }, 100);
             }
           }
         }
@@ -144,7 +150,12 @@
         } else {
           searchHistory_container.innerHTML = searchHistory.map((item, index) => `
             <div class="searchItem" data-index="${index}">
-              <div class="searchItem-type">${item.type === 'agents' ? '🕵️ Agent' : 'locations' ? '📍 Location' : 'departments' ? '🏢 Department' : 'archives' ? '📚 Archive' : ''}</div>
+              <div class="searchItem-type">${
+                item.type === 'agents' ? '🕵️ Agent' : 
+                item.type === 'locations' ? '📍 Location' : 
+                item.type === 'deparments' ? '🏢 Department' : 
+                item.type === 'archives' ? '📚 Archive' : '🔍'
+              }</div>
               <div class="searchItem-name">${item.name}</div>
               <div style="font-size: 11px; opacity: 0.6; margin-top: 8px;">${item.timestamp}</div>
             </div>
