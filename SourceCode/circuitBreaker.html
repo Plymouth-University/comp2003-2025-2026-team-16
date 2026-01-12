@@ -232,6 +232,13 @@
             const status = document.getElementById("status");
             status.textContent = message;
             status.style.color = win ? "#00ffcc" : "#ff4d6d";
+            
+            // Redirect to main page after winning
+            if (win) {
+                setTimeout(() => {
+                    window.location.href = 'Main page.html';
+                }, 2000);
+            }
         }
 
         document.addEventListener("keydown", e => {
