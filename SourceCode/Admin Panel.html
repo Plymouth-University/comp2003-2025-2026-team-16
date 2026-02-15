@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&display=swap" rel="stylesheet">
+    <title>D.O.V.E.S Database — Main</title>
+    <meta name="description" content="Search agents and locations in the D.O.V.E.S database.">
+
+  </head>
+
+  <body>
+    <div id="header">
+      <img src="DOVE LOGO.png" alt="The D.O.V.E.S logo" class="logo">
+      <h1 id="headerTitle">D.O.V.E.S Database</h1>
+    </div>
+      <main id="admin-panel-main">
+        <div class="tab-container">
+          <button class="tab-button active" onclick="showForm('user')">Create User</button>
+          <button class="tab-button" onclick="showForm('agent')">Create Agent</button>
+          <button class="tab-button" onclick="showForm('location')">Create Location</button>
+        </div>
+        <section class="admin-form-section" id="form-user">
+          <h2>Create New User</h2>
+          <form action="/create_user" method="post" class="admin-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <label for="role">Role:</label>
+            <select id="role" name="role">
+              <option value="User">User</option>
+              <option value="Admin">Admin</option>
+            </select>
+            <label for="rank">Rank:</label>
+            <input type="text" id="rank" name="rank" value="rookie" required>
+            <button type="submit">Create User</button>
+          </form>
+        </section>
+        <section class="admin-form-section" id="form-agent" style="display:none;">
+          <h2>Create New Agent</h2>
+          <form action="/create_agent" method="post" class="admin-form">
+            <label for="agent_name">Name:</label>
+            <input type="text" id="agent_name" name="name" required>
+            <label for="agent_description">Description:</label>
+            <textarea id="agent_description" name="description"></textarea>
+            <label for="agent_min_rank">Minimum Rank Required:</label>
+            <input type="text" id="agent_min_rank" name="min_rank_required" value="rookie" required>
+            <button type="submit">Create Agent</button>
+          </form>
+        </section>
+        <section class="admin-form-section" id="form-location" style="display:none;">
+          <h2>Create New Location</h2>
+          <form action="/create_location" method="post" class="admin-form">
+            <label for="location_name">Name:</label>
+            <input type="text" id="location_name" name="name" required>
+            <label for="location_description">Description:</label>
+            <textarea id="location_description" name="description"></textarea>
+            <label for="location_min_rank">Minimum Rank Required:</label>
+            <input type="text" id="location_min_rank" name="min_rank_required" value="rookie" required>
+            <button type="submit">Create Location</button>
+          </form>
+        </section>
+      </main>
