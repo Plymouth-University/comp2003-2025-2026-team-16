@@ -72,6 +72,25 @@ def login():
             'message': 'Invalid username or password.'
         }), 401
 
+
+@app.route('/create_user', methods=['POST'])
+def create_user():
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form
+    username = data.get('username')
+    password = data.get('password')
+    role = data.get('role', 'User')
+    rank = data.get('rank', 'rookie')
+    if not username or not password:
+        return jsonify({'success': False, 'message': 'Username and password required.'}), 400
+    try:
+        storage.insert_user(username, password, role, rank)
+        return jsonify({'success': True, 'message': 'User created successfully.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+
 if __name__ == "__main__":
     storage.initialise_database()
     app.run(debug=True)
