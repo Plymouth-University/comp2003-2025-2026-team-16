@@ -71,7 +71,7 @@ def insert_user(username, password, role='User', rank='rookie'):
     conn.commit()
     conn.close()
 
-def insert_test_agent(name, description, min_rank_required):
+def insert_agent(name, description, min_rank_required):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
     cursor.execute('''
@@ -81,7 +81,7 @@ def insert_test_agent(name, description, min_rank_required):
     conn.commit()
     conn.close()
 
-def insert_test_location(name, description, min_rank_required):
+def insert_location(name, description, min_rank_required):
     conn = sqlite3.connect(db_name)
     cursor = conn.cursor()
     cursor.execute('''

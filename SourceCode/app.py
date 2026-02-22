@@ -91,6 +91,40 @@ def create_user():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
 
+@app.route('/create_agent', methods=['POST'])
+def create_agent():
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form
+    name = data.get('name')
+    description = data.get('description', '')
+    min_rank_required = data.get('min_rank_required', 'rookie')
+    if not name:
+        return jsonify({'success': False, 'message': 'Agent name required.'}), 400
+    try:
+        storage.insert_agent(name, description, min_rank_required)
+        return jsonify({'success': True, 'message': 'Agent created successfully.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+
+@app.route('/create_location', methods=['POST'])
+def create_location():
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form
+    name = data.get('name')
+    description = data.get('description', '')
+    min_rank_required = data.get('min_rank_required', 'rookie')
+    if not name:
+        return jsonify({'success': False, 'message': 'Location name required.'}), 400
+    try:
+        storage.insert_location(name, description, min_rank_required)
+        return jsonify({'success': True, 'message': 'Location created successfully.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+    
 if __name__ == "__main__":
     storage.initialise_database()
     app.run(debug=True)
