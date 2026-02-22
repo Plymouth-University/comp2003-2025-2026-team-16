@@ -2,11 +2,11 @@
 window.addEventListener('DOMContentLoaded', function() {
     // ...existing code for tab switching...
 
+    // User form
     var userForm = document.querySelector('#form-user form');
     var userMsg = document.createElement('div');
     userMsg.id = 'user-form-message';
     userForm.parentNode.insertBefore(userMsg, userForm);
-
     userForm.addEventListener('submit', function(e) {
         e.preventDefault();
         userMsg.textContent = '';
@@ -29,6 +29,66 @@ window.addEventListener('DOMContentLoaded', function() {
         .catch(() => {
             userMsg.textContent = 'An error occurred.';
             userMsg.style.color = 'red';
+        });
+    });
+
+    // Agent form
+    var agentForm = document.querySelector('#form-agent form');
+    var agentMsg = document.createElement('div');
+    agentMsg.id = 'agent-form-message';
+    agentForm.parentNode.insertBefore(agentMsg, agentForm);
+    agentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        agentMsg.textContent = '';
+        var formData = new FormData(agentForm);
+        fetch('http://127.0.0.1:5000/create_agent', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                agentMsg.textContent = 'Agent created successfully!';
+                agentMsg.style.color = 'green';
+                agentForm.reset();
+            } else {
+                agentMsg.textContent = data.message || 'Failed to create agent.';
+                agentMsg.style.color = 'red';
+            }
+        })
+        .catch(() => {
+            agentMsg.textContent = 'An error occurred.';
+            agentMsg.style.color = 'red';
+        });
+    });
+
+    // Location form
+    var locationForm = document.querySelector('#form-location form');
+    var locationMsg = document.createElement('div');
+    locationMsg.id = 'location-form-message';
+    locationForm.parentNode.insertBefore(locationMsg, locationForm);
+    locationForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        locationMsg.textContent = '';
+        var formData = new FormData(locationForm);
+        fetch('http://127.0.0.1:5000/create_location', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                locationMsg.textContent = 'Location created successfully!';
+                locationMsg.style.color = 'green';
+                locationForm.reset();
+            } else {
+                locationMsg.textContent = data.message || 'Failed to create location.';
+                locationMsg.style.color = 'red';
+            }
+        })
+        .catch(() => {
+            locationMsg.textContent = 'An error occurred.';
+            locationMsg.style.color = 'red';
         });
     });
 });
