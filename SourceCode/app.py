@@ -125,6 +125,50 @@ def create_location():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
     
+@app.route('/get_items', methods=['GET'])
+def get_items():
+    table = request.args.get('table')
+    if not table:
+        return jsonify({'success': False, 'message': 'Table parameter required.'}), 400
+    try:
+        if table == 'Users':
+            users = storage.get_users()
+            items = [
+                {'user_id': u[0], 'username': u[1], 'role': u[2], 'rank': u[3]} for u in users
+            ]
+        elif table == 'Agents':
+            agents = storage.get_agents()
+            items = [
+                {'agent_id': a[0], 'name': a[1], 'description': a[2], 'min_rank_required': a[3]} for a in agents
+            ]
+        elif table == 'Locations':
+            locations = storage.get_locations()
+            items = [
+                {'location_id': l[0], 'name': l[1], 'description': l[2], 'min_rank_required': l[3]} for l in locations
+            ]
+        else:
+            return jsonify({'success': False, 'message': 'Unsupported table.'}), 400
+        return jsonify({'success': True, 'items': items})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 500
+    
+# Delete item endpoint
+@app.route('/delete_item', methods=['POST'])
+def delete_item():
+    if request.is_json:
+        data = request.get_json()
+    else:
+        data = request.form
+    table = data.get('table')
+    item_id = data.get('item_id')
+    if not table or not item_id:
+        return jsonify({'success': False, 'message': 'Table and item_id required.'}), 400
+    try:
+        storage.delete_item(table, item_id)
+        return jsonify({'success': True, 'message': f'Item {item_id} deleted from {table}.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+    
 if __name__ == "__main__":
     storage.initialise_database()
     app.run(debug=True)

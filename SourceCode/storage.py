@@ -90,3 +90,47 @@ def insert_location(name, description, min_rank_required):
     ''', (name, description, min_rank_required))
     conn.commit()
     conn.close()
+
+# Universal delete function
+def delete_item(table, item_id):
+
+    allowed_tables = {
+        'Users': 'user_id',
+        'Agents': 'agent_id',
+        'Locations': 'location_id',
+        'Departments': 'department_id',
+        'Archives': 'archive_id'
+    }
+    if table not in allowed_tables:
+        raise ValueError('Invalid table name.')
+    id_column = allowed_tables[table]
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute(f"DELETE FROM {table} WHERE {id_column} = ?", (item_id,))
+    conn.commit()
+    conn.close()
+
+# Fetch lists for admin panel
+def get_users():
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute("SELECT user_id, username, role, rank FROM Users")
+    users = cursor.fetchall()
+    conn.close()
+    return users
+
+def get_agents():
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute("SELECT agent_id, name, description, min_rank_required FROM Agents")
+    agents = cursor.fetchall()
+    conn.close()
+    return agents
+
+def get_locations():
+    conn = sqlite3.connect(db_name)
+    cursor = conn.cursor()
+    cursor.execute("SELECT location_id, name, description, min_rank_required FROM Locations")
+    locations = cursor.fetchall()
+    conn.close()
+    return locations

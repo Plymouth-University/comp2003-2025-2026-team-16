@@ -22,10 +22,11 @@
           <button class="tab-button active">Create User</button>
           <button class="tab-button">Create Agent</button>
           <button class="tab-button">Create Location</button>
+          <button class="tab-button">Delete</button>
         </div>
         <section class="admin-form-section" id="form-user">
           <h2>Create New User</h2>
-          <form action="/create_user" method="post" class="admin-form">
+          <form class="admin-form">
             <label for="username">Username:</label>
             <input type="text" id="username" name="username" required>
             <label for="password">Password:</label>
@@ -42,7 +43,7 @@
         </section>
         <section class="admin-form-section" id="form-agent" style="display:none;">
           <h2>Create New Agent</h2>
-          <form action="/create_agent" method="post" class="admin-form">
+          <form class="admin-form">
             <label for="agent_name">Name:</label>
             <input type="text" id="agent_name" name="name" required>
             <label for="agent_description">Description:</label>
@@ -54,7 +55,7 @@
         </section>
         <section class="admin-form-section" id="form-location" style="display:none;">
           <h2>Create New Location</h2>
-          <form action="/create_location" method="post" class="admin-form">
+          <form class="admin-form">
             <label for="location_name">Name:</label>
             <input type="text" id="location_name" name="name" required>
             <label for="location_description">Description:</label>
@@ -62,6 +63,22 @@
             <label for="location_min_rank">Minimum Rank Required:</label>
             <input type="text" id="location_min_rank" name="min_rank_required" value="rookie" required>
             <button type="submit">Create Location</button>
+          </form>
+        </section>
+        <section class="admin-form-section" id="form-delete" style="display:none;">
+          <h2>Delete Item</h2>
+          <form class="admin-form">
+            <label for="delete_table">Table:</label>
+            <select id="delete_table" name="table">
+              <option value="Users">Users</option>
+              <option value="Agents">Agents</option>
+              <option value="Locations">Locations</option>
+              <option value="Departments">Departments</option>
+              <option value="Archives">Archives</option>
+            </select>
+            <label for="delete_id">ID:</label>
+            <input type="number" id="delete_id" name="item_id" required>
+            <button type="submit">Delete Item</button>
           </form>
         </section>
       </div>
