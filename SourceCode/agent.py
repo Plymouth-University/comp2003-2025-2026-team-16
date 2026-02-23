@@ -30,3 +30,27 @@ Give hints, not the correct solution
 If you don't know something, say:
     "This intel is classified for now"
 """
+
+ALLOWED_PAGES = [
+    "Main page",
+    "Login Page",
+    "Details Page",
+    "Admin Panel",
+    "Circuit Breaker",
+    "DOVE LOGO"
+]
+
+ALLOWED_ACTIONS = {
+    "chat": {
+        "description": "Reply with a spy-style message to the user",
+        "params": []
+    },
+    "explain_page": {
+        "description": "Explain what a specific website page does",
+        "params": ["page_name"]
+    },
+    "go_to_page": {
+        "description": "Request navigation to a specific website page",
+        "params": ["page_name"]
+    }
+}
