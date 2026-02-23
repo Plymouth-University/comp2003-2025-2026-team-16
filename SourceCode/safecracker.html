@@ -427,7 +427,7 @@
                 }
                 this.userCombination = [];
                 this.currentDialIndex = 0;
-                this.hintUsed = false;
+                this.hintUsed = 0;
                 this.attempts = 0;
                 this.updateAttemptDisplay();
             }
@@ -523,7 +523,21 @@
                 if (this.combinationsMatch()) {
                     this.winGame();
                 } else {
-                    this.showStatus(`❌ Incorrect! Try again. (Attempt ${this.attempts})`, 'error');
+                    const correctPositions = this.userCombination.filter((num, idx) => num === this.targetCombination[idx]).length;
+                    const correctNumbers = this.userCombination.filter(num => this.targetCombination.includes(num)).length;
+                    
+                    let feedback = `❌ Not quite! `;
+                    if (correctPositions > 0) {
+                        feedback += `${correctPositions} correct position${correctPositions !== 1 ? 's' : ''}. `;
+                    }
+                    if (correctNumbers > correctPositions) {
+                        feedback += `${correctNumbers - correctPositions} correct number${correctNumbers - correctPositions !== 1 ? 's' : ''} (wrong position).`;
+                    }
+                    if (correctPositions === 0 && correctNumbers === 0) {
+                        feedback += 'No correct numbers. Keep trying!';
+                    }
+                    
+                    this.showStatus(feedback, 'error');
                     this.userCombination = [];
                     this.renderCombinationDisplay();
                     document.getElementById('submitBtn').disabled = true;
@@ -545,15 +559,32 @@
             }
 
             giveHint() {
-                if (this.hintUsed) {
-                    this.showStatus('You can only use one hint per game!', 'error');
+                if (this.hintUsed > 2) {
+                    this.showStatus('No more hints available!', 'error');
                     return;
                 }
 
-                this.hintUsed = true;
-                let hint = 'First number is: ' + String(this.targetCombination[0]).padStart(2, '0');
+                this.hintUsed++;
+                let hint = '';
+                
+                if (this.hintUsed === 1) {
+                    hint = `🔍 First number: ${String(this.targetCombination[0]).padStart(2, '0')}`;
+                } else if (this.hintUsed === 2) {
+                    if (this.getDifficultyLength() > 1) {
+                        hint = `🔍 First number: ${String(this.targetCombination[0]).padStart(2, '0')} | Second number: ${String(this.targetCombination[1]).padStart(2, '0')}`;
+                    } else {
+                        hint = `🔍 That's all the numbers!`;
+                    }
+                } else {
+                    if (this.getDifficultyLength() === 3) {
+                        hint = `🔍 Complete combination: ${this.targetCombination.map(n => String(n).padStart(2, '0')).join(' - ')}`;
+                    } else {
+                        hint = `🔍 No more hints!`;
+                    }
+                }
+                
                 document.getElementById('hintText').textContent = hint;
-                document.getElementById('hintBtn').disabled = true;
+                document.getElementById('hintBtn').textContent = `Get Hint (${3 - this.hintUsed} left)`;
             }
 
             winGame() {
