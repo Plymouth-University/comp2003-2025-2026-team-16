@@ -1,12 +1,13 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from psycopg2.extras import RealDictCursor
 import sqlite3
 import storage
 
 app = Flask(__name__)
 CORS(app)
 def search_database(query, search_type):
-    conn = sqlite3.connect('database.db')
+    conn = storage.get_connection()
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     table_map = {
@@ -16,7 +17,7 @@ def search_database(query, search_type):
         'archives': 'Archives'
     }
     table = table_map.get(search_type, 'Agents')
-    cursor.execute(f"SELECT * FROM {table} WHERE name LIKE ?", ('%' + query + '%',))
+    cursor.execute(f"SELECT * FROM {table} WHERE name LIKE %s", ('%' + query + '%',))
     entries = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return entries
@@ -51,11 +52,11 @@ def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    conn = sqlite3.connect('database.db')
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
+    conn = storage.get_connection()
+    
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
     cursor.execute('''
-        SELECT username, rank, role FROM Users WHERE username = ? AND password = ?
+        SELECT username, rank, role FROM "Users" WHERE username = %s AND password = %s
     ''', (username, password))
     user = cursor.fetchone()
     conn.close()
@@ -170,5 +171,5 @@ def delete_item():
         return jsonify({'success': False, 'message': str(e)}), 400
     
 if __name__ == "__main__":
-    storage.initialise_database()
+    
     app.run(debug=True)
