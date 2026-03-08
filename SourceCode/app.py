@@ -6,21 +6,6 @@ import storage
 
 app = Flask(__name__)
 CORS(app)
-def search_database(query, search_type):
-    conn = storage.get_connection()
-    conn.row_factory = sqlite3.Row
-    cursor = conn.cursor()
-    table_map = {
-        'agents': 'Agents',
-        'locations': 'Locations',
-        'departments': 'Departments',
-        'archives': 'Archives'
-    }
-    table = table_map.get(search_type, 'Agents')
-    cursor.execute(f"SELECT * FROM {table} WHERE name LIKE %s", ('%' + query + '%',))
-    entries = [dict(row) for row in cursor.fetchall()]
-    conn.close()
-    return entries
 
 @app.route('/search')
 def search():
@@ -29,7 +14,7 @@ def search():
     user_rank = request.args.get('rank', 'rookie')
     rank_levels = {'rookie': 0, 'veteran': 1, 'elite': 2}
     user_level = rank_levels.get(user_rank, 0)
-    entries = search_database(query, search_type)
+    entries = storage.search_database(query, search_type)
     filtered = []
     for entry in entries:
         min_rank = entry.get('min_rank_required', 'rookie')
@@ -52,14 +37,8 @@ def login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    conn = storage.get_connection()
+    user = storage.get_user(username, password)
     
-    cursor = conn.cursor(cursor_factory=RealDictCursor)
-    cursor.execute('''
-        SELECT username, rank, role FROM "Users" WHERE username = %s AND password = %s
-    ''', (username, password))
-    user = cursor.fetchone()
-    conn.close()
     if user:
         return jsonify({
             'success': True,
@@ -135,17 +114,17 @@ def get_items():
         if table == 'Users':
             users = storage.get_users()
             items = [
-                {'user_id': u[0], 'username': u[1], 'role': u[2], 'rank': u[3]} for u in users
+                {'user_id': u['user_id'], 'username': u['username'], 'role': u['role'], 'rank': u['rank']} for u in users
             ]
         elif table == 'Agents':
             agents = storage.get_agents()
             items = [
-                {'agent_id': a[0], 'name': a[1], 'description': a[2], 'min_rank_required': a[3]} for a in agents
+                {'agent_id': a['agent_id'], 'name': a['name'], 'description': a['description'], 'min_rank_required': a['min_rank_required']} for a in agents
             ]
         elif table == 'Locations':
             locations = storage.get_locations()
             items = [
-                {'location_id': l[0], 'name': l[1], 'description': l[2], 'min_rank_required': l[3]} for l in locations
+                {'location_id': l['location_id'], 'name': l['name'], 'description': l['description'], 'min_rank_required': l['min_rank_required']} for l in locations
             ]
         else:
             return jsonify({'success': False, 'message': 'Unsupported table.'}), 400
