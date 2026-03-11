@@ -2,7 +2,7 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from psycopg2.extras import RealDictCursor
 import sqlite3
-import storage
+import storage as storage
 
 app = Flask(__name__)
 CORS(app)
