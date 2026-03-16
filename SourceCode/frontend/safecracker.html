@@ -368,6 +368,9 @@
                 this.dialRotation = 0;
                 this.gameWon = false;
 
+                // Audio setup for clicks
+                this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
                 this.init();
             }
 
@@ -419,15 +422,20 @@
                 return lengths[this.currentDifficulty];
             }
 
+            getFixedCombination() {
+                const combos = {
+                    easy: [5, 12, 27],
+                    medium: [7, 19, 31, 4],
+                    hard: [3, 18, 22, 35, 11],
+                };
+                return combos[this.currentDifficulty].slice();
+            }
+
             generateNewCombination() {
-                const length = this.getDifficultyLength();
-                this.targetCombination = [];
-                for (let i = 0; i < length; i++) {
-                    this.targetCombination.push(Math.floor(Math.random() * 40));
-                }
+                this.targetCombination = this.getFixedCombination();
                 this.userCombination = [];
                 this.currentDialIndex = 0;
-                this.hintUsed = 0;
+                this.hintUsed = false;
                 this.attempts = 0;
                 this.updateAttemptDisplay();
             }
@@ -454,26 +462,79 @@
                 if (this.gameWon) return;
                 this.dialRotation = (this.dialRotation + 9) % 360;
                 this.updateDialDisplay();
+                const currentNumber = this.getCurrentDialNumber();
+                const isComboNumber = this.targetCombination.includes(currentNumber);
+                this.playClick(isComboNumber ? 'combo' : 'normal');
             }
 
             rotateDialCounterClockwise() {
                 if (this.gameWon) return;
                 this.dialRotation = (this.dialRotation - 9 + 360) % 360;
                 this.updateDialDisplay();
+                const currentNumber = this.getCurrentDialNumber();
+                const isComboNumber = this.targetCombination.includes(currentNumber);
+                this.playClick(isComboNumber ? 'combo' : 'normal');
+            }
+
+            getCurrentDialNumber() {
+                return (40 - (Math.round(this.dialRotation / 9) % 40)) % 40;
             }
 
             updateDialDisplay() {
                 const dialNumbers = document.getElementById('dialNumbers');
                 dialNumbers.style.transform = `rotate(${this.dialRotation}deg)`;
 
-                const currentNumber = (40 - (Math.round(this.dialRotation / 9) % 40)) % 40;
                 document.getElementById('dialContainer').style.boxShadow = 
                     `0 0 8px #7DE3FF, inset 0 0 15px rgba(0, 229, 255, 0.1), 0 0 20px rgba(0, 229, 255, 0.3)`;
             }
 
+            playClick(type = 'normal') {
+                if (!this.audioContext) return;
+                const now = this.audioContext.currentTime;
+
+                // Create a short burst of filtered noise for a physical "click" feel.
+                const bufferSize = this.audioContext.sampleRate * 0.05; // 50ms
+                const noiseBuffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
+                const data = noiseBuffer.getChannelData(0);
+                for (let i = 0; i < bufferSize; i++) {
+                    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+                }
+
+                const noiseSource = this.audioContext.createBufferSource();
+                noiseSource.buffer = noiseBuffer;
+
+                const filter = this.audioContext.createBiquadFilter();
+                filter.type = 'bandpass';
+
+                const gain = this.audioContext.createGain();
+                gain.gain.setValueAtTime(0, now);
+
+                // Different timbres for normal / combo / correct
+                const config = {
+                    normal: { freq: 1200, q: 10, peak: 0.18 },
+                    combo: { freq: 2200, q: 14, peak: 0.25 },
+                    correct: { freq: 3200, q: 16, peak: 0.3 },
+                };
+
+                const { freq, q, peak } = config[type] || config.normal;
+                filter.frequency.setValueAtTime(freq, now);
+                filter.Q.setValueAtTime(q, now);
+
+                gain.gain.linearRampToValueAtTime(peak, now + 0.005);
+                gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
+
+                noiseSource.connect(filter).connect(gain).connect(this.audioContext.destination);
+                noiseSource.start(now);
+                noiseSource.stop(now + 0.07);
+            }
+
             selectNumber() {
-                const currentNumber = (40 - (Math.round(this.dialRotation / 9) % 40)) % 40;
-                
+                const currentNumber = this.getCurrentDialNumber();
+                const nextIndex = this.userCombination.length;
+                const isCorrect = currentNumber === this.targetCombination[nextIndex];
+
+                this.playClick(isCorrect ? 'correct' : 'normal');
+
                 if (this.userCombination.length < this.getDifficultyLength()) {
                     this.userCombination.push(currentNumber);
                     this.renderCombinationDisplay();
