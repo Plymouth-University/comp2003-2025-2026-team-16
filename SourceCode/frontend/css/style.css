@@ -201,7 +201,7 @@ h2 {
 
 #detailsContainer {
   font-size: 25px;
-   display: flex;
+  display: flex;
   flex-direction: column; 
   align-items: center; 
   justify-content: center;    
@@ -232,7 +232,18 @@ h2 {
 
 .admin-form-section{
   font-size: 15px;
-   display: flex;
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  gap: 15px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.admin-form{
+  font-size: 15px;
+  display: flex;
   flex-direction: column; 
   align-items: center; 
   justify-content: center; 
@@ -246,4 +257,99 @@ h2 {
   text-align: center;
   margin-bottom: 40px;
   white-space: nowrap;
+}
+
+#delete-item-list {
+  font-size: 15px;
+  display: flex;
+  flex-direction: column; 
+  align-items: center; 
+  justify-content: center; 
+  min-width: 600px;
+  overflow-x: auto;
+}
+
+#agent_name{
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  outline: none;
+  color: white;
+  border: 1px solid #00E5FF;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+}
+
+#agent_description{
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  outline: none;
+  color: white;
+  border: 1px solid #00E5FF;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+}
+
+#location_name{
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  outline: none;
+  color: white;
+  border: 1px solid #00E5FF;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+}
+
+#location_description{
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  outline: none;
+  color: white;
+  border: 1px solid #00E5FF;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+}
+
+#rank{
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  outline: none;
+  color: white;
+  border: 1px solid #00E5FF;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+}
+
+.min_rank{
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  outline: none;
+  color: white;
+  border: 1px solid #00E5FF;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+}
+
+.create{
+  padding: 10px 20px;               
+  background-color: rgba(255, 255, 255, 0.05);        
+  color: #00E5FF;   
+  text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;                    
+  border:1px solid #00E5FF;                      
+  border-radius: 25px;              
+  cursor: pointer;                   
+  font-size: 20px;
+  display: inline-block;
+  transform-origin: center center;
+  transition: transform 160ms cubic-bezier(.2,.9,.2,1), box-shadow 160ms ease, background-color 160ms ease;
+  will-change: transform;
+}
+
+#delete_id{
+  background-color: rgba(255, 255, 255, 0.05);
+  padding: 8px;
+  outline: none;
+  color: white;
+  border: 1px solid #00E5FF;
+  border-radius: 6px;
+  box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
 }
