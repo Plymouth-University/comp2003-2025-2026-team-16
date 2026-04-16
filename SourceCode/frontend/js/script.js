@@ -1,6 +1,6 @@
 // Initialize search history from localStorage
       let searchHistory = JSON.parse(localStorage.getItem('doveSearchHistory')) || [];
-      let currentSearchType = 'agents';
+      let currentSearchType = 'personnel';
 
       // DOM Elements
       const navBtns = document.querySelectorAll('.navBtn');
@@ -16,10 +16,11 @@
           btn.classList.add('active');
           currentSearchType = btn.dataset.type;
           const placeholderMap = {
-            agents: 'Search for an agent...',
-            locations: 'Search for a location...',
-            deparments: 'Search for a department...',
-            archives: 'Search the archive...'
+            personnel: 'Search personnel...',
+            intelligence: 'Search intelligence...',
+            missions: 'Search missions...',
+            archive: 'Search the archive...',
+            glossary: 'Search the glossary...'
           };
           searchBar.placeholder = placeholderMap[currentSearchType] || 'Search the database...';
           searchBar.focus();
@@ -33,10 +34,11 @@
           navBtns[0].classList.add('active');
           currentSearchType = navBtns[0].dataset.type || currentSearchType;
           const placeholderMap = {
-            agents: 'Search for an agent...',
-            locations: 'Search for a location...',
-            deparments: 'Search for a department...',
-            archives: 'Search the archive...'
+            personnel: 'Search personnel...',
+            intelligence: 'Search intelligence...',
+            missions: 'Search missions...',
+            archive: 'Search the archive...',
+            glossary: 'Search the glossary...'
           };
           searchBar.placeholder = placeholderMap[currentSearchType] || 'Search the database...';
         }
@@ -50,7 +52,7 @@
             // Add to search history and perform search
             performSearch();
             // Check if searching for circuitbreak in archives
-            if (currentSearchType === 'archives' && query.toLowerCase() === 'circuitbreak') {
+            if (currentSearchType === 'missions' && query.toLowerCase() === 'circuitbreak') {
               setTimeout(() => {
                 window.location.href = 'circuitBreaker.html';
               }, 100);
@@ -137,7 +139,15 @@
       function updateSearchResults() {
         const query = searchBar.value.trim();
         if (query.length === 0) {
-          searchResults.innerHTML = `<p>Start searching to find ${currentSearchType} in the database</p>`;
+          const labelMap = {
+            personnel: 'Personnel',
+            intelligence: 'Intelligence',
+            missions: 'Missions',
+            archive: 'Archive',
+            glossary: 'Glossary'
+          };
+          const label = labelMap[currentSearchType] || 'agents or locations';
+          searchResults.innerHTML = `<p>Start searching to find ${label} in the database</p>`;
         } else {
           searchResults.innerHTML = `<p>Searching for "<strong>${query}</strong>"...</p>`;
         }
@@ -151,10 +161,11 @@
           searchHistory_container.innerHTML = searchHistory.map((item, index) => `
             <div class="searchItem" data-index="${index}">
               <div class="searchItem-type">${
-                item.type === 'agents' ? '🕵️ Agent' : 
-                item.type === 'locations' ? '📍 Location' : 
-                item.type === 'deparments' ? '🏢 Department' : 
-                item.type === 'archives' ? '📚 Archive' : '🔍'
+                item.type === 'personnel' ? '🕵️ Personnel' :
+                item.type === 'intelligence' ? '🔎 Intelligence' :
+                item.type === 'missions' ? '📋 Missions' :
+                item.type === 'archive' ? '📚 Archive' :
+                item.type === 'glossary' ? '📖 Glossary' : '🔍'
               }</div>
               <div class="searchItem-name">${item.name}</div>
               <div style="font-size: 11px; opacity: 0.6; margin-top: 8px;">${item.timestamp}</div>

@@ -193,6 +193,43 @@ h2 {
   box-shadow: 0 6px 18px rgba(0,229,255,0.06), 0 0 6px #7DE3FF;
 }
 
+.navDropdown {
+  position: relative;
+}
+
+.navDropdown .dropdownMenu {
+  display: none;
+  position: absolute;
+  left: 100%;
+  top: 0;
+  margin-left: 8px;
+  background-color: #0D1117;
+  border: 1px solid #00E5FF;
+  border-radius: 8px;
+  box-shadow: 0 0 8px #7DE3FF;
+  min-width: 180px;
+  z-index: 100;
+  flex-direction: column;
+  padding: 6px 0;
+}
+
+.navDropdown:hover .dropdownMenu {
+  display: flex;
+}
+
+.navDropdown .dropdownMenu a {
+  padding: 8px 18px;
+  color: #00E5FF;
+  text-decoration: none;
+  font-size: 16px;
+  text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;
+  transition: background-color 120ms ease;
+}
+
+.navDropdown .dropdownMenu a:hover {
+  background-color: rgba(0, 229, 255, 0.1);
+}
+
 .navBtn.active {
   transform: scale(1.08);
   background-color: rgba(0, 229, 255, 0.12);

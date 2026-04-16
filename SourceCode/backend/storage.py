@@ -89,12 +89,30 @@ def search_database(query, search_type):
     conn = get_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     table_map = {
+        # Legacy keys
         'agents': 'Agents',
         'locations': 'Locations',
         'departments': 'Departments',
-        'archives': 'Archives'
+        'archives': 'Archives',
+        # Personnel
+        'personnel': 'Agents',
+        'management': 'Agents',
+        'field-agents': 'Agents',
+        'undercover-agents': 'Agents',
+        # Intelligence
+        'operatives': 'Agents',
+        'locations': 'Locations',
+        # Archive
+        'archive': 'Archives',
+        'documents': 'Archives',
+        'completed-missions': 'Archives',
+        'archive-evidence': 'Archives',
+        'archive-misc': 'Archives',
     }
-    table = table_map.get(search_type, 'Agents')
+    table = table_map.get(search_type)
+    if not table:
+        conn.close()
+        return []
     cursor.execute(f'SELECT * FROM "{table}" WHERE name LIKE %s', ('%' + query + '%',))
     entries = [dict(row) for row in cursor.fetchall()]
     conn.close()
