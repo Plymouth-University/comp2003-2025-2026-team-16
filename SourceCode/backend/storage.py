@@ -88,32 +88,40 @@ def get_locations():
 def search_database(query, search_type):
     conn = get_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
+    # (table_name, type_filter) — None means no type filter, search whole table
     table_map = {
-        # Legacy keys
-        'agents': 'Agents',
-        'locations': 'Locations',
-        'departments': 'Departments',
-        'archives': 'Archives',
         # Personnel
-        'personnel': 'Agents',
-        'management': 'Agents',
-        'field-agents': 'Agents',
-        'undercover-agents': 'Agents',
+        'personnel':          ('Agents', None),
+        'management':         ('Agents', 'management'),
+        'field-agents':       ('Agents', 'field-agents'),
+        'undercover-agents':  ('Agents', 'undercover-agents'),
+        'departments':        ('Departments', None),
         # Intelligence
-        'operatives': 'Agents',
-        'locations': 'Locations',
+        'intelligence':       (None, None),
+        'evidence':           (None, None),
+        'factions':           ('Factions', None),
+        'operatives':         ('Agents', 'operatives'),
+        'suspects':           ('Suspects', None),
+        'locations':          ('Locations', None),
+        'technology':         (None, None),
         # Archive
-        'archive': 'Archives',
-        'documents': 'Archives',
-        'completed-missions': 'Archives',
-        'archive-evidence': 'Archives',
-        'archive-misc': 'Archives',
+        'archive':            ('Archive', None),
+        'documents':          ('Archive', 'documents'),
+        'completed-missions': ('Archive', 'completed-missions'),
+        'archive-evidence':   ('Archive', 'archive-evidence'),
+        'archive-misc':       ('Archive', 'archive-misc'),
+        # Glossary
+        'glossary':           ('Glossary', None),
     }
-    table = table_map.get(search_type)
-    if not table:
+    mapping = table_map.get(search_type)
+    if not mapping or mapping[0] is None:
         conn.close()
         return []
-    cursor.execute(f'SELECT * FROM "{table}" WHERE name LIKE %s', ('%' + query + '%',))
+    table, type_filter = mapping
+    if type_filter:
+        cursor.execute(f'SELECT * FROM "{table}" WHERE name LIKE %s AND type = %s', ('%' + query + '%', type_filter))
+    else:
+        cursor.execute(f'SELECT * FROM "{table}" WHERE name LIKE %s', ('%' + query + '%',))
     entries = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return entries

@@ -9,22 +9,55 @@
       const searchHistory_container = document.getElementById('searchHistory');
       const emptyState = document.getElementById('emptyState');
 
+      // Shared placeholder map
+      const placeholderMap = {
+        personnel: 'Search personnel...',
+        management: 'Search management...',
+        'field-agents': 'Search field agents...',
+        'undercover-agents': 'Search undercover agents...',
+        departments: 'Search departments...',
+        intelligence: 'Search intelligence...',
+        evidence: 'Search evidence...',
+        factions: 'Search factions...',
+        operatives: 'Search operatives...',
+        suspects: 'Search suspects...',
+        locations: 'Search locations...',
+        technology: 'Search technology...',
+        missions: 'Search missions...',
+        active: 'Search active missions...',
+        paused: 'Search paused missions...',
+        'case-notes': 'Search case notes...',
+        'missions-misc': 'Search miscellaneous...',
+        archive: 'Search the archive...',
+        documents: 'Search documents...',
+        'completed-missions': 'Search completed missions...',
+        'archive-evidence': 'Search archived evidence...',
+        'archive-misc': 'Search miscellaneous...',
+        glossary: 'Search the glossary...'
+      };
+
+      function setSearchType(type, activeBtn) {
+        currentSearchType = type;
+        navBtns.forEach(b => b.classList.remove('active'));
+        if (activeBtn) activeBtn.classList.add('active');
+        searchBar.placeholder = placeholderMap[type] || 'Search the database...';
+        searchBar.focus();
+        updateSearchResults();
+      }
+
       // Navigation Button Event Listeners
       navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
-          navBtns.forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-          currentSearchType = btn.dataset.type;
-          const placeholderMap = {
-            personnel: 'Search personnel...',
-            intelligence: 'Search intelligence...',
-            missions: 'Search missions...',
-            archive: 'Search the archive...',
-            glossary: 'Search the glossary...'
-          };
-          searchBar.placeholder = placeholderMap[currentSearchType] || 'Search the database...';
-          searchBar.focus();
-          updateSearchResults();
+          setSearchType(btn.dataset.type, btn);
+        });
+      });
+
+      // Dropdown link event listeners
+      document.querySelectorAll('.navDropdown .dropdownMenu a').forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const parentBtn = link.closest('.navDropdown').querySelector('.navBtn');
+          setSearchType(link.dataset.type, parentBtn);
         });
       });
 
@@ -33,13 +66,6 @@
         if (navBtns.length > 0) {
           navBtns[0].classList.add('active');
           currentSearchType = navBtns[0].dataset.type || currentSearchType;
-          const placeholderMap = {
-            personnel: 'Search personnel...',
-            intelligence: 'Search intelligence...',
-            missions: 'Search missions...',
-            archive: 'Search the archive...',
-            glossary: 'Search the glossary...'
-          };
           searchBar.placeholder = placeholderMap[currentSearchType] || 'Search the database...';
         }
       }

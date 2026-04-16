@@ -10,7 +10,7 @@ CORS(app)
 @app.route('/search')
 def search():
     query = request.args.get('q', '')
-    search_type = request.args.get('type', 'agents')
+    search_type = request.args.get('type', 'personnel')
     user_rank = request.args.get('rank', 'rookie')
     rank_levels = {'rookie': 0, 'veteran': 1, 'elite': 2}
     user_level = rank_levels.get(user_rank, 0)
