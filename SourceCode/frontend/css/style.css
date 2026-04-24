@@ -390,3 +390,55 @@ h2 {
   border-radius: 6px;
   box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
 }
+
+#agentChat {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 320px;
+  height: 420px;
+  background-color: rgba(13, 17, 23, 0.95);
+  border: 1px solid #00E5FF;
+  border-radius: 10px;
+  box-shadow: 0 0 6px #7DE3FF, 0 0 12px #7DE3FF;
+  display: flex;
+  flex-direction: column;
+  z-index: 1000;
+}
+
+#agentChat .chatHeader {
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #00E5FF;
+}
+
+#chatMessages {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  font-size: 14px;
+}
+
+.chatInputArea {
+  display: flex;
+  border-top: 1px solid #00E5FF;
+}
+
+#chatInput {
+  flex: 1;
+  background-color: rgba(255, 255, 255, 0.05);
+  border: none;
+  color: white;
+  padding: 8px;
+  outline: none;
+}
+
+#sendChat {
+  margin: 5px;
+}
+
+.hidden {
+  display: none !important;
+}

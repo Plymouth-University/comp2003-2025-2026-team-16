@@ -62,6 +62,9 @@
       <div class="navDropdown">
         <button class="navBtn" data-type="glossary">Glossary</button>
       </div>
+      <div class="navDropdown">
+        <button class="navBtn" data-type="agent">Agent</button>
+      </div>
     </div>
 
     <!-- Search Container -->
@@ -88,6 +91,24 @@
         <div id="emptyState">No previous searches yet</div>
       </div>
     </div>
+
+    <!-- Agent Chat Window -->
+    <div id="agentChat" class="hidden">
+      <div class="chatHeader">
+        <span>Agent Assistant</span>
+        <button id="closeChat">✕</button>
+      </div>
+
+      <div class="chatBody" id="chatMessages">
+        <p class="botMsg">Agent system online. How can I assist?</p>
+      </div>
+
+      <div class="chatInputArea">
+        <input type="text" id="chatInput" placeholder="Type a message...">
+        <button id="sendChat" class="navBtn">Send</button>
+      </div>
+    </div>
+    
     <script src="js/script.js"></script>
   </body>
 </html>

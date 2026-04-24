@@ -48,6 +48,7 @@
       // Navigation Button Event Listeners
       navBtns.forEach(btn => {
         btn.addEventListener('click', () => {
+          if (btn.dataset.type === 'agent') return; // ignore agent
           setSearchType(btn.dataset.type, btn);
         });
       });
@@ -223,3 +224,69 @@
       // Initialize
       updateSearchHistory();
       searchBar.focus();
+
+      // === AGENT CHAT FUNCTIONALITY ===
+      document.addEventListener('DOMContentLoaded', () => {
+        // Get elements
+        const agentBtn = document.querySelector('[data-type="agent"]');
+        const agentChat = document.getElementById('agentChat');
+        const closeChat = document.getElementById('closeChat');
+        const sendChat = document.getElementById('sendChat');
+        const chatInput = document.getElementById('chatInput');
+        const chatMessages = document.getElementById('chatMessages');
+
+        // Open chat
+        agentBtn.addEventListener('click', () => {
+          agentChat.classList.remove('hidden');
+        });
+
+        // Close chat
+        closeChat.addEventListener('click', () => {
+          agentChat.classList.add('hidden');
+        });
+
+        // Send message
+        sendChat.addEventListener('click', sendMessage);
+
+        // Allow Enter key
+        chatInput.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            sendMessage();
+          }
+        });
+
+        function sendMessage() {
+          const text = chatInput.value.trim();
+          if (!text) return;
+
+          // User message
+          const userMsg = document.createElement('div');
+          userMsg.textContent = text;
+          userMsg.style.textAlign = 'right';
+          chatMessages.appendChild(userMsg);
+
+          // Placeholder AI response
+          const botMsg = document.createElement('div');
+          botMsg.textContent = "Thinking...";
+          chatMessages.appendChild(botMsg);
+
+          chatInput.value = "";
+          chatMessages.scrollTop = chatMessages.scrollHeight;
+
+          // Backend hook
+          fetch('http://localhost:5000/agent', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ message: text })
+          })
+          .then(res => res.json())
+          .then(data => {
+            botMsg.textContent = data.response || "No response";
+          })
+          .catch(() => {
+            botMsg.textContent = "Error contacting agent.";
+          });
+        }
+      });
