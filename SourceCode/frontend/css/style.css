@@ -439,6 +439,11 @@ h2 {
   margin: 5px;
 }
 
+#chatMessages div {
+  margin-bottom: 10px;
+  line-height: 1.4;
+}
+
 .hidden {
   display: none !important;
 }

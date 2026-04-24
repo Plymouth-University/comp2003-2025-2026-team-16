@@ -3,6 +3,7 @@ from flask_cors import CORS
 from psycopg2.extras import RealDictCursor
 import sqlite3
 import storage as storage
+from agent import run_agent
 
 app = Flask(__name__)
 CORS(app)
@@ -148,7 +149,18 @@ def delete_item():
         return jsonify({'success': True, 'message': f'Item {item_id} deleted from {table}.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
-    
+
+@app.route('/agent', methods=['POST'])
+def agent():
+    data = request.get_json()
+    message = data.get('message', '')
+
+    response_text = run_agent(message)
+
+    return jsonify({
+        "response": response_text
+    })
+
 if __name__ == "__main__":
     
     app.run(debug=True)
