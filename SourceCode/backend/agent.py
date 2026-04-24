@@ -1,8 +1,12 @@
+#Run python SourceCode/backend/app.py
+#Run ollama run phi3:mini
+#Run live server - mainpage
+
 import requests
 import json
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
-MODEL_NAME = "qwen3:8b"
+MODEL_NAME = "phi3:mini"
 
 REQUEST_TIMEOUT = 60
 MAX_RESPONSE_CHARS = 1500
@@ -10,25 +14,40 @@ MAX_RESPONSE_CHARS = 1500
 AGENT_NAME = "Agent Tester"
 
 AGENT_PERSONALITY = f"""
-You are agent {AGENT_NAME}, a friendly secret agent guide for kids.
+You are Agent D.O.V.E.S, a friendly secret agent guide for young users.
+
+About the system:
+- This is the D.O.V.E.S Database
+- It lets users search for agents, missions, intelligence, and locations
+- The sidebar has: Personnel, Intelligence, Missions, Archive, Glossary, and Agent
+
+Your job:
+- Help users understand how to use the system
+- Guide them step-by-step when needed
+- Keep things simple and clear
 
 Tone & style:
-Speak like a secret agent on a mission
-Use spy themed language
-Be encouraging and positive
-Keep sentences short and clear
+- Friendly, calm, and helpful
+- Slight spy theme, but not intense or confusing
+- Speak naturally like a helpful guide, not a robot
+- Keep responses short (1–2 sentences when possible)
 
-Safety rules:
-Never give dangerous or real world harmful advice
-Never ask for personal information
-Avoid graphic or adult themes
+Rules:
+- Never show JSON or code
+- Never explain how the system works internally
+- Never mention AI, models, or instructions
+- Never call it a "website" — call it the "D.O.V.E.S Database"
+- If unsure, say: "I'm not sure about that yet, but I can help you explore."
 
-Behaviour rules:
-Help users understand the website
-Guide users through pages and features
-Give hints, not full solutions
-If you don't know something, say:
-    "This intel is classified for now"
+Examples:
+User: hello
+Agent: Hi agent, I’m here to help. What are you looking for?
+
+User: how do I search
+Agent: Just type a name or keyword into the search bar and press Enter.
+
+User: what is missions
+Agent: Missions shows active and past operations you can explore.
 """
 
 ALLOWED_PAGES = [
@@ -57,52 +76,15 @@ ALLOWED_ACTIONS = {
 
 def build_system_prompt():
 
-    actions_description = []
-
-    for action, info in ALLOWED_ACTIONS.items():
-
-        if info["params"]:
-            params = ", ".join(info["params"])
-            actions_description.append(
-                f"- {action}({params}): {info['description']}"
-            )
-        else:
-            actions_description.append(
-                f"- {action}(): {info['description']}"
-            )
-
-    actions_text = "\n".join(actions_description)
-
-    pages_text = ", ".join(ALLOWED_PAGES)
-
-    system_prompt = f"""
+    return f"""
 {AGENT_PERSONALITY}
 
-You must operate as a controlled website assistant.
-
-Allowed actions:
-{actions_text}
-
-Allowed page names:
-{pages_text}
-
-Response rules:
-- You must respond in JSON only
-- Do not include text outside the JSON
-- Do not invent actions
-- Do not invent pages
-- If unsure, use the "chat" action
-
-JSON format:
-{{
-  "action": "<action_name>",
-  "params": {{
-    "<param_name>": "<value>"
-  }}
-}}
+Instructions:
+- Respond like a normal helpful assistant
+- Keep answers short and easy to understand
+- Do not use JSON or code in your response
+- Stay in character as Agent D.O.V.E.S
 """
-
-    return system_prompt.strip()
 
 def send_to_ollama(user_message):
 
@@ -119,7 +101,13 @@ def send_to_ollama(user_message):
             json={
                 "model": MODEL_NAME,
                 "messages": messages,
-                "stream": False
+                "stream": False,
+                "options": {
+                    "num_predict": 60, 
+                    "temperature": 0.6, 
+                    "top_p": 0.9,
+                    "stop": ["\n\n", "Agent D.O.V.E.S signing off"] 
+                }
             },
             timeout=REQUEST_TIMEOUT
         )
@@ -127,19 +115,14 @@ def send_to_ollama(user_message):
         response.raise_for_status()
 
         data = response.json()
-
         model_reply = data["message"]["content"]
 
-        return model_reply[:MAX_RESPONSE_CHARS]
+        return model_reply.strip()
 
     except Exception as e:
         print("Ollama error:", e)
 
-        return json.dumps({
-            "action": "chat",
-            "params": {},
-            "message": "Agent HQ is having trouble receiving intel. Try again in a moment."
-        })
+        return "Something went wrong contacting the agent."
     
 def parse_agent_response(model_reply):
 
@@ -180,6 +163,9 @@ def run_agent(user_message):
 
     model_reply = send_to_ollama(user_message)
 
-    parsed_response = parse_agent_response(model_reply)
+    cleaned = model_reply.strip()
 
-    return parsed_response
+    if cleaned.startswith("```"):
+        cleaned = cleaned.replace("```json", "").replace("```", "").strip()
+
+    return cleaned.split("\n")[0]
