@@ -21,13 +21,13 @@ def insert_user(username, password, role='User', rank='rookie'):
     conn.commit()
     conn.close()
 
-def insert_agent(name, description, min_rank_required):
+def insert_agent(name, codename, type, faction, role, counterpart, species, overview, background_origins, symbolism_codename_meaning, img, min_rank_required):
     conn = get_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     cursor.execute('''
-        INSERT INTO "Agents" (name, description, min_rank_required)
-        VALUES (%s, %s, %s)
-    ''', (name, description, min_rank_required))
+        INSERT INTO "Agents" (name, codename, type, faction, role, counterpart, species, overview, background_origins, symbolism_codename_meaning, img, min_rank_required)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    ''', (name, codename, type, faction, role, counterpart, species, overview, background_origins, symbolism_codename_meaning, img, min_rank_required))
     conn.commit()
     conn.close()
 
@@ -49,7 +49,10 @@ def delete_item(table, item_id):
         'Agents': 'agent_id',
         'Locations': 'location_id',
         'Departments': 'department_id',
-        'Archives': 'archive_id'
+        'Factions': 'faction_id',
+        'Suspects': 'suspect_id',
+        'Archive': 'archive_id',
+        'Glossary': 'glossary_id',
     }
     if table not in allowed_tables:
         raise ValueError('Invalid table name.')
@@ -125,6 +128,49 @@ def search_database(query, search_type):
     entries = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return entries
+
+def insert_department(name, description, min_rank_required):
+    conn = get_connection()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute('INSERT INTO "Departments" (name, description, min_rank_required) VALUES (%s, %s, %s)', (name, description, min_rank_required))
+    conn.commit()
+    conn.close()
+
+def insert_faction(name, description, min_rank_required):
+    conn = get_connection()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute('INSERT INTO "Factions" (name, description, min_rank_required) VALUES (%s, %s, %s)', (name, description, min_rank_required))
+    conn.commit()
+    conn.close()
+
+def insert_suspect(name, description, min_rank_required):
+    conn = get_connection()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute('INSERT INTO "Suspects" (name, description, min_rank_required) VALUES (%s, %s, %s)', (name, description, min_rank_required))
+    conn.commit()
+    conn.close()
+
+def insert_archive(name, description, min_rank_required):
+    conn = get_connection()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute('INSERT INTO "Archive" (name, description, min_rank_required) VALUES (%s, %s, %s)', (name, description, min_rank_required))
+    conn.commit()
+    conn.close()
+
+def insert_glossary(name, description, min_rank_required):
+    conn = get_connection()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute('INSERT INTO "Glossary" (name, description, min_rank_required) VALUES (%s, %s, %s)', (name, description, min_rank_required))
+    conn.commit()
+    conn.close()
+
+def get_all_items(table):
+    conn = get_connection()
+    cursor = conn.cursor(cursor_factory=RealDictCursor)
+    cursor.execute(f'SELECT * FROM "{table}"')
+    items = [dict(row) for row in cursor.fetchall()]
+    conn.close()
+    return items
 
 def get_user(username, password):
     conn = get_connection()

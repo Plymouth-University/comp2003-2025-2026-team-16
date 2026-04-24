@@ -62,6 +62,96 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    // Department form
+    var departmentForm = document.querySelector('#form-departments form');
+    var departmentMsg = document.createElement('div');
+    departmentForm.parentNode.insertBefore(departmentMsg, departmentForm);
+    departmentForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        departmentMsg.textContent = '';
+        var formData = new FormData(departmentForm);
+        fetch('http://127.0.0.1:5000/create_department', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                departmentMsg.textContent = data.success ? 'Department created successfully!' : (data.message || 'Failed to create department.');
+                departmentMsg.style.color = data.success ? 'green' : 'red';
+                if (data.success) departmentForm.reset();
+            })
+            .catch(() => { departmentMsg.textContent = 'An error occurred.'; departmentMsg.style.color = 'red'; });
+    });
+
+    // Faction form
+    var factionForm = document.querySelector('#form-factions form');
+    var factionMsg = document.createElement('div');
+    factionForm.parentNode.insertBefore(factionMsg, factionForm);
+    factionForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        factionMsg.textContent = '';
+        var formData = new FormData(factionForm);
+        fetch('http://127.0.0.1:5000/create_faction', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                factionMsg.textContent = data.success ? 'Faction created successfully!' : (data.message || 'Failed to create faction.');
+                factionMsg.style.color = data.success ? 'green' : 'red';
+                if (data.success) factionForm.reset();
+            })
+            .catch(() => { factionMsg.textContent = 'An error occurred.'; factionMsg.style.color = 'red'; });
+    });
+
+    // Suspect form
+    var suspectForm = document.querySelector('#form-suspects form');
+    var suspectMsg = document.createElement('div');
+    suspectForm.parentNode.insertBefore(suspectMsg, suspectForm);
+    suspectForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        suspectMsg.textContent = '';
+        var formData = new FormData(suspectForm);
+        fetch('http://127.0.0.1:5000/create_suspect', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                suspectMsg.textContent = data.success ? 'Suspect created successfully!' : (data.message || 'Failed to create suspect.');
+                suspectMsg.style.color = data.success ? 'green' : 'red';
+                if (data.success) suspectForm.reset();
+            })
+            .catch(() => { suspectMsg.textContent = 'An error occurred.'; suspectMsg.style.color = 'red'; });
+    });
+
+    // Archive form
+    var archiveForm = document.querySelector('#form-archive form');
+    var archiveMsg = document.createElement('div');
+    archiveForm.parentNode.insertBefore(archiveMsg, archiveForm);
+    archiveForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        archiveMsg.textContent = '';
+        var formData = new FormData(archiveForm);
+        fetch('http://127.0.0.1:5000/create_archive', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                archiveMsg.textContent = data.success ? 'Archive entry created successfully!' : (data.message || 'Failed to create archive entry.');
+                archiveMsg.style.color = data.success ? 'green' : 'red';
+                if (data.success) archiveForm.reset();
+            })
+            .catch(() => { archiveMsg.textContent = 'An error occurred.'; archiveMsg.style.color = 'red'; });
+    });
+
+    // Glossary form
+    var glossaryForm = document.querySelector('#form-glossary form');
+    var glossaryMsg = document.createElement('div');
+    glossaryForm.parentNode.insertBefore(glossaryMsg, glossaryForm);
+    glossaryForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        glossaryMsg.textContent = '';
+        var formData = new FormData(glossaryForm);
+        fetch('http://127.0.0.1:5000/create_glossary', { method: 'POST', body: formData })
+            .then(r => r.json())
+            .then(data => {
+                glossaryMsg.textContent = data.success ? 'Glossary entry created successfully!' : (data.message || 'Failed to create glossary entry.');
+                glossaryMsg.style.color = data.success ? 'green' : 'red';
+                if (data.success) glossaryForm.reset();
+            })
+            .catch(() => { glossaryMsg.textContent = 'An error occurred.'; glossaryMsg.style.color = 'red'; });
+    });
+
     // Location form
     var locationForm = document.querySelector('#form-location form');
     var locationMsg = document.createElement('div');
@@ -92,30 +182,26 @@ window.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+const formIds = ['user', 'agent', 'location', 'departments', 'factions', 'suspects', 'archive', 'glossary', 'delete'];
+
 function showForm(form) {
-    document.getElementById('form-user').style.display = (form === 'user') ? 'block' : 'none';
-    document.getElementById('form-agent').style.display = (form === 'agent') ? 'block' : 'none';
-    document.getElementById('form-location').style.display = (form === 'location') ? 'block' : 'none';
-    document.getElementById('form-delete').style.display = (form === 'delete') ? 'block' : 'none';
+    formIds.forEach(id => {
+        document.getElementById('form-' + id).style.display = (form === id) ? 'block' : 'none';
+    });
     var buttons = document.getElementsByClassName('tab-button');
     for (var i = 0; i < buttons.length; i++) {
         buttons[i].classList.remove('active');
     }
-    if (form === 'user') buttons[0].classList.add('active');
-    if (form === 'agent') buttons[1].classList.add('active');
-    if (form === 'location') buttons[2].classList.add('active');
-    if (form === 'delete') buttons[3].classList.add('active');
+    var idx = formIds.indexOf(form);
+    if (idx !== -1) buttons[idx].classList.add('active');
 }
 
 // Attach event listeners to tab buttons after DOM is loaded
 window.addEventListener('DOMContentLoaded', function() {
     var buttons = document.getElementsByClassName('tab-button');
-    if (buttons.length === 4) {
-        buttons[0].addEventListener('click', function() { showForm('user'); });
-        buttons[1].addEventListener('click', function() { showForm('agent'); });
-        buttons[2].addEventListener('click', function() { showForm('location'); });
-        buttons[3].addEventListener('click', function() { showForm('delete'); });
-    }
+    formIds.forEach(function(id, i) {
+        if (buttons[i]) buttons[i].addEventListener('click', function() { showForm(id); });
+    });
 });
 
 
@@ -126,7 +212,7 @@ window.addEventListener('DOMContentLoaded', function() {
     itemList.id = 'delete-item-list';
     deleteForm.parentNode.insertBefore(itemList, deleteForm);
 
-    function renderItems(items, table) {
+    function renderItems(items) {
         itemList.innerHTML = '';
         if (!items || items.length === 0) {
             itemList.textContent = 'No items found.';
@@ -135,17 +221,9 @@ window.addEventListener('DOMContentLoaded', function() {
         var list = document.createElement('ul');
         items.forEach(function(item) {
             var li = document.createElement('li');
-            if (table === 'Users') {
-                li.textContent = `ID: ${item.user_id}, Username: ${item.username}, Role: ${item.role}, Rank: ${item.rank}`;
-            } else if (table === 'Agents') {
-                li.textContent = `ID: ${item.agent_id}, Name: ${item.name}, Rank: ${item.min_rank_required}`;
-            } else if (table === 'Locations') {
-                li.textContent = `ID: ${item.location_id}, Name: ${item.name}, Rank: ${item.min_rank_required}`;
-            } else if (table === 'Departments') {
-                li.textContent = `ID: ${item.department_id}, Name: ${item.name}`;
-            } else if (table === 'Archives') {
-                li.textContent = `ID: ${item.archive_id}, Title: ${item.title}`;
-            }
+            const idField = Object.keys(item).find(k => k.endsWith('_id') || k === 'id');
+            const displayName = item.name || item.username || item.title || '—';
+            li.textContent = `ID: ${item[idField]}, Name: ${displayName}`;
             list.appendChild(li);
         });
         itemList.appendChild(list);
@@ -160,7 +238,7 @@ window.addEventListener('DOMContentLoaded', function() {
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
-                    renderItems(data.items, table);
+                    renderItems(data.items);
                 } else {
                     itemList.textContent = data.message || 'Failed to fetch items.';
                 }

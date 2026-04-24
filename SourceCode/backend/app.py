@@ -79,12 +79,23 @@ def create_agent():
     else:
         data = request.form
     name = data.get('name')
-    description = data.get('description', '')
-    min_rank_required = data.get('min_rank_required', 'rookie')
     if not name:
         return jsonify({'success': False, 'message': 'Agent name required.'}), 400
     try:
-        storage.insert_agent(name, description, min_rank_required)
+        storage.insert_agent(
+            name=name,
+            codename=data.get('codename', ''),
+            type=data.get('type', 'field-agents'),
+            faction=data.get('faction', ''),
+            role=data.get('role', ''),
+            counterpart=data.get('counterpart', ''),
+            species=data.get('species', ''),
+            overview=data.get('overview', ''),
+            background_origins=data.get('background_origins', ''),
+            symbolism_codename_meaning=data.get('symbolism_codename_meaning', ''),
+            img=data.get('img', ''),
+            min_rank_required=data.get('min_rank_required', 'rookie')
+        )
         return jsonify({'success': True, 'message': 'Agent created successfully.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
@@ -106,29 +117,76 @@ def create_location():
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
     
+@app.route('/create_department', methods=['POST'])
+def create_department():
+    data = request.get_json() if request.is_json else request.form
+    name = data.get('name')
+    if not name:
+        return jsonify({'success': False, 'message': 'Department name required.'}), 400
+    try:
+        storage.insert_department(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        return jsonify({'success': True, 'message': 'Department created successfully.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+
+@app.route('/create_faction', methods=['POST'])
+def create_faction():
+    data = request.get_json() if request.is_json else request.form
+    name = data.get('name')
+    if not name:
+        return jsonify({'success': False, 'message': 'Faction name required.'}), 400
+    try:
+        storage.insert_faction(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        return jsonify({'success': True, 'message': 'Faction created successfully.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+
+@app.route('/create_suspect', methods=['POST'])
+def create_suspect():
+    data = request.get_json() if request.is_json else request.form
+    name = data.get('name')
+    if not name:
+        return jsonify({'success': False, 'message': 'Suspect name required.'}), 400
+    try:
+        storage.insert_suspect(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        return jsonify({'success': True, 'message': 'Suspect created successfully.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+
+@app.route('/create_archive', methods=['POST'])
+def create_archive():
+    data = request.get_json() if request.is_json else request.form
+    name = data.get('name')
+    if not name:
+        return jsonify({'success': False, 'message': 'Archive entry name required.'}), 400
+    try:
+        storage.insert_archive(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        return jsonify({'success': True, 'message': 'Archive entry created successfully.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+
+@app.route('/create_glossary', methods=['POST'])
+def create_glossary():
+    data = request.get_json() if request.is_json else request.form
+    name = data.get('name')
+    if not name:
+        return jsonify({'success': False, 'message': 'Glossary entry name required.'}), 400
+    try:
+        storage.insert_glossary(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        return jsonify({'success': True, 'message': 'Glossary entry created successfully.'})
+    except Exception as e:
+        return jsonify({'success': False, 'message': str(e)}), 400
+
 @app.route('/get_items', methods=['GET'])
 def get_items():
     table = request.args.get('table')
+    allowed_tables = ['Users', 'Agents', 'Locations', 'Departments', 'Factions', 'Suspects', 'Archive', 'Glossary']
     if not table:
         return jsonify({'success': False, 'message': 'Table parameter required.'}), 400
+    if table not in allowed_tables:
+        return jsonify({'success': False, 'message': 'Unsupported table.'}), 400
     try:
-        if table == 'Users':
-            users = storage.get_users()
-            items = [
-                {'user_id': u['user_id'], 'username': u['username'], 'role': u['role'], 'rank': u['rank']} for u in users
-            ]
-        elif table == 'Agents':
-            agents = storage.get_agents()
-            items = [
-                {'agent_id': a['agent_id'], 'name': a['name'], 'description': a['description'], 'min_rank_required': a['min_rank_required']} for a in agents
-            ]
-        elif table == 'Locations':
-            locations = storage.get_locations()
-            items = [
-                {'location_id': l['location_id'], 'name': l['name'], 'description': l['description'], 'min_rank_required': l['min_rank_required']} for l in locations
-            ]
-        else:
-            return jsonify({'success': False, 'message': 'Unsupported table.'}), 400
+        items = storage.get_all_items(table)
         return jsonify({'success': True, 'items': items})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 500

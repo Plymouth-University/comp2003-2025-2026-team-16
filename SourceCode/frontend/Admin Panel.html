@@ -22,6 +22,11 @@
           <button class="tab-button active">Create User</button>
           <button class="tab-button">Create Agent</button>
           <button class="tab-button">Create Location</button>
+          <button class="tab-button">Departments</button>
+          <button class="tab-button">Factions</button>
+          <button class="tab-button">Suspects</button>
+          <button class="tab-button">Archive</button>
+          <button class="tab-button">Glossary</button>
           <button class="tab-button">Delete</button>
         </div>
         <section class="admin-form-section" id="form-user">
@@ -46,10 +51,37 @@
           <form class="admin-form">
             <label for="agent_name">Name:</label>
             <input type="text" id="agent_name" name="name" required>
-            <label for="agent_description">Description:</label>
-            <textarea id="agent_description" name="description"></textarea>
+            <label for="agent_codename">Codename:</label>
+            <input type="text" id="agent_codename" name="codename">
+            <label for="agent_type">Type:</label>
+            <select id="agent_type" name="type">
+              <option value="field-agents">Field Agent</option>
+              <option value="undercover-agents">Undercover Agent</option>
+              <option value="management">Management</option>
+              <option value="operatives">Operative</option>
+            </select>
+            <label for="agent_faction">Faction:</label>
+            <input type="text" id="agent_faction" name="faction">
+            <label for="agent_role">Role:</label>
+            <input type="text" id="agent_role" name="role">
+            <label for="agent_counterpart">Counterpart:</label>
+            <input type="text" id="agent_counterpart" name="counterpart">
+            <label for="agent_species">Species:</label>
+            <input type="text" id="agent_species" name="species">
+            <label for="agent_overview">Overview:</label>
+            <textarea id="agent_overview" name="overview"></textarea>
+            <label for="agent_background">Background & Origins:</label>
+            <textarea id="agent_background" name="background_origins"></textarea>
+            <label for="agent_symbolism">Symbolism & Codename Meaning:</label>
+            <textarea id="agent_symbolism" name="symbolism_codename_meaning"></textarea>
+            <label for="agent_img">Image URL:</label>
+            <input type="text" id="agent_img" name="img">
             <label for="agent_min_rank">Minimum Rank Required:</label>
-            <input type="text" class="min_rank" name="min_rank_required" value="rookie" required>
+            <select id="agent_min_rank" name="min_rank_required">
+              <option value="rookie">Rookie</option>
+              <option value="veteran">Veteran</option>
+              <option value="elite">Elite</option>
+            </select>
             <button type="submit" class="create">Create Agent</button>
           </form>
         </section>
@@ -61,8 +93,92 @@
             <label for="location_description">Description:</label>
             <textarea id="location_description" name="description"></textarea>
             <label for="location_min_rank">Minimum Rank Required:</label>
-            <input type="text" class="min_rank" name="min_rank_required" value="rookie" required>
+            <select id="location_min_rank" name="min_rank_required">
+              <option value="rookie">Rookie</option>
+              <option value="veteran">Veteran</option>
+              <option value="elite">Elite</option>
+            </select>
             <button type="submit" class="create">Create Location</button>
+          </form>
+        </section>
+        <section class="admin-form-section" id="form-departments" style="display:none;">
+          <h2>Create New Department</h2>
+          <form class="admin-form">
+            <label for="department_name">Name:</label>
+            <input type="text" id="department_name" name="name" required>
+            <label for="department_description">Description:</label>
+            <textarea id="department_description" name="description"></textarea>
+            <label for="department_min_rank">Minimum Rank Required:</label>
+            <select id="department_min_rank" name="min_rank_required">
+              <option value="rookie">Rookie</option>
+              <option value="veteran">Veteran</option>
+              <option value="elite">Elite</option>
+            </select>
+            <button type="submit" class="create">Create Department</button>
+          </form>
+        </section>
+        <section class="admin-form-section" id="form-factions" style="display:none;">
+          <h2>Create New Faction</h2>
+          <form class="admin-form">
+            <label for="faction_name">Name:</label>
+            <input type="text" id="faction_name" name="name" required>
+            <label for="faction_description">Description:</label>
+            <textarea id="faction_description" name="description"></textarea>
+            <label for="faction_min_rank">Minimum Rank Required:</label>
+            <select id="faction_min_rank" name="min_rank_required">
+              <option value="rookie">Rookie</option>
+              <option value="veteran">Veteran</option>
+              <option value="elite">Elite</option>
+            </select>
+            <button type="submit" class="create">Create Faction</button>
+          </form>
+        </section>
+        <section class="admin-form-section" id="form-suspects" style="display:none;">
+          <h2>Create New Suspect</h2>
+          <form class="admin-form">
+            <label for="suspect_name">Name:</label>
+            <input type="text" id="suspect_name" name="name" required>
+            <label for="suspect_description">Description:</label>
+            <textarea id="suspect_description" name="description"></textarea>
+            <label for="suspect_min_rank">Minimum Rank Required:</label>
+            <select id="suspect_min_rank" name="min_rank_required">
+              <option value="rookie">Rookie</option>
+              <option value="veteran">Veteran</option>
+              <option value="elite">Elite</option>
+            </select>
+            <button type="submit" class="create">Create Suspect</button>
+          </form>
+        </section>
+        <section class="admin-form-section" id="form-archive" style="display:none;">
+          <h2>Create New Archive Entry</h2>
+          <form class="admin-form">
+            <label for="archive_name">Name:</label>
+            <input type="text" id="archive_name" name="name" required>
+            <label for="archive_description">Description:</label>
+            <textarea id="archive_description" name="description"></textarea>
+            <label for="archive_min_rank">Minimum Rank Required:</label>
+            <select id="archive_min_rank" name="min_rank_required">
+              <option value="rookie">Rookie</option>
+              <option value="veteran">Veteran</option>
+              <option value="elite">Elite</option>
+            </select>
+            <button type="submit" class="create">Create Archive Entry</button>
+          </form>
+        </section>
+        <section class="admin-form-section" id="form-glossary" style="display:none;">
+          <h2>Create New Glossary Entry</h2>
+          <form class="admin-form">
+            <label for="glossary_name">Name:</label>
+            <input type="text" id="glossary_name" name="name" required>
+            <label for="glossary_description">Description:</label>
+            <textarea id="glossary_description" name="description"></textarea>
+            <label for="glossary_min_rank">Minimum Rank Required:</label>
+            <select id="glossary_min_rank" name="min_rank_required">
+              <option value="rookie">Rookie</option>
+              <option value="veteran">Veteran</option>
+              <option value="elite">Elite</option>
+            </select>
+            <button type="submit" class="create">Create Glossary Entry</button>
           </form>
         </section>
         <section class="admin-form-section" id="form-delete" style="display:none;">
@@ -74,7 +190,10 @@
               <option value="Agents">Agents</option>
               <option value="Locations">Locations</option>
               <option value="Departments">Departments</option>
-              <option value="Archives">Archives</option>
+              <option value="Factions">Factions</option>
+              <option value="Suspects">Suspects</option>
+              <option value="Archive">Archive</option>
+              <option value="Glossary">Glossary</option>
             </select>
             <label for="delete_id">ID:</label>
             <input type="number" id="delete_id" name="item_id" required>
