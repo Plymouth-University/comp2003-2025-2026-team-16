@@ -96,7 +96,11 @@ def send_to_ollama(user_message):
 
     try:
         response = requests.post(
-            OLLAMA_URL,
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {GROQ_API_KEY}",
+                "Content-Type": "application/json"
+            },
             json={
                 "model": "llama-3.1-8b-instant",
                 "messages": [
@@ -117,9 +121,8 @@ def send_to_ollama(user_message):
         return data["choices"][0]["message"]["content"].strip()
 
     except Exception as e:
-        print("Ollama error:", e)
-
-        return "Something went wrong contacting the agent."
+        print("Groq error:", e)
+        return "The agent is currently unavailable. Try again in a moment."
     
 def parse_agent_response(model_reply):
 
