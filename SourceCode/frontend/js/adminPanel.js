@@ -1,3 +1,8 @@
+function adminHeaders() {
+    var user = JSON.parse(localStorage.getItem('doveUser'));
+    return user && user.token ? { 'X-Session-Token': user.token } : {};
+}
+
 // Handle Create User form submission with fetch
 window.addEventListener('DOMContentLoaded', function() {
     // ...existing code for tab switching...
@@ -11,8 +16,9 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         userMsg.textContent = '';
         var formData = new FormData(userForm);
-        fetch('http://127.0.0.1:5000/create_user', {
+        fetch('https://comp2003-2025-2026-team-16.onrender.com/create_user', {
             method: 'POST',
+            headers: adminHeaders(),
             body: formData
         })
         .then(response => response.json())
@@ -41,8 +47,9 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         agentMsg.textContent = '';
         var formData = new FormData(agentForm);
-        fetch('http://127.0.0.1:5000/create_agent', {
+        fetch('https://comp2003-2025-2026-team-16.onrender.com/create_agent', {
             method: 'POST',
+            headers: adminHeaders(),
             body: formData
         })
         .then(response => response.json())
@@ -70,7 +77,7 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         departmentMsg.textContent = '';
         var formData = new FormData(departmentForm);
-        fetch('http://127.0.0.1:5000/create_department', { method: 'POST', body: formData })
+        fetch('https://comp2003-2025-2026-team-16.onrender.com/create_department', { method: 'POST', headers: adminHeaders(), body: formData })
             .then(r => r.json())
             .then(data => {
                 departmentMsg.textContent = data.success ? 'Department created successfully!' : (data.message || 'Failed to create department.');
@@ -88,7 +95,7 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         factionMsg.textContent = '';
         var formData = new FormData(factionForm);
-        fetch('http://127.0.0.1:5000/create_faction', { method: 'POST', body: formData })
+        fetch('https://comp2003-2025-2026-team-16.onrender.com/create_faction', { method: 'POST', headers: adminHeaders(), body: formData })
             .then(r => r.json())
             .then(data => {
                 factionMsg.textContent = data.success ? 'Faction created successfully!' : (data.message || 'Failed to create faction.');
@@ -106,7 +113,7 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         suspectMsg.textContent = '';
         var formData = new FormData(suspectForm);
-        fetch('http://127.0.0.1:5000/create_suspect', { method: 'POST', body: formData })
+        fetch('https://comp2003-2025-2026-team-16.onrender.com/create_suspect', { method: 'POST', headers: adminHeaders(), body: formData })
             .then(r => r.json())
             .then(data => {
                 suspectMsg.textContent = data.success ? 'Suspect created successfully!' : (data.message || 'Failed to create suspect.');
@@ -124,7 +131,7 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         archiveMsg.textContent = '';
         var formData = new FormData(archiveForm);
-        fetch('http://127.0.0.1:5000/create_archive', { method: 'POST', body: formData })
+        fetch('https://comp2003-2025-2026-team-16.onrender.com/create_archive', { method: 'POST', headers: adminHeaders(), body: formData })
             .then(r => r.json())
             .then(data => {
                 archiveMsg.textContent = data.success ? 'Archive entry created successfully!' : (data.message || 'Failed to create archive entry.');
@@ -142,7 +149,7 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         glossaryMsg.textContent = '';
         var formData = new FormData(glossaryForm);
-        fetch('http://127.0.0.1:5000/create_glossary', { method: 'POST', body: formData })
+        fetch('https://comp2003-2025-2026-team-16.onrender.com/create_glossary', { method: 'POST', headers: adminHeaders(), body: formData })
             .then(r => r.json())
             .then(data => {
                 glossaryMsg.textContent = data.success ? 'Glossary entry created successfully!' : (data.message || 'Failed to create glossary entry.');
@@ -161,8 +168,9 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         locationMsg.textContent = '';
         var formData = new FormData(locationForm);
-        fetch('http://127.0.0.1:5000/create_location', {
+        fetch('https://comp2003-2025-2026-team-16.onrender.com/create_location', {
             method: 'POST',
+            headers: adminHeaders(),
             body: formData
         })
         .then(response => response.json())
@@ -234,7 +242,9 @@ window.addEventListener('DOMContentLoaded', function() {
             itemList.innerHTML = '';
             return;
         }
-        fetch(`http://127.0.0.1:5000/get_items?table=${table}`)
+        fetch(`https://comp2003-2025-2026-team-16.onrender.com/get_items?table=${table}`, {
+            headers: adminHeaders()
+        })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -264,8 +274,9 @@ window.addEventListener('DOMContentLoaded', function() {
         e.preventDefault();
         deleteMsg.textContent = '';
         var formData = new FormData(deleteForm);
-        fetch('http://127.0.0.1:5000/delete_item', {
+        fetch('https://comp2003-2025-2026-team-16.onrender.com/delete_item', {
             method: 'POST',
+            headers: adminHeaders(),
             body: formData
         })
         .then(response => response.json())

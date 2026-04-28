@@ -1,3 +1,12 @@
+// Show admin panel button only for admins
+document.addEventListener('DOMContentLoaded', function () {
+  const user = JSON.parse(localStorage.getItem('doveUser'));
+  if (user && user.role === 'Admin') {
+    const adminNav = document.getElementById('adminPanelNav');
+    if (adminNav) adminNav.style.display = '';
+  }
+});
+
 // Initialize search history from localStorage
       let searchHistory = JSON.parse(localStorage.getItem('doveSearchHistory')) || [];
       let currentSearchType = 'personnel';
@@ -78,10 +87,19 @@
           if (query.length > 0) {
             // Add to search history and perform search
             performSearch();
-            // Check if searching for circuitbreak in archives
-            if (currentSearchType === 'missions' && query.toLowerCase() === 'circuitbreak') {
+            // Check if searching for minigames in missions
+            const q = query.toLowerCase();
+            if (currentSearchType === 'missions' && q === 'circuitbreak') {
               setTimeout(() => {
                 window.location.href = 'circuitBreaker.html';
+              }, 100);
+            } else if (currentSearchType === 'missions' && q === 'safecracker') {
+              setTimeout(() => {
+                window.location.href = 'safecracker.html';
+              }, 100);
+            } else if (currentSearchType === 'missions' && (q === 'radio mission' || q === 'radiomission')) {
+              setTimeout(() => {
+                window.location.href = 'Radio Mission.html';
               }, 100);
             } else {
               setTimeout(() => {
@@ -123,7 +141,7 @@
           const user = JSON.parse(localStorage.getItem('doveUser') || '{}');
           const userRank = user.rank || 'rookie';
           searchResults.innerHTML = `<p>Searching for <strong>${query}</strong> in ${currentSearchType}...</p>`;
-          fetch(`http://localhost:5000/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(currentSearchType)}&rank=${encodeURIComponent(userRank)}`)
+          fetch(`https://comp2003-2025-2026-team-16.onrender.com/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(currentSearchType)}&rank=${encodeURIComponent(userRank)}`)
             .then(response => response.json())
             .then(results => {
               if (results.length === 0) {
@@ -274,7 +292,7 @@
           chatMessages.scrollTop = chatMessages.scrollHeight;
 
           // Backend hook
-          fetch('http://localhost:5000/agent', {
+          fetch('https://comp2003-2025-2026-team-16.onrender.com/agent', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'

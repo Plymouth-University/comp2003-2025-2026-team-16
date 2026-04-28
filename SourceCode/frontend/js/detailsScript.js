@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const userRank = user.rank || 'rookie';
 
   // Fields to never display as rows
-  const hiddenFields = new Set(['name', 'title', 'id', 'ID', 'img', 'min_rank_required', 'agent_id', 'type']);
+  const hiddenFields = new Set(['name', 'title', 'id', 'ID', 'img', 'min_rank_required', 'agent_id', 'type', 'locked']);
 
   // Human-readable labels for known fields
   const fieldLabels = {
@@ -32,7 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     faction: 'Faction',
   };
 
-  fetch(`http://localhost:5000/search?q=${encodeURIComponent(name)}&type=${encodeURIComponent(type)}&rank=${encodeURIComponent(userRank)}`)
+  fetch(`https://comp2003-2025-2026-team-16.onrender.com/search?q=${encodeURIComponent(name)}&type=${encodeURIComponent(type)}&rank=${encodeURIComponent(userRank)}`)
     .then(response => response.json())
     .then(results => {
       if (!results || results.length === 0) {

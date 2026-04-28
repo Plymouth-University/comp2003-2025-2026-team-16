@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
 			const password = document.getElementById('password').value;
 
 			// Send credentials to backend for authentication
-			fetch('http://localhost:5000/login', {
+			fetch('https://comp2003-2025-2026-team-16.onrender.com/login', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json'
@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
 					localStorage.setItem('doveUser', JSON.stringify({
 						username: data.username,
 						rank: data.rank,
-						role: data.role
+						role: data.role,
+						token: data.token
 					}));
 					window.location.href = 'Main page.html';
 				} else {

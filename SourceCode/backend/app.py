@@ -2,11 +2,27 @@ from flask import Flask, request, jsonify
 from flask_cors import CORS
 from psycopg2.extras import RealDictCursor
 import sqlite3
+import secrets
 import storage as storage
 from agent import run_agent
 
 app = Flask(__name__)
 CORS(app)
+
+# Server-side session store: token -> {username, role}
+_sessions = {}
+
+def _get_session_user():
+    token = request.headers.get('X-Session-Token')
+    if not token:
+        return None
+    return _sessions.get(token)
+
+def _require_admin():
+    user = _get_session_user()
+    if not user or user.get('role') != 'Admin':
+        return jsonify({'success': False, 'message': 'Admin access required.'}), 403
+    return None
 
 @app.route('/search')
 def search():
@@ -41,11 +57,14 @@ def login():
     user = storage.get_user(username, password)
     
     if user:
+        token = secrets.token_hex(32)
+        _sessions[token] = {'username': user['username'], 'role': user['role']}
         return jsonify({
             'success': True,
             'username': user['username'],
             'rank': user['rank'],
-            'role': user['role']
+            'role': user['role'],
+            'token': token
         })
     else:
         return jsonify({
@@ -56,6 +75,9 @@ def login():
 
 @app.route('/create_user', methods=['POST'])
 def create_user():
+    err = _require_admin()
+    if err:
+        return err
     if request.is_json:
         data = request.get_json()
     else:
@@ -74,6 +96,9 @@ def create_user():
 
 @app.route('/create_agent', methods=['POST'])
 def create_agent():
+    err = _require_admin()
+    if err:
+        return err
     if request.is_json:
         data = request.get_json()
     else:
@@ -102,6 +127,9 @@ def create_agent():
 
 @app.route('/create_location', methods=['POST'])
 def create_location():
+    err = _require_admin()
+    if err:
+        return err
     if request.is_json:
         data = request.get_json()
     else:
@@ -119,6 +147,9 @@ def create_location():
     
 @app.route('/create_department', methods=['POST'])
 def create_department():
+    err = _require_admin()
+    if err:
+        return err
     data = request.get_json() if request.is_json else request.form
     name = data.get('name')
     if not name:
@@ -131,6 +162,9 @@ def create_department():
 
 @app.route('/create_faction', methods=['POST'])
 def create_faction():
+    err = _require_admin()
+    if err:
+        return err
     data = request.get_json() if request.is_json else request.form
     name = data.get('name')
     if not name:
@@ -143,6 +177,9 @@ def create_faction():
 
 @app.route('/create_suspect', methods=['POST'])
 def create_suspect():
+    err = _require_admin()
+    if err:
+        return err
     data = request.get_json() if request.is_json else request.form
     name = data.get('name')
     if not name:
@@ -155,6 +192,9 @@ def create_suspect():
 
 @app.route('/create_archive', methods=['POST'])
 def create_archive():
+    err = _require_admin()
+    if err:
+        return err
     data = request.get_json() if request.is_json else request.form
     name = data.get('name')
     if not name:
@@ -167,6 +207,9 @@ def create_archive():
 
 @app.route('/create_glossary', methods=['POST'])
 def create_glossary():
+    err = _require_admin()
+    if err:
+        return err
     data = request.get_json() if request.is_json else request.form
     name = data.get('name')
     if not name:
@@ -179,6 +222,9 @@ def create_glossary():
 
 @app.route('/get_items', methods=['GET'])
 def get_items():
+    err = _require_admin()
+    if err:
+        return err
     table = request.args.get('table')
     allowed_tables = ['Users', 'Agents', 'Locations', 'Departments', 'Factions', 'Suspects', 'Archive', 'Glossary']
     if not table:
@@ -194,6 +240,9 @@ def get_items():
 # Delete item endpoint
 @app.route('/delete_item', methods=['POST'])
 def delete_item():
+    err = _require_admin()
+    if err:
+        return err
     if request.is_json:
         data = request.get_json()
     else:
