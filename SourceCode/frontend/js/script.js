@@ -87,10 +87,19 @@ document.addEventListener('DOMContentLoaded', function () {
           if (query.length > 0) {
             // Add to search history and perform search
             performSearch();
-            // Check if searching for circuitbreak in archives
-            if (currentSearchType === 'missions' && query.toLowerCase() === 'circuitbreak') {
+            // Check if searching for minigames in missions
+            const q = query.toLowerCase();
+            if (currentSearchType === 'missions' && q === 'circuitbreak') {
               setTimeout(() => {
                 window.location.href = 'circuitBreaker.html';
+              }, 100);
+            } else if (currentSearchType === 'missions' && q === 'safecracker') {
+              setTimeout(() => {
+                window.location.href = 'safecracker.html';
+              }, 100);
+            } else if (currentSearchType === 'missions' && (q === 'radio mission' || q === 'radiomission')) {
+              setTimeout(() => {
+                window.location.href = 'Radio Mission.html';
               }, 100);
             } else {
               setTimeout(() => {
