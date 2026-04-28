@@ -19,7 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const userRank = user.rank || 'rookie';
 
   // Fields to never display as rows
-  const hiddenFields = new Set(['name', 'title', 'id', 'ID', 'img', 'min_rank_required', 'agent_id', 'type']);
+  const hiddenFields = new Set(['name', 'title', 'id', 'ID', 'img', 'min_rank_required', 'agent_id', 'type', 'locked']);
 
   // Human-readable labels for known fields
   const fieldLabels = {
