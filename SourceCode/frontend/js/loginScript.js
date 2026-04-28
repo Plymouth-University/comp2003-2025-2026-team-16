@@ -40,7 +40,8 @@ document.addEventListener('DOMContentLoaded', function () {
 					localStorage.setItem('doveUser', JSON.stringify({
 						username: data.username,
 						rank: data.rank,
-						role: data.role
+						role: data.role,
+						token: data.token
 					}));
 					window.location.href = 'Main page.html';
 				} else {

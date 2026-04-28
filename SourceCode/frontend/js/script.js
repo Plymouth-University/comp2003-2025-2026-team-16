@@ -1,3 +1,12 @@
+// Show admin panel button only for admins
+document.addEventListener('DOMContentLoaded', function () {
+  const user = JSON.parse(localStorage.getItem('doveUser'));
+  if (user && user.role === 'Admin') {
+    const adminNav = document.getElementById('adminPanelNav');
+    if (adminNav) adminNav.style.display = '';
+  }
+});
+
 // Initialize search history from localStorage
       let searchHistory = JSON.parse(localStorage.getItem('doveSearchHistory')) || [];
       let currentSearchType = 'personnel';

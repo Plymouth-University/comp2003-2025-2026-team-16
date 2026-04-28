@@ -13,6 +13,14 @@
   </head>
 
   <body>
+    <script>
+      (function () {
+        var user = JSON.parse(localStorage.getItem('doveUser'));
+        if (!user || user.role !== 'Admin') {
+          window.location.replace('Main page.html');
+        }
+      })();
+    </script>
     <div id="header">
       <img src="images/DOVE LOGO.png" alt="The D.O.V.E.S logo" class="logo">
       <h3 id="headerTitle">D.O.V.E.S Database</h3>
