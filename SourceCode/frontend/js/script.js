@@ -123,7 +123,7 @@
           const user = JSON.parse(localStorage.getItem('doveUser') || '{}');
           const userRank = user.rank || 'rookie';
           searchResults.innerHTML = `<p>Searching for <strong>${query}</strong> in ${currentSearchType}...</p>`;
-          fetch(`http://localhost:5000/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(currentSearchType)}&rank=${encodeURIComponent(userRank)}`)
+          fetch(`https://comp2003-2025-2026-team-16.onrender.com/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(currentSearchType)}&rank=${encodeURIComponent(userRank)}`)
             .then(response => response.json())
             .then(results => {
               if (results.length === 0) {
@@ -274,7 +274,7 @@
           chatMessages.scrollTop = chatMessages.scrollHeight;
 
           // Backend hook
-          fetch('http://localhost:5000/agent', {
+          fetch('https://comp2003-2025-2026-team-16.onrender.com/agent', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
