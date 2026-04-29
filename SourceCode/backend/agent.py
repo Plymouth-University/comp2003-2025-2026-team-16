@@ -1,9 +1,13 @@
 #Run python SourceCode/backend/app.py
-#Run ollama run phi3:mini
 #Run live server - mainpage
+#pip install python-dotenv
 
 import requests
 import json
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 OLLAMA_URL = "http://localhost:11434/api/chat"
 MODEL_NAME = "phi3:mini"
@@ -30,7 +34,7 @@ Tone & style:
 - Friendly, calm, and helpful
 - Slight spy theme, but not intense or confusing
 - Speak naturally like a helpful guide, not a robot
-- Keep responses short (1–2 sentences when possible)
+- Keep responses short (1-2 sentences when possible)
 
 Rules:
 - Never show JSON or code
@@ -88,41 +92,37 @@ Instructions:
 
 def send_to_ollama(user_message):
 
-    system_prompt = build_system_prompt()
-
-    messages = [
-        {"role": "system", "content": system_prompt},
-        {"role": "user", "content": user_message}
-    ]
+    GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 
     try:
         response = requests.post(
-            OLLAMA_URL,
-            json={
-                "model": MODEL_NAME,
-                "messages": messages,
-                "stream": False,
-                "options": {
-                    "num_predict": 60, 
-                    "temperature": 0.6, 
-                    "top_p": 0.9,
-                    "stop": ["\n\n", "Agent D.O.V.E.S signing off"] 
-                }
+            "https://api.groq.com/openai/v1/chat/completions",
+            headers={
+                "Authorization": f"Bearer {GROQ_API_KEY}",
+                "Content-Type": "application/json"
             },
-            timeout=REQUEST_TIMEOUT
+            json={
+                "model": "llama-3.1-8b-instant",
+                "messages": [
+                    {"role": "system", "content": build_system_prompt()},
+                    {"role": "user", "content": user_message}
+                ],
+                "max_tokens": 60,
+                "temperature": 0.5
+            }
         )
+
+        if response.status_code != 200:
+            print("Groq API error:", response.text)
 
         response.raise_for_status()
 
         data = response.json()
-        model_reply = data["message"]["content"]
-
-        return model_reply.strip()
+        return data["choices"][0]["message"]["content"].strip()
 
     except Exception as e:
-        print("Ollama error:", e)
-
-        return "Something went wrong contacting the agent."
+        print("Groq error:", e)
+        return "The agent is currently unavailable. Try again in a moment."
     
 def parse_agent_response(model_reply):
 

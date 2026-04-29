@@ -4,26 +4,30 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OPERATION STATIC — Agent Radio Mission</title>
-<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&family=VT323&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Science+Gothic:wght@100..900&display=swap" rel="stylesheet">
 <style>
   :root {
-    --green: #00ff88;
-    --green-dim: #00994d;
-    --green-glow: rgba(0,255,136,0.3);
-    --amber: #ffaa00;
-    --red: #ff3333;
-    --bg: #050a08;
-    --panel: #0a1510;
-    --panel-border: #1a3025;
-    --scanline: rgba(0,0,0,0.15);
+    --cyan:        #00E5FF;
+    --cyan-dim:    #589eef;
+    --cyan-glow:   rgba(0, 229, 255, 0.3);
+    --blue-deep:   #3b2cde;
+    --amber:       #7DE3FF;
+    --red:         #ff4d6d;
+    --bg:          #05080f;
+    --panel:       rgba(0, 10, 30, 0.85);
+    --panel-border:#00E5FF;
+    --panel-border-dim: rgba(0,229,255,0.25);
   }
-
+ 
   * { margin: 0; padding: 0; box-sizing: border-box; }
-
+ 
   body {
     background: var(--bg);
-    color: var(--green);
-    font-family: 'Share Tech Mono', monospace;
+    color: var(--cyan);
+    font-family: "Science Gothic", sans-serif;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
@@ -31,53 +35,46 @@
     overflow-x: hidden;
     position: relative;
   }
-
-  /* CRT scanlines overlay */
+ 
+  /* Subtle grid background */
   body::before {
     content: '';
     position: fixed;
     inset: 0;
-    background: repeating-linear-gradient(
-      0deg,
-      var(--scanline) 0px,
-      var(--scanline) 1px,
-      transparent 1px,
-      transparent 3px
-    );
+    background-image:
+      linear-gradient(rgba(0,229,255,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,229,255,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
     pointer-events: none;
-    z-index: 1000;
+    z-index: 0;
   }
-
-  /* CRT vignette */
+ 
+  /* Vignette */
   body::after {
     content: '';
     position: fixed;
     inset: 0;
-    background: radial-gradient(ellipse at center, transparent 60%, rgba(0,0,0,0.7) 100%);
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.75) 100%);
     pointer-events: none;
-    z-index: 999;
+    z-index: 1;
   }
-
-  .noise {
-    position: fixed;
-    inset: 0;
-    opacity: 0.03;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 998;
-  }
-
-  /* === HEADER === */
-  .header {
+ 
+  /* All content above pseudo elements */
+  .header, .step-tracker, .briefing-panel, .math-panel,
+  .game-container, .transmit-btn, .decode-panel,
+  .hint-row, .result-overlay { position: relative; z-index: 2; }
+ 
+  /* === HEADER (reuse site header styles) === */
+  .page-header {
     width: 100%;
     max-width: 900px;
     padding: 20px 20px 0;
     text-align: center;
   }
-
+ 
   .classified-banner {
-    font-family: 'Orbitron', monospace;
-    font-size: 10px;
+    font-family: "Science Gothic", sans-serif;
+    font-size: 11px;
     font-weight: 900;
     letter-spacing: 6px;
     color: var(--red);
@@ -88,600 +85,525 @@
     margin-bottom: 10px;
     animation: blink-border 2s infinite;
   }
-
-  @keyframes blink-border {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-  }
-
+ 
+  @keyframes blink-border { 0%,100%{opacity:1} 50%{opacity:0.45} }
+ 
   .title {
-    font-family: 'Orbitron', monospace;
-    font-size: clamp(22px, 5vw, 42px);
+    font-family: "Science Gothic", sans-serif;
+    font-size: clamp(24px, 5vw, 44px);
     font-weight: 900;
     letter-spacing: 4px;
-    text-shadow: 0 0 20px var(--green), 0 0 40px var(--green-dim);
+    text-shadow: 0 0 2px var(--blue-deep), 0 0 8px var(--cyan-dim), 0 0 18px rgba(125,227,255,0.4);
     line-height: 1.1;
+    color: var(--cyan);
   }
-
+ 
   .subtitle {
-    font-family: 'VT323', monospace;
-    font-size: 20px;
-    color: var(--green-dim);
+    font-size: 16px;
+    color: var(--cyan-dim);
     letter-spacing: 3px;
-    margin-top: 4px;
+    margin-top: 6px;
+    text-shadow: 0 0 6px var(--cyan-glow);
   }
-
-  /* === BRIEFING === */
-  .briefing-panel {
-    width: 100%;
-    max-width: 900px;
-    margin: 20px 20px 0;
-    border: 1px solid var(--panel-border);
-    background: var(--panel);
-    padding: 16px 20px;
-    position: relative;
-  }
-
-  .briefing-panel::before {
-    content: '// MISSION BRIEFING';
-    position: absolute;
-    top: -10px;
-    left: 16px;
-    background: var(--panel);
-    padding: 0 8px;
-    font-size: 11px;
-    color: var(--amber);
-    letter-spacing: 2px;
-  }
-
-  .briefing-text {
-    font-size: 13px;
-    line-height: 1.7;
-    color: #aaddcc;
-  }
-
-  .briefing-text strong { color: var(--green); }
-
-  /* === MATH PANEL === */
-  .math-panel {
+ 
+  /* === SHARED PANEL === */
+  .panel {
     width: 100%;
     max-width: 900px;
     margin: 16px 20px 0;
-    border: 1px solid var(--panel-border);
+    width: calc(100% - 40px);
+    border: 1px solid var(--panel-border-dim);
     background: var(--panel);
-    padding: 16px 20px;
+    padding: 20px;
     position: relative;
+    box-shadow: 0 0 18px rgba(0,229,255,0.06), inset 0 0 30px rgba(0,20,60,0.4);
   }
-
-  .math-panel::before {
-    content: '// SIGNAL EQUATIONS';
+ 
+  .panel-label {
     position: absolute;
-    top: -10px;
+    top: -11px;
     left: 16px;
-    background: var(--panel);
-    padding: 0 8px;
+    background: var(--bg);
+    padding: 0 10px;
     font-size: 11px;
-    color: var(--amber);
-    letter-spacing: 2px;
+    color: var(--cyan);
+    letter-spacing: 3px;
+    text-shadow: 0 0 6px var(--cyan-glow);
   }
-
+ 
+  /* === BRIEFING === */
+  .briefing-text {
+    font-size: 14px;
+    line-height: 1.8;
+    color: rgba(0,229,255,0.75);
+  }
+ 
+  .briefing-text strong { color: var(--cyan); text-shadow: 0 0 4px var(--cyan-glow); }
+ 
+  /* === MATH PANEL === */
   .equations {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 12px;
   }
-
+ 
   @media (max-width: 600px) { .equations { grid-template-columns: 1fr; } }
-
+ 
   .eq-card {
-    border: 1px solid #1a3025;
-    padding: 12px;
-    background: rgba(0,255,136,0.03);
+    border: 1px solid var(--panel-border-dim);
+    padding: 14px;
+    background: rgba(0,229,255,0.03);
+    box-shadow: inset 0 0 12px rgba(0,20,60,0.3);
   }
-
+ 
   .eq-label {
     font-size: 10px;
-    letter-spacing: 2px;
-    color: var(--amber);
-    margin-bottom: 6px;
+    letter-spacing: 3px;
+    color: var(--cyan-dim);
+    margin-bottom: 8px;
+    text-shadow: 0 0 4px var(--cyan-glow);
   }
-
+ 
   .eq-formula {
-    font-family: 'VT323', monospace;
-    font-size: 22px;
-    color: var(--green);
-    text-shadow: 0 0 8px var(--green-glow);
+    font-size: 20px;
+    color: var(--cyan);
+    text-shadow: 0 0 8px var(--cyan-glow);
+    margin-bottom: 6px;
+    letter-spacing: 1px;
   }
-
+ 
   .eq-desc {
-    font-size: 11px;
-    color: #7aaa90;
-    margin-top: 4px;
-    line-height: 1.5;
+    font-size: 12px;
+    color: rgba(0,229,255,0.55);
+    line-height: 1.6;
   }
-
+ 
   .target-box {
     grid-column: 1 / -1;
-    border: 1px solid var(--amber);
-    padding: 12px;
-    background: rgba(255,170,0,0.05);
+    border: 1px solid var(--cyan);
+    padding: 14px;
+    background: rgba(0,229,255,0.05);
     text-align: center;
+    box-shadow: 0 0 20px rgba(0,229,255,0.1);
   }
-
-  .target-label { font-size: 11px; color: var(--amber); letter-spacing: 3px; }
+ 
+  .target-label { font-size: 11px; color: var(--cyan); letter-spacing: 4px; }
   .target-value {
-    font-family: 'Orbitron', monospace;
-    font-size: 18px;
-    color: var(--amber);
-    text-shadow: 0 0 10px rgba(255,170,0,0.5);
-    margin-top: 4px;
+    font-size: 22px;
+    color: var(--cyan);
+    text-shadow: 0 0 12px var(--cyan-glow);
+    margin-top: 6px;
+    font-weight: bold;
   }
-
-  /* === MAIN GAME === */
+ 
+  /* === GAME GRID === */
   .game-container {
-    width: 100%;
+    width: calc(100% - 40px);
     max-width: 900px;
     margin: 16px 20px;
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
   }
-
+ 
   @media (max-width: 650px) { .game-container { grid-template-columns: 1fr; } }
-
+ 
   /* --- Radio Panel --- */
   .radio-panel {
-    border: 1px solid var(--panel-border);
+    border: 1px solid var(--panel-border-dim);
     background: var(--panel);
-    padding: 20px;
+    padding: 24px 20px;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 16px;
+    box-shadow: 0 0 18px rgba(0,229,255,0.06);
   }
-
-  .radio-panel::before {
-    content: '// FREQUENCY DIAL';
-    position: absolute;
-    top: -10px;
-    left: 16px;
-    background: var(--panel);
-    padding: 0 8px;
-    font-size: 11px;
-    color: var(--amber);
-    letter-spacing: 2px;
-  }
-
+ 
+  .radio-panel .panel-label { background: var(--bg); }
+ 
   /* Dial */
-  .dial-wrapper {
-    position: relative;
-    width: 160px;
-    height: 160px;
-  }
-
+  .dial-wrapper { position: relative; width: 160px; height: 160px; }
+ 
   .dial-bg {
     width: 160px;
     height: 160px;
     border-radius: 50%;
-    border: 3px solid var(--panel-border);
-    background: radial-gradient(circle, #0d1f17 60%, #050a08 100%);
+    border: 3px solid var(--panel-border-dim);
+    background: radial-gradient(circle, rgba(0,20,50,0.9) 60%, rgba(5,8,15,1) 100%);
     position: relative;
     cursor: grab;
     user-select: none;
-    box-shadow: 0 0 20px rgba(0,255,136,0.1), inset 0 0 20px rgba(0,0,0,0.5);
+    box-shadow: 0 0 30px rgba(0,229,255,0.15), inset 0 0 20px rgba(0,0,0,0.5);
     transition: box-shadow 0.2s;
   }
-
+ 
   .dial-bg:active { cursor: grabbing; }
-  .dial-bg.glowing { box-shadow: 0 0 30px var(--green-glow), inset 0 0 10px rgba(0,255,136,0.1); }
-
-  /* Tick marks */
-  .dial-ticks {
-    position: absolute;
-    inset: 0;
-    border-radius: 50%;
-  }
-
+  .dial-bg.glowing { box-shadow: 0 0 40px var(--cyan-glow), inset 0 0 10px rgba(0,229,255,0.1); }
+ 
   .dial-needle {
     position: absolute;
     width: 3px;
     height: 60px;
-    background: linear-gradient(to bottom, var(--green), transparent);
+    background: linear-gradient(to bottom, var(--cyan), transparent);
     left: 50%;
     top: 50%;
     transform-origin: bottom center;
     transform: translateX(-50%) translateY(-100%) rotate(0deg);
     border-radius: 3px;
-    box-shadow: 0 0 8px var(--green);
+    box-shadow: 0 0 8px var(--cyan);
     transition: transform 0.05s;
   }
-
+ 
   .dial-center {
     position: absolute;
     width: 14px;
     height: 14px;
-    background: var(--green);
+    background: var(--cyan);
     border-radius: 50%;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    box-shadow: 0 0 10px var(--green);
+    box-shadow: 0 0 10px var(--cyan);
     z-index: 2;
   }
-
-  /* Tick labels */
-  .dial-label {
-    position: absolute;
-    font-family: 'VT323', monospace;
-    font-size: 13px;
-    color: var(--green-dim);
-    transform: translate(-50%, -50%);
-  }
-
+ 
   .freq-display {
-    font-family: 'Orbitron', monospace;
-    font-size: 26px;
-    color: var(--green);
-    text-shadow: 0 0 15px var(--green);
+    font-size: 30px;
+    color: var(--cyan);
+    text-shadow: 0 0 15px var(--cyan), 0 0 30px var(--cyan-glow);
     letter-spacing: 2px;
     text-align: center;
-    background: #030806;
-    border: 1px solid var(--panel-border);
-    padding: 8px 16px;
+    background: rgba(0,10,30,0.9);
+    border: 1px solid var(--panel-border-dim);
+    padding: 10px 18px;
     width: 100%;
+    box-shadow: 0 0 12px rgba(0,229,255,0.08);
   }
-
+ 
   .freq-unit {
-    font-size: 12px;
-    color: var(--green-dim);
+    font-size: 11px;
+    color: var(--cyan-dim);
     letter-spacing: 3px;
     text-align: center;
+    text-shadow: 0 0 4px var(--cyan-glow);
   }
-
-  .slider-row {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-  }
-
+ 
+  .slider-row { width: 100%; display: flex; flex-direction: column; gap: 8px; }
+ 
   .slider-label {
     font-size: 10px;
-    letter-spacing: 2px;
-    color: #7aaa90;
+    letter-spacing: 3px;
+    color: var(--cyan-dim);
   }
-
+ 
   input[type=range] {
     width: 100%;
     -webkit-appearance: none;
     appearance: none;
     height: 4px;
-    background: linear-gradient(to right, var(--green) var(--val, 50%), #1a3025 var(--val, 50%));
+    background: linear-gradient(to right, var(--cyan) var(--val, 50%), rgba(0,229,255,0.15) var(--val, 50%));
     border-radius: 2px;
     cursor: pointer;
   }
-
+ 
   input[type=range]::-webkit-slider-thumb {
     -webkit-appearance: none;
     width: 16px;
     height: 16px;
     border-radius: 50%;
-    background: var(--green);
-    box-shadow: 0 0 8px var(--green);
+    background: var(--cyan);
+    box-shadow: 0 0 8px var(--cyan);
     cursor: pointer;
     border: 2px solid var(--bg);
   }
-
+ 
   /* --- Meters Panel --- */
   .meters-panel {
-    border: 1px solid var(--panel-border);
+    border: 1px solid var(--panel-border-dim);
     background: var(--panel);
-    padding: 20px;
+    padding: 24px 20px;
     position: relative;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    box-shadow: 0 0 18px rgba(0,229,255,0.06);
   }
-
-  .meters-panel::before {
-    content: '// SIGNAL ANALYSIS';
-    position: absolute;
-    top: -10px;
-    left: 16px;
-    background: var(--panel);
-    padding: 0 8px;
-    font-size: 11px;
-    color: var(--amber);
-    letter-spacing: 2px;
-  }
-
+ 
+  .meters-panel .panel-label { background: var(--bg); }
+ 
   .meter-item { display: flex; flex-direction: column; gap: 6px; }
   .meter-head { display: flex; justify-content: space-between; align-items: baseline; }
-  .meter-name { font-size: 11px; letter-spacing: 2px; color: #7aaa90; }
-  .meter-val {
-    font-family: 'Orbitron', monospace;
-    font-size: 16px;
-  }
-
+  .meter-name { font-size: 11px; letter-spacing: 3px; color: var(--cyan-dim); }
+  .meter-val  { font-size: 16px; font-weight: bold; }
+ 
   .meter-bar-bg {
     width: 100%;
     height: 10px;
-    background: #0a1510;
-    border: 1px solid var(--panel-border);
+    background: rgba(0,229,255,0.06);
+    border: 1px solid var(--panel-border-dim);
     border-radius: 2px;
     overflow: hidden;
   }
-
+ 
   .meter-bar-fill {
     height: 100%;
     border-radius: 2px;
     transition: width 0.3s ease, background 0.3s ease;
+    box-shadow: 0 0 6px currentColor;
   }
-
+ 
   /* Waveform */
   .waveform-area {
-    border: 1px solid var(--panel-border);
-    background: #030806;
+    border: 1px solid var(--panel-border-dim);
+    background: rgba(0,5,20,0.9);
     height: 80px;
     position: relative;
     overflow: hidden;
   }
-
+ 
   .waveform-label {
     position: absolute;
-    top: 4px;
-    left: 8px;
+    top: 5px;
+    left: 10px;
     font-size: 9px;
-    letter-spacing: 2px;
-    color: #3a6650;
+    letter-spacing: 3px;
+    color: rgba(0,229,255,0.35);
   }
-
+ 
   canvas.waveform { width: 100%; height: 100%; }
-
-  /* Score / status */
-  .score-row {
-    display: flex;
-    gap: 8px;
-    justify-content: space-between;
-    font-size: 11px;
-    color: #7aaa90;
-  }
-
-  .score-val {
-    font-family: 'Orbitron', monospace;
-    color: var(--green);
-    font-size: 13px;
-  }
-
+ 
   /* === TRANSMIT BUTTON === */
   .transmit-btn {
-    width: 100%;
+    width: calc(100% - 40px);
     max-width: 900px;
     margin: 0 20px;
     padding: 16px;
     background: transparent;
-    border: 2px solid var(--green);
-    color: var(--green);
-    font-family: 'Orbitron', monospace;
-    font-size: 14px;
+    border: 2px solid var(--cyan);
+    color: var(--cyan);
+    font-family: "Science Gothic", sans-serif;
+    font-size: 15px;
     font-weight: 700;
-    letter-spacing: 4px;
+    letter-spacing: 5px;
     cursor: pointer;
     text-transform: uppercase;
-    text-shadow: 0 0 10px var(--green);
-    box-shadow: 0 0 20px rgba(0,255,136,0.1);
+    text-shadow: 0 0 8px var(--cyan-glow);
+    box-shadow: 0 0 20px rgba(0,229,255,0.1);
     transition: all 0.2s;
     position: relative;
     overflow: hidden;
+    z-index: 2;
   }
-
+ 
   .transmit-btn::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: var(--green);
+    background: var(--cyan);
     transform: scaleX(0);
     transform-origin: left;
     transition: transform 0.3s ease;
     z-index: -1;
   }
-
-  .transmit-btn:hover {
-    color: var(--bg);
-    box-shadow: 0 0 30px var(--green-glow);
-  }
+ 
+  .transmit-btn:hover { color: var(--bg); box-shadow: 0 0 40px var(--cyan-glow); }
   .transmit-btn:hover::before { transform: scaleX(1); }
   .transmit-btn:disabled {
-    border-color: #1a3025;
-    color: #1a3025;
+    border-color: rgba(0,229,255,0.15);
+    color: rgba(0,229,255,0.15);
     text-shadow: none;
     box-shadow: none;
     cursor: not-allowed;
   }
   .transmit-btn:disabled::before { display: none; }
-
-  /* === MESSAGE DECODE === */
+ 
+  /* === DECODE PANEL === */
   .decode-panel {
-    width: 100%;
+    width: calc(100% - 40px);
     max-width: 900px;
     margin: 16px 20px;
-    border: 1px solid var(--panel-border);
+    border: 1px solid var(--panel-border-dim);
     background: var(--panel);
-    padding: 20px;
+    padding: 22px;
     position: relative;
     min-height: 80px;
     display: none;
+    box-shadow: 0 0 18px rgba(0,229,255,0.06);
+    z-index: 2;
   }
-
+ 
   .decode-panel.visible { display: block; }
-
-  .decode-panel::before {
-    content: '// INCOMING TRANSMISSION';
-    position: absolute;
-    top: -10px;
-    left: 16px;
-    background: var(--panel);
-    padding: 0 8px;
-    font-size: 11px;
-    color: var(--amber);
-    letter-spacing: 2px;
-  }
-
+ 
   .decode-message {
-    font-family: 'VT323', monospace;
-    font-size: 26px;
-    line-height: 1.4;
+    font-size: 24px;
+    line-height: 1.5;
     letter-spacing: 2px;
     min-height: 40px;
+    text-shadow: 0 0 8px var(--cyan-glow);
   }
-
+ 
   .decode-hint {
-    font-size: 11px;
-    color: #7aaa90;
-    margin-top: 8px;
+    font-size: 12px;
+    color: rgba(0,229,255,0.5);
+    margin-top: 10px;
     letter-spacing: 1px;
   }
-
+ 
   /* === RESULT OVERLAY === */
   .result-overlay {
     display: none;
     position: fixed;
     inset: 0;
-    background: rgba(0,0,0,0.85);
+    background: rgba(0,0,0,0.88);
     z-index: 2000;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     gap: 20px;
   }
-
+ 
   .result-overlay.show { display: flex; }
-
+ 
   .result-box {
-    border: 2px solid var(--green);
+    border: 2px solid var(--cyan);
     background: var(--panel);
-    padding: 40px;
-    max-width: 500px;
+    padding: 44px;
+    max-width: 520px;
     width: 90%;
     text-align: center;
-    box-shadow: 0 0 60px rgba(0,255,136,0.3);
+    box-shadow: 0 0 60px rgba(0,229,255,0.25);
     animation: slideIn 0.3s ease;
   }
-
+ 
   @keyframes slideIn {
     from { transform: translateY(-30px); opacity: 0; }
-    to { transform: translateY(0); opacity: 1; }
+    to   { transform: translateY(0);     opacity: 1; }
   }
-
-  .result-box.fail { border-color: var(--red); box-shadow: 0 0 60px rgba(255,51,51,0.3); }
-
+ 
+  .result-box.fail {
+    border-color: var(--red);
+    box-shadow: 0 0 60px rgba(255,77,109,0.25);
+  }
+ 
   .result-title {
-    font-family: 'Orbitron', monospace;
-    font-size: 28px;
+    font-size: 30px;
     font-weight: 900;
     letter-spacing: 3px;
     margin-bottom: 16px;
+    text-shadow: 0 0 12px var(--cyan-glow);
   }
-
+ 
   .result-msg {
     font-size: 14px;
-    line-height: 1.8;
-    color: #aaddcc;
+    line-height: 1.9;
+    color: rgba(0,229,255,0.75);
     margin-bottom: 24px;
   }
-
+ 
+  .result-msg strong { color: var(--cyan); }
+ 
   .result-score {
-    font-family: 'Orbitron', monospace;
-    font-size: 36px;
-    color: var(--amber);
-    text-shadow: 0 0 15px rgba(255,170,0,0.5);
+    font-size: 40px;
+    color: var(--cyan);
+    text-shadow: 0 0 15px var(--cyan-glow);
     margin-bottom: 24px;
+    font-weight: bold;
   }
-
+ 
   .retry-btn {
-    padding: 12px 32px;
+    padding: 12px 34px;
     background: transparent;
-    border: 2px solid var(--green);
-    color: var(--green);
-    font-family: 'Orbitron', monospace;
-    font-size: 12px;
+    border: 1px solid var(--cyan);
+    color: var(--cyan);
+    font-family: "Science Gothic", sans-serif;
+    font-size: 13px;
     font-weight: 700;
-    letter-spacing: 3px;
+    letter-spacing: 4px;
     cursor: pointer;
     transition: all 0.2s;
+    text-shadow: 0 0 4px var(--cyan-glow);
+    border-radius: 25px;
   }
-
-  .retry-btn:hover { background: var(--green); color: var(--bg); }
-
+ 
+  .retry-btn:hover {
+    background: rgba(0,229,255,0.15);
+    box-shadow: 0 0 12px var(--cyan-glow);
+    transform: scale(1.05);
+  }
+ 
   /* === HINTS === */
   .hint-row {
-    width: 100%;
+    width: calc(100% - 40px);
     max-width: 900px;
-    margin: 0 20px 20px;
+    margin: 0 20px 30px;
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    gap: 12px;
+    z-index: 2;
   }
-
+ 
   @media (max-width: 600px) { .hint-row { grid-template-columns: 1fr; } }
-
+ 
   .hint-card {
-    border: 1px solid var(--panel-border);
-    background: var(--panel);
-    padding: 12px;
-    font-size: 11px;
-    color: #7aaa90;
-    line-height: 1.6;
+    border: 1px solid var(--panel-border-dim);
+    background: rgba(0,229,255,0.03);
+    padding: 14px;
+    font-size: 12px;
+    color: rgba(0,229,255,0.65);
+    line-height: 1.7;
+    box-shadow: inset 0 0 12px rgba(0,20,60,0.3);
   }
-
+ 
   .hint-title {
-    color: var(--amber);
+    color: var(--cyan);
     letter-spacing: 2px;
-    font-size: 10px;
-    margin-bottom: 4px;
+    font-size: 11px;
+    margin-bottom: 6px;
+    text-shadow: 0 0 4px var(--cyan-glow);
   }
-
-  /* battery icon animation */
-  @keyframes pulse-red { 0%,100%{opacity:1} 50%{opacity:0.4} }
-  .battery-critical { animation: pulse-red 1s infinite; }
-
-  /* === STEP COUNTER === */
+ 
+  /* === STEP TRACKER === */
   .step-tracker {
-    width: 100%;
+    width: calc(100% - 40px);
     max-width: 900px;
     margin: 16px 20px 0;
     display: flex;
     gap: 8px;
     align-items: center;
+    z-index: 2;
   }
-
+ 
   .step {
     flex: 1;
     height: 3px;
-    background: #1a3025;
+    background: rgba(0,229,255,0.1);
     border-radius: 2px;
     transition: background 0.4s;
   }
-
-  .step.done { background: var(--green); box-shadow: 0 0 8px var(--green-glow); }
-  .step.active { background: var(--amber); box-shadow: 0 0 8px rgba(255,170,0,0.4); animation: pulse-step 1s infinite; }
-
-  @keyframes pulse-step { 0%,100%{opacity:1} 50%{opacity:0.5} }
-
-  .step-label { font-size: 10px; color: #3a6650; letter-spacing: 2px; }
+ 
+  .step.done   { background: var(--cyan); box-shadow: 0 0 8px var(--cyan-glow); }
+  .step.active { background: var(--cyan-dim); box-shadow: 0 0 8px rgba(89,158,239,0.4); animation: pulse-step 1s infinite; }
+ 
+  @keyframes pulse-step { 0%,100%{opacity:1} 50%{opacity:0.4} }
+ 
+  .step-label { font-size: 10px; color: rgba(0,229,255,0.35); letter-spacing: 2px; }
 </style>
 </head>
 <body>
-<div class="noise"></div>
-
-<!-- HEADER -->
-<div class="header">
+ 
+<!-- HEADER (matches site header) -->
+<div id="header">
+  <img src="DOVE LOGO.png" alt="The D.O.V.E.S logo" class="logo">
+  <h1 id="headerTitle">OPERATION STATIC</h1>
+</div>
+ 
+<div class="page-header">
   <div class="classified-banner">⬛ CLASSIFIED ⬛</div>
-  <div class="title">OPERATION STATIC</div>
   <div class="subtitle">SATELLITE SIGNAL INTERCEPT — AGENT FIELD MISSION</div>
 </div>
-
+ 
 <!-- STEP TRACKER -->
 <div class="step-tracker">
   <div class="step-label">STEP</div>
@@ -690,9 +612,10 @@
   <div class="step" id="step3"></div>
   <div class="step-label">3</div>
 </div>
-
+ 
 <!-- BRIEFING -->
-<div class="briefing-panel" style="margin: 16px 20px 0; max-width:900px; width:calc(100% - 40px);">
+<div class="panel" style="margin-top:16px;">
+  <div class="panel-label">// MISSION BRIEFING</div>
   <p class="briefing-text">
     Agent, <strong>Codename NIGHTHAWK</strong> is transmitting a critical message from a satellite orbiting 550 km above Earth.
     Your field radio can receive on different frequencies — but there's a problem.
@@ -703,9 +626,10 @@
     <strong>Target Score must exceed 70 points.</strong>
   </p>
 </div>
-
+ 
 <!-- MATH PANEL -->
-<div class="math-panel" style="margin: 12px 20px 0; max-width:900px; width:calc(100% - 40px);">
+<div class="panel" style="margin-top:12px;">
+  <div class="panel-label">// SIGNAL EQUATIONS</div>
   <div class="equations">
     <div class="eq-card">
       <div class="eq-label">SIGNAL CLARITY FORMULA</div>
@@ -738,17 +662,18 @@
       <div class="target-box">
         <div class="target-label">⬛ TARGET SCORE ⬛</div>
         <div class="target-value">S &gt; 70 POINTS</div>
-        <div style="font-size:11px;color:#7aaa90;margin-top:6px;">Sweet spot: f = 107–112 MHz</div>
+        <div style="font-size:12px;color:rgba(0,229,255,0.5);margin-top:8px;">Sweet spot: f = 107–112 MHz</div>
       </div>
     </div>
   </div>
 </div>
-
+ 
 <!-- GAME AREA -->
-<div class="game-container" style="margin: 12px 20px; max-width:900px; width:calc(100% - 40px);">
-
+<div class="game-container">
+ 
   <!-- RADIO DIAL -->
   <div class="radio-panel">
+    <div class="panel-label">// FREQUENCY DIAL</div>
     <div class="dial-wrapper">
       <div class="dial-bg" id="dialBg">
         <canvas id="tickCanvas" width="160" height="160" style="position:absolute;inset:0;border-radius:50%;"></canvas>
@@ -763,61 +688,63 @@
       <input type="range" id="freqSlider" min="20" max="120" value="88" step="1" oninput="updateFreq(this.value)">
     </div>
   </div>
-
+ 
   <!-- METERS -->
   <div class="meters-panel">
-
+    <div class="panel-label">// SIGNAL ANALYSIS</div>
+ 
     <div class="meter-item">
       <div class="meter-head">
         <span class="meter-name">SIGNAL CLARITY</span>
-        <span class="meter-val" id="clarityMeter" style="color:var(--green)">0%</span>
+        <span class="meter-val" id="clarityMeter" style="color:var(--cyan)">0%</span>
       </div>
       <div class="meter-bar-bg">
-        <div class="meter-bar-fill" id="clarityBar" style="width:0%;background:var(--green)"></div>
+        <div class="meter-bar-fill" id="clarityBar" style="width:0%;background:var(--cyan)"></div>
       </div>
     </div>
-
+ 
     <div class="meter-item">
       <div class="meter-head">
         <span class="meter-name">BATTERY DRAIN</span>
         <span class="meter-val" id="drainMeter" style="color:var(--red)">0%/s</span>
       </div>
       <div class="meter-bar-bg">
-        <div class="meter-bar-fill" id="drainBar" style="width:0%;background:var(--green)"></div>
+        <div class="meter-bar-fill" id="drainBar" style="width:0%;background:var(--cyan)"></div>
       </div>
     </div>
-
+ 
     <div class="meter-item">
       <div class="meter-head">
         <span class="meter-name">BATTERY REMAINING</span>
-        <span class="meter-val" id="batteryMeter" style="color:var(--green)">100%</span>
+        <span class="meter-val" id="batteryMeter" style="color:var(--cyan)">100%</span>
       </div>
       <div class="meter-bar-bg">
-        <div class="meter-bar-fill" id="batteryBar" style="width:100%;background:var(--green)"></div>
+        <div class="meter-bar-fill" id="batteryBar" style="width:100%;background:var(--cyan)"></div>
       </div>
     </div>
-
+ 
     <div class="waveform-area">
       <div class="waveform-label">INCOMING WAVEFORM</div>
       <canvas class="waveform" id="waveCanvas" width="400" height="80"></canvas>
     </div>
-
+ 
   </div>
 </div>
-
+ 
 <!-- TRANSMIT -->
-<button class="transmit-btn" id="transmitBtn" onclick="transmit()" style="max-width:900px;width:calc(100% - 40px);">
+<button class="transmit-btn" id="transmitBtn" onclick="transmit()">
   ▶ LOCK FREQUENCY &amp; TRANSMIT
 </button>
-
+ 
 <!-- DECODE PANEL -->
-<div class="decode-panel" id="decodePanel" style="max-width:900px;width:calc(100% - 40px);">
+<div class="decode-panel" id="decodePanel">
+  <div class="panel-label">// INCOMING TRANSMISSION</div>
   <div class="decode-message" id="decodeMsg"></div>
   <div class="decode-hint" id="decodeHint"></div>
 </div>
-
+ 
 <!-- HINTS -->
-<div class="hint-row" style="max-width:900px;width:calc(100% - 40px);">
+<div class="hint-row">
   <div class="hint-card">
     <div class="hint-title">⚡ AGENT TIP 1</div>
     Calculate S for f = 105, 107, 110 MHz. Which values score above 70? That tells you the minimum safe frequency.
@@ -831,7 +758,7 @@
     Too low → message is full of --- and unreadable. Too high → battery dies mid-transmission. The sweet spot is 107–112 MHz.
   </div>
 </div>
-
+ 
 <!-- RESULT OVERLAY -->
 <div class="result-overlay" id="resultOverlay">
   <div class="result-box" id="resultBox">
@@ -841,7 +768,7 @@
     <button class="retry-btn" onclick="resetGame()">↺ RETRY MISSION</button>
   </div>
 </div>
-
+ 
 <script>
 // ===== STATE =====
 let frequency = 88;
@@ -850,10 +777,10 @@ let batteryInterval = null;
 let transmitting = false;
 let waveFrame = 0;
 let cancelled = false;
-
+ 
 const SECRET_MESSAGE = "MEET AT THE OLD LIGHTHOUSE AT MIDNIGHT — BRING THE BLUE FOLDER";
 const MESSAGE_WORDS = SECRET_MESSAGE.split(" ");
-
+ 
 // ===== FORMULAS =====
 function calcClarity(f) { return Math.round(100 * (f / 120)); }
 function calcDrain(f) {
@@ -862,10 +789,10 @@ function calcDrain(f) {
   return parseFloat((base + boost).toFixed(2));
 }
 function calcScore(f) { return parseFloat((calcClarity(f) - (f*f/800) * 1.31).toFixed(1)); }
-
+ 
 // ===== DIAL SETUP =====
 const tickCtx = document.getElementById('tickCanvas').getContext('2d');
-
+ 
 function drawTicks() {
   tickCtx.clearRect(0, 0, 160, 160);
   const cx = 80, cy = 80, r = 72;
@@ -880,72 +807,71 @@ function drawTicks() {
     tickCtx.beginPath();
     tickCtx.moveTo(x1, y1);
     tickCtx.lineTo(x2, y2);
-    tickCtx.strokeStyle = isMajor ? 'rgba(0,255,136,0.6)' : 'rgba(0,255,136,0.2)';
+    tickCtx.strokeStyle = isMajor ? 'rgba(0,229,255,0.7)' : 'rgba(0,229,255,0.25)';
     tickCtx.lineWidth = isMajor ? 2 : 1;
     tickCtx.stroke();
     if (isMajor && i % 20 === 0) {
       const label = 20 + (i / 100) * 100;
       const lx = cx + (r - 22) * Math.cos(angle);
       const ly = cy + (r - 22) * Math.sin(angle);
-      tickCtx.fillStyle = 'rgba(0,255,136,0.5)';
-      tickCtx.font = '9px Share Tech Mono';
+      tickCtx.fillStyle = 'rgba(0,229,255,0.6)';
+      tickCtx.font = '9px "Science Gothic", monospace';
       tickCtx.textAlign = 'center';
       tickCtx.textBaseline = 'middle';
       tickCtx.fillText(Math.round(label), lx, ly);
     }
   }
 }
-
+ 
 drawTicks();
-
+ 
 function updateNeedle(f) {
   const t = (f - 20) / 100;
   const angle = t * 360 - 180;
   document.getElementById('dialNeedle').style.transform =
     `translateX(-50%) translateY(-100%) rotate(${angle}deg)`;
 }
-
+ 
 // ===== UPDATE UI =====
 function updateFreq(val) {
   frequency = parseInt(val);
   const slider = document.getElementById('freqSlider');
   const pct = ((frequency - 20) / 100) * 100;
   slider.style.setProperty('--val', pct + '%');
-
+ 
   const C = calcClarity(frequency);
   const D = calcDrain(frequency);
-
+ 
   document.getElementById('freqDisplay').textContent = frequency.toFixed(1);
-
-  // Meters
+ 
   document.getElementById('clarityMeter').textContent = C + '%';
   document.getElementById('clarityBar').style.width = C + '%';
   document.getElementById('clarityBar').style.background =
-    C > 70 ? 'var(--green)' : C > 40 ? 'var(--amber)' : 'var(--red)';
-
+    C > 70 ? 'var(--cyan)' : C > 40 ? '#7DE3FF' : 'var(--red)';
+ 
   const drainPct = Math.min(100, (D / 18) * 100);
   document.getElementById('drainMeter').textContent = D.toFixed(2) + '%/s';
   document.getElementById('drainBar').style.width = drainPct + '%';
   document.getElementById('drainBar').style.background =
-    D < 5 ? 'var(--green)' : D < 10 ? 'var(--amber)' : 'var(--red)';
-
+    D < 5 ? 'var(--cyan)' : D < 10 ? '#7DE3FF' : 'var(--red)';
+ 
   updateNeedle(frequency);
 }
-
+ 
 // ===== WAVEFORM =====
 const waveCtx = document.getElementById('waveCanvas').getContext('2d');
-
+ 
 function drawWaveform() {
   const w = 400, h = 80;
   waveCtx.clearRect(0, 0, w, h);
-
+ 
   const C = calcClarity(frequency) / 100;
   const noise = 1 - C;
-
+ 
   waveCtx.beginPath();
-  waveCtx.strokeStyle = `rgba(0,255,136,${0.3 + C * 0.6})`;
+  waveCtx.strokeStyle = `rgba(0,229,255,${0.3 + C * 0.6})`;
   waveCtx.lineWidth = 1.5;
-
+ 
   for (let x = 0; x < w; x++) {
     const t = (x / w) * Math.PI * 6 + waveFrame * 0.08;
     const signal = Math.sin(t) * (h / 2 - 8) * C;
@@ -955,30 +881,29 @@ function drawWaveform() {
     else waveCtx.lineTo(x, y);
   }
   waveCtx.stroke();
-
+ 
   waveFrame++;
   if (!transmitting) requestAnimationFrame(drawWaveform);
 }
-
+ 
 drawWaveform();
-
+ 
 // ===== TRANSMIT =====
 function transmit() {
   const S = calcScore(frequency);
   const C = calcClarity(frequency);
   const D = calcDrain(frequency);
-
+ 
   transmitting = true;
   document.getElementById('transmitBtn').disabled = true;
-
-  // Step 1 → 2
+ 
   document.getElementById('step1').classList.remove('active');
   document.getElementById('step1').classList.add('done');
   document.getElementById('step2').classList.add('active');
-
+ 
   const decodePanel = document.getElementById('decodePanel');
   decodePanel.classList.add('visible');
-
+ 
   if (S < 30) {
     document.getElementById('decodeMsg').style.color = 'var(--red)';
     document.getElementById('decodeMsg').textContent = '▓▓▒░ SIGNAL TOO WEAK ░▒▓▓ — ADJUST FREQUENCY';
@@ -987,12 +912,11 @@ function transmit() {
     setTimeout(() => showResult(false, S), 2000);
     return;
   }
-
-  // Battery draining animation
+ 
   battery = 100;
   cancelled = false;
   updateBatteryDisplay();
-
+ 
   batteryInterval = setInterval(() => {
     battery = Math.max(0, battery - D * 0.55);
     updateBatteryDisplay();
@@ -1002,16 +926,15 @@ function transmit() {
       showResult(false, S, 'battery');
     }
   }, 200);
-
-  // Animate message decode based on clarity
+ 
   let revealed = 0;
   const totalWords = MESSAGE_WORDS.length;
   const revealedWords = [];
   const interval = Math.max(80, 400 - C * 3);
-
+ 
   const msgEl = document.getElementById('decodeMsg');
-  msgEl.style.color = S >= 70 ? 'var(--green)' : 'var(--amber)';
-
+  msgEl.style.color = S >= 70 ? 'var(--cyan)' : '#7DE3FF';
+ 
   function revealNext() {
     if (cancelled) return;
     if (revealed >= totalWords) {
@@ -1027,45 +950,37 @@ function transmit() {
       }, 800);
       return;
     }
-
-    // Corrupt words based on how far below the sweet spot we are.
-    // Uses a squared curve so corruption ramps up very quickly below 107.
-    // At f=107: 0% corruption. At f=100: ~60%. At f=90: ~90%. At f=80: ~99%.
+ 
     const corruptionLevel = Math.max(0, (107 - frequency) / 87);
     const corruptionChance = Math.min(0.99, Math.pow(corruptionLevel * 2.8, 2));
-
+ 
     function corruptWord(w) {
       return w.split('').map(c => {
         if (c === ' ') return ' ';
         return Math.random() < corruptionChance ? '-' : c;
       }).join('');
     }
-
-    // Corrupt the new word and store it
+ 
     revealedWords[revealed] = corruptionChance > 0 ? corruptWord(MESSAGE_WORDS[revealed]) : MESSAGE_WORDS[revealed];
-
-    // Also re-corrupt all previously revealed words each tick so nothing stays readable
+ 
     if (corruptionChance > 0) {
       for (let i = 0; i < revealed; i++) {
         revealedWords[i] = corruptWord(MESSAGE_WORDS[i]);
       }
     }
-
+ 
     const fullRevealed = revealedWords.slice(0, revealed + 1).join(' ');
     const dashRatio = (fullRevealed.match(/-/g) || []).length / fullRevealed.replace(/ /g, '').length;
-
+ 
     msgEl.textContent = fullRevealed + (revealed < totalWords - 1 ? ' ▌' : '');
-
     document.getElementById('decodeHint').textContent =
       `Decoding... Clarity: ${C}% | Battery: ${battery.toFixed(0)}%`;
-
+ 
     revealed++;
-
-    // After last word, check if message is too corrupted to count as success
+ 
     if (revealed >= totalWords && dashRatio > 0.35) {
       clearInterval(batteryInterval);
       cancelled = true;
-      // Keep flickering the corrupt message so it stays unreadable
       function corruptMessage() {
         const flickered = SECRET_MESSAGE.split('').map(c => {
           if (c === ' ') return ' ';
@@ -1080,22 +995,22 @@ function transmit() {
       }, 2000);
       return;
     }
-
+ 
     setTimeout(revealNext, interval);
   }
-
+ 
   setTimeout(revealNext, 400);
 }
-
+ 
 function updateBatteryDisplay() {
   const pct = battery;
   document.getElementById('batteryMeter').textContent = pct.toFixed(0) + '%';
   document.getElementById('batteryBar').style.width = pct + '%';
-  const color = pct > 50 ? 'var(--green)' : pct > 25 ? 'var(--amber)' : 'var(--red)';
+  const color = pct > 50 ? 'var(--cyan)' : pct > 25 ? '#7DE3FF' : 'var(--red)';
   document.getElementById('batteryBar').style.background = color;
   document.getElementById('batteryMeter').style.color = color;
 }
-
+ 
 // ===== RESULT =====
 function showResult(success, score, reason) {
   clearInterval(batteryInterval);
@@ -1104,12 +1019,12 @@ function showResult(success, score, reason) {
   const title = document.getElementById('resultTitle');
   const scoreEl = document.getElementById('resultScore');
   const msg = document.getElementById('resultMsg');
-
+ 
   overlay.classList.add('show');
-
+ 
   if (success) {
     box.classList.remove('fail');
-    title.style.color = 'var(--green)';
+    title.style.color = 'var(--cyan)';
     title.textContent = '✓ MISSION SUCCESS';
     scoreEl.textContent = score + ' PTS';
     msg.innerHTML = `Outstanding fieldwork, Agent.<br>Message successfully decoded from NIGHTHAWK.<br><br>
@@ -1122,13 +1037,13 @@ function showResult(success, score, reason) {
     title.textContent = reason === 'battery' ? '✗ BATTERY DEAD' : '✗ MISSION FAILED';
     scoreEl.style.color = 'var(--red)';
     scoreEl.textContent = score + ' PTS';
-
+ 
     if (reason === 'battery') {
       msg.innerHTML = `Battery depleted before decode completed.<br><strong>Frequency ${frequency} MHz drains too fast.</strong><br><br>
         Drain was ${calcDrain(frequency)}%/s — try a frequency between 107–112 MHz.`;
     } else if (reason === 'corrupted') {
       msg.innerHTML = `Too much interference — message unreadable.<br><strong>Frequency ${frequency} MHz is too low for a clean signal.</strong><br><br>
-        Try increasing frequency. The sweet spot is between <strong>107–112 MHz</strong> where signal is clear but battery drain is manageable.`;
+        Try increasing frequency. The sweet spot is between <strong>107–112 MHz</strong>.`;
     } else {
       msg.innerHTML = `Signal score of <strong>${score}</strong> is below the 70-point threshold.<br><br>
         Try increasing frequency for more clarity, but watch the battery drain formula!<br>
@@ -1136,7 +1051,7 @@ function showResult(success, score, reason) {
     }
   }
 }
-
+ 
 function resetGame() {
   clearInterval(batteryInterval);
   transmitting = false;
@@ -1154,12 +1069,12 @@ function resetGame() {
   waveFrame = 0;
   drawWaveform();
 }
-
+ 
 // ===== DIAL DRAG =====
 const dialBg = document.getElementById('dialBg');
 let isDragging = false;
 let lastAngle = 0;
-
+ 
 function getAngle(e, el) {
   const rect = el.getBoundingClientRect();
   const cx = rect.left + rect.width / 2;
@@ -1168,17 +1083,10 @@ function getAngle(e, el) {
   const clientY = e.touches ? e.touches[0].clientY : e.clientY;
   return Math.atan2(clientY - cy, clientX - cx) * 180 / Math.PI;
 }
-
-dialBg.addEventListener('mousedown', e => {
-  isDragging = true;
-  lastAngle = getAngle(e, dialBg);
-});
-
-dialBg.addEventListener('touchstart', e => {
-  isDragging = true;
-  lastAngle = getAngle(e, dialBg);
-}, { passive: true });
-
+ 
+dialBg.addEventListener('mousedown', e => { isDragging = true; lastAngle = getAngle(e, dialBg); });
+dialBg.addEventListener('touchstart', e => { isDragging = true; lastAngle = getAngle(e, dialBg); }, { passive: true });
+ 
 window.addEventListener('mousemove', e => {
   if (!isDragging || transmitting) return;
   const angle = getAngle(e, dialBg);
@@ -1191,7 +1099,7 @@ window.addEventListener('mousemove', e => {
   document.getElementById('freqSlider').value = frequency;
   updateFreq(frequency);
 });
-
+ 
 window.addEventListener('touchmove', e => {
   if (!isDragging || transmitting) return;
   const angle = getAngle(e, dialBg);
@@ -1204,10 +1112,10 @@ window.addEventListener('touchmove', e => {
   document.getElementById('freqSlider').value = frequency;
   updateFreq(frequency);
 }, { passive: true });
-
+ 
 window.addEventListener('mouseup', () => isDragging = false);
 window.addEventListener('touchend', () => isDragging = false);
-
+ 
 // ===== INIT =====
 updateFreq(88);
 </script>

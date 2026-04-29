@@ -17,14 +17,14 @@
             padding: 40px 20px;
             gap: 30px;
         }
-
+ 
         .game-title {
             font-size: 48px;
             margin-bottom: 20px;
             text-align: center;
             text-shadow: 0 0 2px #3b2cde, 0 0 4px #589eef, 0 0 8px #bcd5db;
         }
-
+ 
         .difficulty-selection {
             display: flex;
             gap: 15px;
@@ -32,7 +32,7 @@
             flex-wrap: wrap;
             margin-bottom: 20px;
         }
-
+ 
         .difficulty-btn {
             padding: 12px 24px;
             background-color: rgba(255, 255, 255, 0.05);
@@ -45,111 +45,165 @@
             transition: all 160ms ease;
             font-family: "Science Gothic", sans-serif;
         }
-
+ 
         .difficulty-btn:hover {
             transform: scale(1.05);
             box-shadow: 0 0 6px #7DE3FF;
         }
-
+ 
         .difficulty-btn.active {
             background-color: rgba(0, 229, 255, 0.2);
             box-shadow: 0 0 12px #7DE3FF;
             transform: scale(1.08);
         }
-
+ 
+        /* ── How To Play accordion ── */
+        .how-to-play {
+            width: 100%;
+            max-width: 620px;
+            border: 1px solid rgba(0, 229, 255, 0.35);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+ 
+        .how-to-play summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 14px 22px;
+            font-size: 17px;
+            font-weight: bold;
+            color: #00E5FF;
+            background: rgba(0, 229, 255, 0.06);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            user-select: none;
+            letter-spacing: 1px;
+        }
+ 
+        .how-to-play summary::-webkit-details-marker { display: none; }
+ 
+        .how-to-play summary::before {
+            content: "▶";
+            font-size: 12px;
+            transition: transform 200ms ease;
+            display: inline-block;
+        }
+ 
+        .how-to-play[open] summary::before {
+            transform: rotate(90deg);
+        }
+ 
+        .how-to-play-body {
+            padding: 18px 24px 20px;
+            font-size: 14.5px;
+            line-height: 1.75;
+            color: rgba(0, 229, 255, 0.85);
+            background: rgba(0, 10, 20, 0.4);
+        }
+ 
+        .how-to-play-body ol {
+            margin: 0 0 12px 18px;
+            padding: 0;
+        }
+ 
+        .how-to-play-body li {
+            margin-bottom: 6px;
+        }
+ 
+        .how-to-play-body .keys {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+ 
+        .how-to-play-body .key {
+            background: rgba(0, 229, 255, 0.12);
+            border: 1px solid rgba(0, 229, 255, 0.4);
+            border-radius: 6px;
+            padding: 3px 10px;
+            font-size: 13px;
+            white-space: nowrap;
+            color: #00E5FF;
+        }
+ 
+        /* ── Safe SVG wrapper ── */
         .safe-display {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 30px;
-            margin-bottom: 30px;
+            margin-bottom: 10px;
         }
-
-        .safe-visual {
-            width: 300px;
-            height: 300px;
-            border: 3px solid #00E5FF;
-            border-radius: 15px;
-            background: linear-gradient(135deg, rgba(0, 20, 40, 0.8), rgba(0, 50, 80, 0.6));
-            box-shadow: 
-                0 0 10px #7DE3FF,
-                inset 0 0 20px rgba(0, 229, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            padding: 20px;
-        }
-
-        .dial-container {
+ 
+        .safe-svg-wrapper {
             position: relative;
-            width: 200px;
-            height: 200px;
-            border: 3px solid #00E5FF;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(0, 100, 150, 0.3), rgba(0, 20, 40, 0.7));
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            box-shadow: 
-                0 0 8px #7DE3FF,
-                inset 0 0 15px rgba(0, 229, 255, 0.1);
+            width: 420px;
+            height: 420px;
         }
-
-        .dial-numbers {
+ 
+        /* The dial overlay sits on top of the SVG safe */
+        .dial-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -52%);
+            width: 210px;
+            height: 210px;
+        }
+ 
+        .dial-numbers-ring {
+            position: absolute;
+            inset: 0;
+            border-radius: 50%;
+        }
+ 
+        .dial-tick {
             position: absolute;
             width: 100%;
             height: 100%;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             justify-content: center;
         }
-
-        .dial-number {
-            position: absolute;
-            font-size: 18px;
+ 
+        .dial-tick span {
+            font-size: 11px;
+            font-family: "Science Gothic", monospace;
+            color: #dddddd;
+            line-height: 1;
+            margin-top: 2px;
             font-weight: bold;
-            width: 80px;
-            height: 80px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            text-shadow: 0 0 3px #000, 0 1px 2px #000;
         }
-
-        .dial-pointer {
+ 
+        .dial-pointer-line {
             position: absolute;
-            width: 8px;
-            height: 60px;
-            background-color: #00E5FF;
-            border-radius: 4px;
-            top: 10px;
+            top: -14px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 14px;
+            background: #00E5FF;
+            border-radius: 2px;
             box-shadow: 0 0 6px #7DE3FF;
-            z-index: 10;
         }
-
-        .dial-center {
-            width: 16px;
-            height: 16px;
-            background-color: #00E5FF;
-            border-radius: 50%;
-            z-index: 11;
-            box-shadow: 0 0 8px #7DE3FF;
-        }
-
+ 
+        /* ── rest of game UI ── */
         .input-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 20px;
         }
-
+ 
         .combination-display {
             display: flex;
             gap: 15px;
             justify-content: center;
         }
-
+ 
         .number-slot {
             width: 50px;
             height: 50px;
@@ -164,23 +218,17 @@
             box-shadow: 0 0 4px #7DE3FF;
             min-width: 50px;
         }
-
-        .number-slot.empty {
-            color: rgba(0, 229, 255, 0.3);
-        }
-
-        .number-slot.filled {
-            color: #00E5FF;
-            text-shadow: 0 0 4px #7DE3FF;
-        }
-
+ 
+        .number-slot.empty { color: rgba(0, 229, 255, 0.3); }
+        .number-slot.filled { color: #00E5FF; text-shadow: 0 0 4px #7DE3FF; }
+ 
         .controls {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             justify-content: center;
         }
-
+ 
         .control-btn {
             padding: 10px 20px;
             background-color: rgba(255, 255, 255, 0.05);
@@ -193,36 +241,33 @@
             transition: all 160ms ease;
             font-family: "Science Gothic", sans-serif;
         }
-
+ 
         .control-btn:hover {
             background-color: rgba(0, 229, 255, 0.1);
             box-shadow: 0 0 6px #7DE3FF;
         }
-
-        .control-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
+ 
+        .control-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+ 
         .game-status {
             text-align: center;
             font-size: 20px;
             min-height: 30px;
             text-shadow: 0 0 2px #3b2cde, 0 0 4px #589eef;
         }
-
+ 
         .game-status.success {
             color: #00FF00;
             text-shadow: 0 0 2px #00FF00, 0 0 4px #00FF00;
             font-size: 28px;
             font-weight: bold;
         }
-
+ 
         .game-status.error {
             color: #FF0040;
             text-shadow: 0 0 2px #FF0040, 0 0 4px #FF0040;
         }
-
+ 
         .game-stats {
             display: flex;
             gap: 40px;
@@ -231,21 +276,21 @@
             margin-bottom: 20px;
             flex-wrap: wrap;
         }
-
+ 
         .stat {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 5px;
         }
-
+ 
         .stat-value {
             font-size: 28px;
             font-weight: bold;
             color: #00E5FF;
             text-shadow: 0 0 4px #7DE3FF;
         }
-
+ 
         .reset-btn {
             padding: 12px 30px;
             background-color: rgba(255, 255, 255, 0.05);
@@ -259,36 +304,25 @@
             font-family: "Science Gothic", sans-serif;
             font-weight: bold;
         }
-
+ 
         .reset-btn:hover {
             background-color: rgba(0, 229, 255, 0.15);
             box-shadow: 0 0 12px #7DE3FF;
             transform: scale(1.05);
         }
-
+ 
         .hint-section {
             text-align: center;
             font-size: 16px;
             color: rgba(0, 229, 255, 0.8);
             margin-top: 20px;
         }
-
+ 
         .hint-text {
             color: #FFD700;
             text-shadow: 0 0 4px #FFD700;
             margin-top: 10px;
             font-style: italic;
-        }
-
-        .instructions {
-            background-color: rgba(0, 229, 255, 0.05);
-            border: 1px solid rgba(0, 229, 255, 0.3);
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 30px;
-            max-width: 600px;
-            font-size: 14px;
-            line-height: 1.6;
         }
     </style>
 </head>
@@ -297,21 +331,40 @@
         <img src="DOVE LOGO.png" alt="The D.O.V.E.S logo" class="logo">
         <h1 id="headerTitle">Safe Cracker Training</h1>
     </div>
-
+ 
     <div class="safe-game-container">
         <h2 class="game-title">🔐 Agent Safe Cracking Challenge</h2>
-
-        <div class="instructions">
-            <strong>Mission Brief:</strong> As a D.O.V.E.S agent, you must crack the safe to retrieve classified documents. 
-            Rotate the dial to match the combination lock. Select your difficulty level and start cracking!
-        </div>
-
+ 
+        <!-- ── HOW TO PLAY ── -->
+        <details class="how-to-play">
+            <summary>📋 How To Play</summary>
+            <div class="how-to-play-body">
+                <strong>Mission:</strong> Crack the safe by finding the correct number combination and entering it in the right order.
+                <ol>
+                    <li><strong>Choose a difficulty</strong> — Easy gives you a 3-number combination, Medium 4 numbers, Hard 5 numbers.</li>
+                    <li><strong>Rotate the dial</strong> using the ← Previous / Next → buttons (or arrow keys) to scroll through numbers 0–39.</li>
+                    <li><strong>Press Spacebar</strong> (or the on-screen dial) to lock in the number currently at the top of the dial.</li>
+                    <li><strong>Fill all slots</strong>, then click <em>Submit Combination</em> (or press Enter) to test your guess.</li>
+                    <li>After each wrong attempt you'll receive <strong>feedback</strong> — how many numbers are correct and how many are in the right position.</li>
+                    <li>Use <strong>Get Hint</strong> if you're stuck — you have up to 3 hints per game.</li>
+                    <li>Click <strong>New Game</strong> at any time to reset with a fresh combination.</li>
+                </ol>
+                <strong>Keyboard shortcuts:</strong>
+                <div class="keys">
+                    <span class="key">← Arrow Left — rotate dial clockwise</span>
+                    <span class="key">→ Arrow Right — rotate dial counter-clockwise</span>
+                    <span class="key">Space — select current number</span>
+                    <span class="key">Enter — submit combination</span>
+                </div>
+            </div>
+        </details>
+ 
         <div class="difficulty-selection">
             <button class="difficulty-btn active" data-difficulty="easy">Easy (3 numbers)</button>
             <button class="difficulty-btn" data-difficulty="medium">Medium (4 numbers)</button>
             <button class="difficulty-btn" data-difficulty="hard">Hard (5 numbers)</button>
         </div>
-
+ 
         <div class="game-stats">
             <div class="stat">
                 <span>Attempts Used</span>
@@ -322,38 +375,198 @@
                 <span class="stat-value" id="timerDisplay">0s</span>
             </div>
         </div>
-
+ 
         <div class="safe-display">
-            <div class="safe-visual">
-                <div class="dial-container" id="dialContainer">
-                    <div class="dial-numbers" id="dialNumbers"></div>
-                    <div class="dial-pointer"></div>
-                    <div class="dial-center"></div>
+            <!-- ── REALISTIC SAFE SVG ── -->
+            <div class="safe-svg-wrapper">
+                <svg viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg" width="420" height="420">
+                    <!-- Safe body -->
+                    <defs>
+                        <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#6a6a6a"/>
+                            <stop offset="45%" style="stop-color:#9a9a9a"/>
+                            <stop offset="100%" style="stop-color:#3a3a3a"/>
+                        </linearGradient>
+                        <linearGradient id="doorGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#7a7a7a"/>
+                            <stop offset="50%" style="stop-color:#b0b0b0"/>
+                            <stop offset="100%" style="stop-color:#4a4a4a"/>
+                        </linearGradient>
+                        <linearGradient id="dialGrad" cx="50%" cy="50%" r="50%" fx="35%" fy="35%" id="dialGrad" gradientUnits="objectBoundingBox">
+                            <stop offset="0%" style="stop-color:#c0c0c0"/>
+                            <stop offset="100%" style="stop-color:#4a4a4a"/>
+                        </linearGradient>
+                        <radialGradient id="dialRadial" cx="40%" cy="35%" r="60%">
+                            <stop offset="0%" style="stop-color:#d0d0d0"/>
+                            <stop offset="60%" style="stop-color:#8a8a8a"/>
+                            <stop offset="100%" style="stop-color:#2e2e2e"/>
+                        </radialGradient>
+                        <radialGradient id="handleGrad" cx="30%" cy="30%" r="70%">
+                            <stop offset="0%" style="stop-color:#e0e0e0"/>
+                            <stop offset="100%" style="stop-color:#5a5a5a"/>
+                        </radialGradient>
+                        <filter id="glow">
+                            <feGaussianBlur stdDeviation="3" result="blur"/>
+                            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                        </filter>
+                        <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+                            <feDropShadow dx="4" dy="6" stdDeviation="6" flood-color="#000" flood-opacity="0.6"/>
+                        </filter>
+                    </defs>
+ 
+                    <!-- Safe outer body shadow -->
+                    <rect x="18" y="22" width="264" height="260" rx="14" ry="14" fill="#000" opacity="0.5"/>
+ 
+                    <!-- Safe outer body -->
+                    <rect x="14" y="16" width="264" height="260" rx="14" ry="14" fill="url(#bodyGrad)" stroke="#2a2a2a" stroke-width="2"/>
+ 
+                    <!-- Body rivets (corners) -->
+                    <circle cx="34" cy="36" r="6" fill="#4a4a4a" stroke="#aaaaaa" stroke-width="1.5"/>
+                    <circle cx="266" cy="36" r="6" fill="#4a4a4a" stroke="#aaaaaa" stroke-width="1.5"/>
+                    <circle cx="34" cy="256" r="6" fill="#4a4a4a" stroke="#aaaaaa" stroke-width="1.5"/>
+                    <circle cx="266" cy="256" r="6" fill="#4a4a4a" stroke="#aaaaaa" stroke-width="1.5"/>
+ 
+                    <!-- Bolt detail lines on sides -->
+                    <line x1="14" y1="80" x2="26" y2="80" stroke="#aaaaaa" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="14" y1="150" x2="26" y2="150" stroke="#aaaaaa" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="14" y1="210" x2="26" y2="210" stroke="#aaaaaa" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="266" y1="80" x2="278" y2="80" stroke="#aaaaaa" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="266" y1="150" x2="278" y2="150" stroke="#aaaaaa" stroke-width="3" stroke-linecap="round"/>
+                    <line x1="266" y1="210" x2="278" y2="210" stroke="#aaaaaa" stroke-width="3" stroke-linecap="round"/>
+ 
+                    <!-- Safe door panel -->
+                    <rect x="30" y="32" width="220" height="228" rx="8" ry="8" fill="url(#doorGrad)" stroke="#555555" stroke-width="1.5" filter="url(#softShadow)"/>
+ 
+                    <!-- Door inset bevel -->
+                    <rect x="38" y="40" width="204" height="212" rx="5" ry="5" fill="none" stroke="#cccccc" stroke-width="1" opacity="0.6"/>
+                    <rect x="40" y="42" width="200" height="208" rx="4" ry="4" fill="none" stroke="#2a2a2a" stroke-width="1" opacity="0.5"/>
+ 
+                    <!-- Hinge left side -->
+                    <rect x="26" y="55" width="10" height="28" rx="3" fill="#6a6a6a" stroke="#bbbbbb" stroke-width="1"/>
+                    <circle cx="31" cy="69" r="4" fill="#3a3a3a" stroke="#cccccc" stroke-width="1.2"/>
+                    <rect x="26" y="195" width="10" height="28" rx="3" fill="#6a6a6a" stroke="#bbbbbb" stroke-width="1"/>
+                    <circle cx="31" cy="209" r="4" fill="#3a3a3a" stroke="#cccccc" stroke-width="1.2"/>
+ 
+                    <!-- Locking bolt bar (right side) -->
+                    <rect x="246" y="75" width="8" height="18" rx="2" fill="#888888" stroke="#cccccc" stroke-width="1"/>
+                    <rect x="246" y="135" width="8" height="18" rx="2" fill="#888888" stroke="#cccccc" stroke-width="1"/>
+                    <rect x="246" y="195" width="8" height="18" rx="2" fill="#888888" stroke="#cccccc" stroke-width="1"/>
+ 
+                    <!-- Dial base plate -->
+                    <circle cx="148" cy="148" r="72" fill="#2e2e2e" stroke="#888888" stroke-width="2"/>
+                    <circle cx="148" cy="148" r="68" fill="#3a3a3a" stroke="#4a4a4a" stroke-width="1"/>
+ 
+                    <!-- Dial ring (rotating part) — this is what the JS overlays -->
+                    <circle id="svgDialRing" cx="148" cy="148" r="60" fill="url(#dialRadial)" stroke="#aaaaaa" stroke-width="2.5"/>
+ 
+                    <!-- Dial tick marks -->
+                    <g id="svgDialTicks" stroke="#cccccc" stroke-width="1.2">
+                        <!-- 40 ticks, every 9° -->
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(0 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(9 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(18 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(27 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(36 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(45 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(54 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(63 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(72 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(81 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(90 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(99 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(108 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(117 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(126 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(135 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(144 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(153 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(162 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(171 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(180 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(189 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(198 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(207 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(216 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(225 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(234 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(243 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(252 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(261 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(270 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(279 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(288 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(297 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(306 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(315 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(324 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(333 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(342 148 148)"/>
+                        <line x1="148" y1="92" x2="148" y2="99" transform="rotate(351 148 148)"/>
+                    </g>
+ 
+                    <!-- Dial pointer indicator (fixed, at top) -->
+                    <polygon points="148,82 144,94 152,94" fill="#00E5FF" filter="url(#glow)" opacity="0.95"/>
+ 
+                    <!-- Dial number display ring (outer labels) rendered by JS inside .dial-overlay -->
+ 
+                    <!-- Dial center knob -->
+                    <circle cx="148" cy="148" r="18" fill="url(#handleGrad)" stroke="#aaaaaa" stroke-width="2"/>
+                    <circle cx="148" cy="148" r="10" fill="#3a3a3a" stroke="#888888" stroke-width="1.5"/>
+                    <circle cx="148" cy="148" r="4" fill="#aaaaaa"/>
+                    <!-- knob highlight -->
+                    <circle cx="143" cy="143" r="3" fill="white" opacity="0.25"/>
+ 
+                    <!-- Door handle (right side) -->
+                    <g filter="url(#softShadow)">
+                        <circle cx="222" cy="148" r="20" fill="url(#handleGrad)" stroke="#aaaaaa" stroke-width="2"/>
+                        <circle cx="222" cy="148" r="13" fill="#3a3a3a" stroke="#777777" stroke-width="1.5"/>
+                        <!-- handle spokes -->
+                        <line x1="222" y1="135" x2="222" y2="161" stroke="#aaaaaa" stroke-width="2.5" stroke-linecap="round"/>
+                        <line x1="209" y1="148" x2="235" y2="148" stroke="#aaaaaa" stroke-width="2.5" stroke-linecap="round"/>
+                        <circle cx="222" cy="148" r="4" fill="#aaaaaa"/>
+                    </g>
+ 
+                    <!-- Keyhole below handle -->
+                    <circle cx="222" cy="192" r="6" fill="#1a1a1a" stroke="#888888" stroke-width="1.5"/>
+                    <rect x="219" y="195" width="6" height="9" rx="1" fill="#1a1a1a" stroke="#888888" stroke-width="1"/>
+ 
+                    <!-- Brand plate -->
+                    <rect x="65" y="220" width="115" height="28" rx="4" fill="#2a2a2a" stroke="#888888" stroke-width="1"/>
+                    <text x="122" y="238" text-anchor="middle" font-family="'Science Gothic', monospace" font-size="11" fill="#bbbbbb" letter-spacing="2">D.O.V.E.S</text>
+ 
+                    <!-- Cyan glow accent on dial when active -->
+                    <circle cx="148" cy="148" r="61" fill="none" stroke="#00E5FF" stroke-width="1" opacity="0.18"/>
+                </svg>
+ 
+                <!-- Rotating number ring overlay -->
+                <div class="dial-overlay" id="dialOverlay">
+                    <div class="dial-numbers-ring" id="dialNumbersRing"></div>
+                    <div class="dial-pointer-line"></div>
                 </div>
             </div>
-
+ 
             <div class="input-section">
                 <div class="combination-display" id="combinationDisplay"></div>
-
+ 
                 <div class="controls">
                     <button class="control-btn" id="prevBtn">← Previous</button>
                     <button class="control-btn" id="nextBtn">Next →</button>
                     <button class="control-btn" id="clearBtn">Clear All</button>
                     <button class="control-btn" id="submitBtn" disabled>Submit Combination</button>
                 </div>
-
+ 
                 <div class="game-status" id="gameStatus"></div>
-
+ 
                 <div class="hint-section">
                     <button class="control-btn" id="hintBtn">Get Hint</button>
                     <div class="hint-text" id="hintText"></div>
                 </div>
             </div>
         </div>
-
+ 
         <button class="reset-btn" id="newGameBtn">New Game</button>
     </div>
-
+ 
     <script>
         class SafeCracker {
             constructor() {
@@ -367,13 +580,12 @@
                 this.timerInterval = null;
                 this.dialRotation = 0;
                 this.gameWon = false;
-
-                // Audio setup for clicks
+ 
                 this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
-
+ 
                 this.init();
             }
-
+ 
             init() {
                 this.setupEventListeners();
                 this.generateNewCombination();
@@ -381,20 +593,19 @@
                 this.updateDialNumbers();
                 this.startTimer();
             }
-
+ 
             setupEventListeners() {
                 document.querySelectorAll('.difficulty-btn').forEach(btn => {
-                    btn.addEventListener('click', (e) => this.changeDifficulty(e.target.dataset.difficulty));
+                    btn.addEventListener('click', (e) => this.changeDifficulty(e.target.dataset.difficulty, e.target));
                 });
-
+ 
                 document.getElementById('nextBtn').addEventListener('click', () => this.rotateDialClockwise());
                 document.getElementById('prevBtn').addEventListener('click', () => this.rotateDialCounterClockwise());
                 document.getElementById('clearBtn').addEventListener('click', () => this.clearCombination());
                 document.getElementById('submitBtn').addEventListener('click', () => this.submitCombination());
                 document.getElementById('hintBtn').addEventListener('click', () => this.giveHint());
                 document.getElementById('newGameBtn').addEventListener('click', () => this.newGame());
-
-                // Keyboard support
+ 
                 document.addEventListener('keydown', (e) => {
                     if (this.gameWon) return;
                     if (e.key === 'ArrowRight') this.rotateDialCounterClockwise();
@@ -406,22 +617,19 @@
                     }
                 });
             }
-
-            changeDifficulty(difficulty) {
+ 
+            changeDifficulty(difficulty, target) {
                 if (this.gameWon) return;
                 this.currentDifficulty = difficulty;
-                document.querySelectorAll('.difficulty-btn').forEach(btn => {
-                    btn.classList.remove('active');
-                });
-                event.target.classList.add('active');
+                document.querySelectorAll('.difficulty-btn').forEach(btn => btn.classList.remove('active'));
+                target.classList.add('active');
                 this.newGame();
             }
-
+ 
             getDifficultyLength() {
-                const lengths = { easy: 3, medium: 4, hard: 5 };
-                return lengths[this.currentDifficulty];
+                return { easy: 3, medium: 4, hard: 5 }[this.currentDifficulty];
             }
-
+ 
             getFixedCombination() {
                 const combos = {
                     easy: [5, 12, 27],
@@ -430,7 +638,7 @@
                 };
                 return combos[this.currentDifficulty].slice();
             }
-
+ 
             generateNewCombination() {
                 this.targetCombination = this.getFixedCombination();
                 this.userCombination = [];
@@ -439,127 +647,102 @@
                 this.attempts = 0;
                 this.updateAttemptDisplay();
             }
-
+ 
             updateDialNumbers() {
-                const dialNumbers = document.getElementById('dialNumbers');
-                dialNumbers.innerHTML = '';
-                
+                const ring = document.getElementById('dialNumbersRing');
+                ring.innerHTML = '';
                 for (let i = 0; i < 40; i++) {
-                    const angle = (i * 9) - 90; // 360/40 = 9 degrees per number
-                    const radius = 110;
-                    const x = radius * Math.cos(angle * Math.PI / 180);
-                    const y = radius * Math.sin(angle * Math.PI / 180);
-
-                    const numberEl = document.createElement('div');
-                    numberEl.className = 'dial-number';
-                    numberEl.textContent = i;
-                    numberEl.style.transform = `translate(${x}px, ${y}px)`;
-                    dialNumbers.appendChild(numberEl);
+                    const angle = i * 9; // 360/40
+                    const tick = document.createElement('div');
+                    tick.className = 'dial-tick';
+                    tick.style.transform = `rotate(${angle}deg)`;
+                    // Only label even numbers to avoid crowding
+                    tick.innerHTML = i % 2 === 0 ? `<span>${i}</span>` : `<span style="opacity:0.4; font-size:8px; color:#aaaaaa">·</span>`;
+                    ring.appendChild(tick);
                 }
             }
-
+ 
             rotateDialClockwise() {
                 if (this.gameWon) return;
                 this.dialRotation = (this.dialRotation + 9) % 360;
                 this.updateDialDisplay();
-                const currentNumber = this.getCurrentDialNumber();
-                const isComboNumber = this.targetCombination.includes(currentNumber);
-                this.playClick(isComboNumber ? 'combo' : 'normal');
+                const cur = this.getCurrentDialNumber();
+                this.playClick(this.targetCombination.includes(cur) ? 'combo' : 'normal');
             }
-
+ 
             rotateDialCounterClockwise() {
                 if (this.gameWon) return;
                 this.dialRotation = (this.dialRotation - 9 + 360) % 360;
                 this.updateDialDisplay();
-                const currentNumber = this.getCurrentDialNumber();
-                const isComboNumber = this.targetCombination.includes(currentNumber);
-                this.playClick(isComboNumber ? 'combo' : 'normal');
+                const cur = this.getCurrentDialNumber();
+                this.playClick(this.targetCombination.includes(cur) ? 'combo' : 'normal');
             }
-
+ 
             getCurrentDialNumber() {
                 return (40 - (Math.round(this.dialRotation / 9) % 40)) % 40;
             }
-
+ 
             updateDialDisplay() {
-                const dialNumbers = document.getElementById('dialNumbers');
-                dialNumbers.style.transform = `rotate(${this.dialRotation}deg)`;
-
-                document.getElementById('dialContainer').style.boxShadow = 
-                    `0 0 8px #7DE3FF, inset 0 0 15px rgba(0, 229, 255, 0.1), 0 0 20px rgba(0, 229, 255, 0.3)`;
+                const ring = document.getElementById('dialNumbersRing');
+                ring.style.transform = `rotate(${this.dialRotation}deg)`;
             }
-
+ 
             playClick(type = 'normal') {
                 if (!this.audioContext) return;
                 const now = this.audioContext.currentTime;
-
-                // Create a short burst of filtered noise for a physical "click" feel.
-                const bufferSize = this.audioContext.sampleRate * 0.05; // 50ms
+                const bufferSize = this.audioContext.sampleRate * 0.05;
                 const noiseBuffer = this.audioContext.createBuffer(1, bufferSize, this.audioContext.sampleRate);
                 const data = noiseBuffer.getChannelData(0);
                 for (let i = 0; i < bufferSize; i++) {
                     data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
                 }
-
                 const noiseSource = this.audioContext.createBufferSource();
                 noiseSource.buffer = noiseBuffer;
-
                 const filter = this.audioContext.createBiquadFilter();
                 filter.type = 'bandpass';
-
                 const gain = this.audioContext.createGain();
                 gain.gain.setValueAtTime(0, now);
-
-                // Different timbres for normal / combo / correct
                 const config = {
                     normal: { freq: 1200, q: 10, peak: 0.18 },
                     combo: { freq: 2200, q: 14, peak: 0.25 },
                     correct: { freq: 3200, q: 16, peak: 0.3 },
                 };
-
                 const { freq, q, peak } = config[type] || config.normal;
                 filter.frequency.setValueAtTime(freq, now);
                 filter.Q.setValueAtTime(q, now);
-
                 gain.gain.linearRampToValueAtTime(peak, now + 0.005);
                 gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.07);
-
                 noiseSource.connect(filter).connect(gain).connect(this.audioContext.destination);
                 noiseSource.start(now);
                 noiseSource.stop(now + 0.07);
             }
-
+ 
             selectNumber() {
                 const currentNumber = this.getCurrentDialNumber();
                 const nextIndex = this.userCombination.length;
                 const isCorrect = currentNumber === this.targetCombination[nextIndex];
-
                 this.playClick(isCorrect ? 'correct' : 'normal');
-
+ 
                 if (this.userCombination.length < this.getDifficultyLength()) {
                     this.userCombination.push(currentNumber);
                     this.renderCombinationDisplay();
                     this.clearGameStatus();
-                    
-                    // Auto-focus to next position
                     if (this.userCombination.length < this.getDifficultyLength()) {
                         this.currentDialIndex = this.userCombination.length;
                     }
                 }
-                
                 if (this.userCombination.length === this.getDifficultyLength()) {
                     document.getElementById('submitBtn').disabled = false;
                 }
             }
-
+ 
             renderCombinationDisplay() {
                 const display = document.getElementById('combinationDisplay');
                 display.innerHTML = '';
                 const length = this.getDifficultyLength();
-
                 for (let i = 0; i < length; i++) {
                     const slot = document.createElement('div');
                     slot.className = 'number-slot';
-                    
                     if (i < this.userCombination.length) {
                         slot.textContent = String(this.userCombination[i]).padStart(2, '0');
                         slot.classList.add('filled');
@@ -567,48 +750,38 @@
                         slot.textContent = '?';
                         slot.classList.add('empty');
                     }
-                    
                     display.appendChild(slot);
                 }
             }
-
+ 
             submitCombination() {
                 if (this.userCombination.length !== this.getDifficultyLength()) {
                     this.showStatus('Please enter all numbers first!', 'error');
                     return;
                 }
-
                 this.attempts++;
                 this.updateAttemptDisplay();
-
+ 
                 if (this.combinationsMatch()) {
                     this.winGame();
                 } else {
                     const correctPositions = this.userCombination.filter((num, idx) => num === this.targetCombination[idx]).length;
                     const correctNumbers = this.userCombination.filter(num => this.targetCombination.includes(num)).length;
-                    
                     let feedback = `❌ Not quite! `;
-                    if (correctPositions > 0) {
-                        feedback += `${correctPositions} correct position${correctPositions !== 1 ? 's' : ''}. `;
-                    }
-                    if (correctNumbers > correctPositions) {
-                        feedback += `${correctNumbers - correctPositions} correct number${correctNumbers - correctPositions !== 1 ? 's' : ''} (wrong position).`;
-                    }
-                    if (correctPositions === 0 && correctNumbers === 0) {
-                        feedback += 'No correct numbers. Keep trying!';
-                    }
-                    
+                    if (correctPositions > 0) feedback += `${correctPositions} correct position${correctPositions !== 1 ? 's' : ''}. `;
+                    if (correctNumbers > correctPositions) feedback += `${correctNumbers - correctPositions} correct number${correctNumbers - correctPositions !== 1 ? 's' : ''} (wrong position).`;
+                    if (correctPositions === 0 && correctNumbers === 0) feedback += 'No correct numbers. Keep trying!';
                     this.showStatus(feedback, 'error');
                     this.userCombination = [];
                     this.renderCombinationDisplay();
                     document.getElementById('submitBtn').disabled = true;
                 }
             }
-
+ 
             combinationsMatch() {
                 return this.userCombination.every((num, idx) => num === this.targetCombination[idx]);
             }
-
+ 
             clearCombination() {
                 this.userCombination = [];
                 this.currentDialIndex = 0;
@@ -618,52 +791,46 @@
                 this.clearGameStatus();
                 document.getElementById('submitBtn').disabled = true;
             }
-
+ 
             giveHint() {
                 if (this.hintUsed > 2) {
                     this.showStatus('No more hints available!', 'error');
                     return;
                 }
-
                 this.hintUsed++;
                 let hint = '';
-                
                 if (this.hintUsed === 1) {
                     hint = `🔍 First number: ${String(this.targetCombination[0]).padStart(2, '0')}`;
                 } else if (this.hintUsed === 2) {
                     if (this.getDifficultyLength() > 1) {
-                        hint = `🔍 First number: ${String(this.targetCombination[0]).padStart(2, '0')} | Second number: ${String(this.targetCombination[1]).padStart(2, '0')}`;
+                        hint = `🔍 First: ${String(this.targetCombination[0]).padStart(2, '0')} | Second: ${String(this.targetCombination[1]).padStart(2, '0')}`;
                     } else {
                         hint = `🔍 That's all the numbers!`;
                     }
                 } else {
                     if (this.getDifficultyLength() === 3) {
-                        hint = `🔍 Complete combination: ${this.targetCombination.map(n => String(n).padStart(2, '0')).join(' - ')}`;
+                        hint = `🔍 Full combination: ${this.targetCombination.map(n => String(n).padStart(2, '0')).join(' – ')}`;
                     } else {
                         hint = `🔍 No more hints!`;
                     }
                 }
-                
                 document.getElementById('hintText').textContent = hint;
                 document.getElementById('hintBtn').textContent = `Get Hint (${3 - this.hintUsed} left)`;
             }
-
+ 
             winGame() {
                 this.gameWon = true;
                 clearInterval(this.timerInterval);
                 const timeElapsed = Math.floor((Date.now() - this.startTime) / 1000);
-                
                 const statusEl = document.getElementById('gameStatus');
                 statusEl.classList.add('success');
                 statusEl.textContent = `🎉 SAFE CRACKED! Mission Complete! Attempts: ${this.attempts} | Time: ${timeElapsed}s`;
-                
-                // Disable all controls
                 document.getElementById('nextBtn').disabled = true;
                 document.getElementById('prevBtn').disabled = true;
                 document.getElementById('clearBtn').disabled = true;
                 document.getElementById('submitBtn').disabled = true;
             }
-
+ 
             newGame() {
                 this.gameWon = false;
                 clearInterval(this.timerInterval);
@@ -677,10 +844,11 @@
                 document.getElementById('prevBtn').disabled = false;
                 document.getElementById('clearBtn').disabled = false;
                 document.getElementById('hintBtn').disabled = false;
+                document.getElementById('hintBtn').textContent = 'Get Hint';
                 document.getElementById('hintText').textContent = '';
                 this.startTimer();
             }
-
+ 
             startTimer() {
                 this.startTime = Date.now();
                 this.timerInterval = setInterval(() => {
@@ -688,28 +856,25 @@
                     document.getElementById('timerDisplay').textContent = elapsed + 's';
                 }, 100);
             }
-
+ 
             updateAttemptDisplay() {
                 document.getElementById('attemptCount').textContent = this.attempts;
             }
-
+ 
             showStatus(message, type) {
                 const statusEl = document.getElementById('gameStatus');
                 statusEl.textContent = message;
                 statusEl.className = 'game-status ' + type;
             }
-
+ 
             clearGameStatus() {
                 const statusEl = document.getElementById('gameStatus');
                 statusEl.textContent = '';
                 statusEl.className = 'game-status';
             }
         }
-
-        // Start the game when page loads
-        document.addEventListener('DOMContentLoaded', () => {
-            new SafeCracker();
-        });
+ 
+        document.addEventListener('DOMContentLoaded', () => { new SafeCracker(); });
     </script>
 </body>
 </html>
