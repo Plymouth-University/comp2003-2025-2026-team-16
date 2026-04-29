@@ -1,3 +1,5 @@
+if (!localStorage.getItem('doveUser')) window.location.href = 'index.html';
+
 // Initialize search history from localStorage
       let searchHistory = JSON.parse(localStorage.getItem('doveSearchHistory')) || [];
       let currentSearchType = 'personnel';
