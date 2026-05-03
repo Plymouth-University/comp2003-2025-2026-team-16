@@ -1,5 +1,6 @@
 import sqlite3
 import psycopg2
+import bcrypt
 import os
 from dotenv import load_dotenv
 from psycopg2.extras import RealDictCursor
@@ -12,12 +13,13 @@ def get_connection():
     return psycopg2.connect(DATABASE_URL)
 
 def insert_user(username, password, role='User', rank='rookie'):
+    hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     conn = get_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     cursor.execute('''
         INSERT INTO "Users" (username, password, role, rank)
         VALUES (%s, %s, %s, %s)
-    ''', (username, password, role, rank))
+    ''', (username, hashed, role, rank))
     conn.commit()
     conn.close()
 
@@ -174,11 +176,13 @@ def get_all_items(table):
 
 def get_user(username, password):
     conn = get_connection()
-    
     cursor = conn.cursor(cursor_factory=RealDictCursor)
     cursor.execute('''
-        SELECT username, rank, role FROM "Users" WHERE username = %s AND password = %s
-    ''', (username, password))
+        SELECT username, rank, role, password FROM "Users" WHERE username = %s
+    ''', (username,))
     user = cursor.fetchone()
     conn.close()
-    return user
+    if user and bcrypt.checkpw(password.encode('utf-8'), user['password'].encode('utf-8')):
+        user.pop('password')
+        return user
+    return None
