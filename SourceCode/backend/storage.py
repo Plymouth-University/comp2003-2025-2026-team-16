@@ -124,9 +124,9 @@ def search_database(query, search_type):
         return []
     table, type_filter = mapping
     if type_filter:
-        cursor.execute(f'SELECT * FROM "{table}" WHERE name LIKE %s AND type = %s', ('%' + query + '%', type_filter))
+        cursor.execute(f'SELECT * FROM "{table}" WHERE name ILIKE %s AND type = %s', ('%' + query + '%', type_filter))
     else:
-        cursor.execute(f'SELECT * FROM "{table}" WHERE name LIKE %s', ('%' + query + '%',))
+        cursor.execute(f'SELECT * FROM "{table}" WHERE name ILIKE %s', ('%' + query + '%',))
     entries = [dict(row) for row in cursor.fetchall()]
     conn.close()
     return entries

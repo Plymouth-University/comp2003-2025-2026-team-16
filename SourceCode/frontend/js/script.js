@@ -131,8 +131,8 @@ if (!localStorage.getItem('doveUser')) window.location.href = 'index.html';
               searchHistory[0].name !== query || 
               searchHistory[0].type !== currentSearchType) {
             searchHistory.unshift(searchEntry);
-            // Keep only last 10 searches
-            if (searchHistory.length > 10) {
+            // Keep only last 3 searches
+            if (searchHistory.length > 3) {
               searchHistory.pop();
             }
             localStorage.setItem('doveSearchHistory', JSON.stringify(searchHistory));
