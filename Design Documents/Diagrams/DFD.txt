@@ -1,0 +1,48 @@
+flowchart LR
+
+User[User]
+Admin[Admin]
+Groq[Groq API]
+
+Search((Search))
+AI((AI Agent))
+AdminProc((Admin Control))
+
+subgraph Database
+UsersDB[(Users)]
+AgentsDB[(Agents)]
+LocationsDB[(Locations)]
+DepartmentsDB[(Departments)]
+FactionsDB[(Factions)]
+SuspectsDB[(Suspects)]
+ArchiveDB[(Archive)]
+GlossaryDB[(Glossary)]
+end
+
+User -->|Search Query| Search
+
+Search <--> UsersDB
+Search <--> AgentsDB
+Search <--> LocationsDB
+Search <--> DepartmentsDB
+Search <--> FactionsDB
+Search <--> SuspectsDB
+Search <--> ArchiveDB
+Search <--> GlossaryDB
+
+Search -->|Results| User
+
+User -->|Message| AI
+AI -->|Request| Groq
+Groq -->|Response| AI
+AI -->|Reply| User
+
+Admin -->|Manage Data| AdminProc
+AdminProc --> UsersDB
+AdminProc --> AgentsDB
+AdminProc --> LocationsDB
+AdminProc --> DepartmentsDB
+AdminProc --> FactionsDB
+AdminProc --> SuspectsDB
+AdminProc --> ArchiveDB
+AdminProc --> GlossaryDB
