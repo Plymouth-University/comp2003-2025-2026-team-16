@@ -1,0 +1,21 @@
+stateDiagram-v2
+
+Closed --> Open : click "Agent"
+Open --> WaitingInput : chat visible
+
+WaitingInput --> Validating : user sends message
+Validating --> WaitingInput : empty input
+Validating --> Processing : valid message
+
+Processing --> SendingRequest : call backend
+SendingRequest --> WaitingResponse : request sent
+
+WaitingResponse --> Responding : response received
+WaitingResponse --> Error : API failure
+
+Responding --> Displaying : show message
+Displaying --> WaitingInput : ready for next input
+
+Error --> WaitingInput : show error message
+
+WaitingInput --> Closed : close chat
