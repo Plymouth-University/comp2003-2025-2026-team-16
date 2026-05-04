@@ -27,9 +27,9 @@
     </div>
       <div id="admin-panel-main">
         <div class="tab-container">
-          <button class="tab-button active">Create User</button>
-          <button class="tab-button">Create Agent</button>
-          <button class="tab-button">Create Location</button>
+          <button class="tab-button active">Users</button>
+          <button class="tab-button">Agents</button>
+          <button class="tab-button">Locations</button>
           <button class="tab-button">Departments</button>
           <button class="tab-button">Factions</button>
           <button class="tab-button">Suspects</button>
@@ -50,7 +50,11 @@
               <option value="Admin">Admin</option>
             </select>
             <label for="rank">Rank:</label>
-            <input type="text" id="rank" name="rank" value="rookie" required>
+            <select id="rank" name="rank">
+              <option value="rookie">Rookie</option>
+              <option value="veteran">Veteran</option>
+              <option value="elite">Elite</option>
+            </select>
             <button type="submit" class="create">Create User</button>
           </form>
         </section>

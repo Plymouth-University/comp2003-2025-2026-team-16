@@ -316,26 +316,64 @@ h2 {
 }
 
 
-#backBtn {
-  font-size: 20px;
-  padding: 1px 20px;               
-  background-color: rgba(255, 255, 255, 0.05);        
-  color: #00E5FF;   
-  text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;                    
-  border:1px solid #00E5FF;                      
-  border-radius: 2px; 
+.page-bg::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url('../images/BACKGROUND.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.15;
+  z-index: -1;
 }
 
-.tab-button{
-  font-size: 25px;
-  padding: 1px 20px;               
-  background-color: rgba(255, 255, 255, 0.05);        
-  color: #00E5FF;   
-  text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;                    
-  border:1px solid #00E5FF;                      
-  border-radius: 2px; 
-  text-align: center;
+#backBtn {
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #00E5FF;
+  text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;
+  border: 1px solid #00E5FF;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 20px;
+  display: inline-block;
+  transform-origin: center center;
+  transition: transform 160ms cubic-bezier(.2,.9,.2,1), box-shadow 160ms ease, background-color 160ms ease;
+  will-change: transform;
+  margin-top: 20px;
+}
+
+#backBtn:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(0,229,255,0.06), 0 0 6px #7DE3FF;
+}
+
+.tab-button {
+  padding: 10px 20px;
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #00E5FF;
+  text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;
+  border: 1px solid #00E5FF;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 20px;
+  display: inline-block;
+  transform-origin: center center;
+  transition: transform 160ms cubic-bezier(.2,.9,.2,1), box-shadow 160ms ease, background-color 160ms ease;
+  will-change: transform;
   margin-bottom: 50px;
+}
+
+.tab-button:hover {
+  transform: scale(1.06);
+  box-shadow: 0 6px 18px rgba(0,229,255,0.06), 0 0 6px #7DE3FF;
+}
+
+#admin-panel-main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
 }
 
 .admin-form-section{
@@ -349,15 +387,59 @@ h2 {
   margin: 0 auto;
 }
 
-.admin-form{
-  font-size: 15px;
-  display: flex;
-  flex-direction: column; 
-  align-items: center; 
-  justify-content: center; 
-  gap: 15px;
-  width: 10px;
-  margin: 0 auto;
+.admin-form {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    gap: 12px 20px;
+    align-items: center;
+    width: 650px;
+    margin: 0 auto;
+    font-size: 15px;
+}
+
+.admin-form .create {
+    grid-column: 1 / -1;
+    justify-self: center;
+    margin-top: 10px;
+}
+
+.admin-form label {
+    color: #00E5FF;
+    text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;
+    text-align: right;
+    padding-right: 10px;
+}
+
+.admin-form input,
+.admin-form select,
+.admin-form textarea {
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 8px;
+    outline: none;
+    color: white;
+    border: 1px solid #00E5FF;
+    border-radius: 6px;
+    box-shadow: 0 0 2px #7DE3FF, 0 0 4px #7DE3FF, 0 0 8px #7DE3FF;
+    font-family: "Science Gothic", sans-serif;
+    font-size: 15px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.admin-form select option {
+    background-color: #0D1117;
+    color: white;
+}
+
+.admin-form textarea {
+    resize: vertical;
+    min-height: 80px;
+    align-self: start;
+}
+
+.admin-form label:has(+ textarea) {
+    align-self: start;
+    padding-top: 8px;
 }
 
 .admin-form-section h2 {
