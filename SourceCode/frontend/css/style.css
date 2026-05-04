@@ -124,34 +124,40 @@ h2 {
     margin-top: 90px;
 }
 
+#pageLayout {
+    display: flex;
+    align-items: flex-start;
+}
+
 #navbar {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    justify-content: left;
-    gap: 30px;
-    margin-bottom: 20px;
-    position: fixed;
-    top: 20px;
-    left: 20px;
-  }
+    gap: 12px;
+    padding: 20px;
+    flex-shrink: 0;
+}
+
+#mainArea {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
 
 #searchContainer {
     text-align: center;
     margin-bottom: 50px;
-    margin-right: 70px;
   }
 
 #mainContent {
     text-align: center;
     margin-bottom: 50px;
-    margin-right: 100px;
   }
 
 #previousSearches {
     text-align: center;
     margin-top: 1px;
-    margin-right: 110px;
   }
 
 #searchBar {
@@ -166,13 +172,13 @@ h2 {
 }
 
 .navBtn {
-    padding: 10px 20px;               
-    background-color: rgba(255, 255, 255, 0.05);        
-    color: #00E5FF;   
-    text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;                    
-    border:1px solid #00E5FF;                      
-    border-radius: 25px;              
-    cursor: pointer;                   
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.05);
+    color: #00E5FF;
+    text-shadow: 0 0 2px #7DE3FF, 0 0 3px #7DE3FF;
+    border:1px solid #00E5FF;
+    border-radius: 25px;
+    cursor: pointer;
     font-size: 20px;
     display: inline-block;
     transform-origin: center center;
@@ -181,12 +187,19 @@ h2 {
     margin-top: 20px;
 }
 
-#navbar {
-   display: flex;
-   flex-direction: column;
-   gap: 12px;
-   margin-top: 220px;
+.navBtn.imgNavBtn {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    border-radius: 0;
 }
+
+.navBtn.imgNavBtn img {
+    width: 100px;
+    height: auto;
+    display: block;
+}
+
 
 .navBtn:hover {
   transform: scale(1.06);

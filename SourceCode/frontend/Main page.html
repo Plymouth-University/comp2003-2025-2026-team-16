@@ -20,76 +20,81 @@
       <button id="adminPanelNav" class="navBtn" onclick="window.location.href='Admin Panel.html'" style="display:none; margin-left:auto; margin-top:auto; margin-bottom:auto;">Admin Panel</button>
     </div>
 
-    <!-- Navigation Bar -->
-    <div id="navbar">
-      <div class="navDropdown">
-        <button class="navBtn" data-type="personnel">Personnel</button>
-        <div class="dropdownMenu">
-          <a href="#" data-type="management">Management</a>
-          <a href="#" data-type="field-agents">Field Agents</a>
-          <a href="#" data-type="undercover-agents">Undercover Agents</a>
-          <a href="#" data-type="departments">Departments</a>
+    <div id="pageLayout">
+      <!-- Navigation Bar -->
+      <div id="navbar">
+        <div class="navDropdown">
+          <button class="navBtn imgNavBtn" data-type="personnel"><img src="images/AGENTS.png" alt="Personnel"></button>
+          <div class="dropdownMenu">
+            <a href="#" data-type="management">Management</a>
+            <a href="#" data-type="field-agents">Field Agents</a>
+            <a href="#" data-type="undercover-agents">Undercover Agents</a>
+            <a href="#" data-type="departments">Departments</a>
+          </div>
+        </div>
+        <div class="navDropdown">
+          <button class="navBtn imgNavBtn" data-type="intelligence"><img src="images/INTEL.png" alt="Intelligence"></button>
+          <div class="dropdownMenu">
+            <a href="#" data-type="evidence">Evidence</a>
+            <a href="#" data-type="factions">Factions</a>
+            <a href="#" data-type="operatives">Operatives</a>
+            <a href="#" data-type="suspects">Suspects</a>
+            <a href="#" data-type="locations">Locations</a>
+            <a href="#" data-type="technology">Technology</a>
+          </div>
+        </div>
+        <div class="navDropdown">
+          <button class="navBtn imgNavBtn" data-type="missions"><img src="images/MISSIONS.png" alt="Missions"></button>
+          <div class="dropdownMenu">
+            <a href="#" data-type="active">Active</a>
+            <a href="#" data-type="paused">Paused</a>
+            <a href="#" data-type="case-notes">Case Notes</a>
+            <a href="#" data-type="missions-misc">Misc</a>
+          </div>
+        </div>
+        <div class="navDropdown">
+          <button class="navBtn imgNavBtn" data-type="archive"><img src="images/ARCHIVE.png" alt="Archive"></button>
+          <div class="dropdownMenu">
+            <a href="#" data-type="documents">Documents</a>
+            <a href="#" data-type="completed-missions">Completed Missions</a>
+            <a href="#" data-type="archive-evidence">Evidence</a>
+            <a href="#" data-type="archive-misc">Misc</a>
+          </div>
+        </div>
+        <div class="navDropdown">
+          <button class="navBtn imgNavBtn" data-type="glossary"><img src="images/CODEX FILE.png" alt="Glossary"></button>
+        </div>
+        <div class="navDropdown">
+          <button class="navBtn" data-type="agent">Agent</button>
         </div>
       </div>
-      <div class="navDropdown">
-        <button class="navBtn" data-type="intelligence">Intelligence</button>
-        <div class="dropdownMenu">
-          <a href="#" data-type="evidence">Evidence</a>
-          <a href="#" data-type="factions">Factions</a>
-          <a href="#" data-type="operatives">Operatives</a>
-          <a href="#" data-type="suspects">Suspects</a>
-          <a href="#" data-type="locations">Locations</a>
-          <a href="#" data-type="technology">Technology</a>
-        </div>
-      </div>
-      <div class="navDropdown">
-        <button class="navBtn" data-type="missions">Missions</button>
-        <div class="dropdownMenu">
-          <a href="#" data-type="active">Active</a>
-          <a href="#" data-type="paused">Paused</a>
-          <a href="#" data-type="case-notes">Case Notes</a>
-          <a href="#" data-type="missions-misc">Misc</a>
-        </div>
-      </div>
-      <div class="navDropdown">
-        <button class="navBtn" data-type="archive">Archive</button>
-        <div class="dropdownMenu">
-          <a href="#" data-type="documents">Documents</a>
-          <a href="#" data-type="completed-missions">Completed Missions</a>
-          <a href="#" data-type="archive-evidence">Evidence</a>
-          <a href="#" data-type="archive-misc">Misc</a>
-        </div>
-      </div>
-      <div class="navDropdown">
-        <button class="navBtn" data-type="glossary">Glossary</button>
-      </div>
-      <div class="navDropdown">
-        <button class="navBtn" data-type="agent">Agent</button>
-      </div>
-    </div>
 
-    <!-- Search Container -->
-    <div id="searchContainer">
-      <input 
-        type="text" 
-        id="searchBar" 
-        placeholder="Enter agent or location name..." 
-        aria-label="Search database"
-      >
-    </div>
+      <!-- Main Area -->
+      <div id="mainArea">
+        <!-- Search Container -->
+        <div id="searchContainer">
+          <input
+            type="text"
+            id="searchBar"
+            placeholder="Enter agent or location name..."
+            aria-label="Search database"
+          >
+        </div>
 
-    <!-- Main Content Area -->
-    <div id="mainContent">
-      <div id="searchResults" class="contentSection active">
-        <p>Start searching to find agents or locations in the database</p>
-      </div>
-    </div>
+        <!-- Main Content Area -->
+        <div id="mainContent">
+          <div id="searchResults" class="contentSection active">
+            <p>Start searching to find agents or locations in the database</p>
+          </div>
+        </div>
 
-    <!-- Previous Searches Section -->
-    <div id="previousSearches">
-      <h3>Your Previous Searches</h3>
-      <div id="searchHistory" class="searchHistoryContainer">
-        <div id="emptyState">No previous searches yet</div>
+        <!-- Previous Searches Section -->
+        <div id="previousSearches">
+          <h3>Your Previous Searches</h3>
+          <div id="searchHistory" class="searchHistoryContainer">
+            <div id="emptyState">No previous searches yet</div>
+          </div>
+        </div>
       </div>
     </div>
 
