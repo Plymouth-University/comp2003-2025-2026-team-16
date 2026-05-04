@@ -633,25 +633,23 @@
   <div class="equations">
     <div class="eq-card">
       <div class="eq-label">SIGNAL CLARITY FORMULA</div>
-      <div class="eq-formula">C = 100 × (f / f_max)</div>
+      <div class="eq-formula">C = f - 20</div>
       <div class="eq-desc">
         C = Clarity score (0–100)<br>
         f = your chosen frequency (MHz)<br>
-        f_max = 120 MHz (satellite max)
       </div>
     </div>
     <div class="eq-card">
       <div class="eq-label">BATTERY DRAIN FORMULA</div>
-      <div class="eq-formula">D = f² ÷ 800</div>
+      <div class="eq-formula">D = f ÷ 10</div>
       <div class="eq-desc">
         D = Battery drain per second (%/s)<br>
         f = your chosen frequency (MHz)<br>
-        Warning: drain spikes sharply above 112 MHz!
       </div>
     </div>
     <div class="eq-card">
       <div class="eq-label">MISSION SCORE FORMULA</div>
-      <div class="eq-formula">S = C − (D × 1.31)</div>
+      <div class="eq-formula">S = C − (D × 5)</div>
       <div class="eq-desc">
         S = Final mission score<br>
         Balance clarity against battery cost.<br>
@@ -662,7 +660,7 @@
       <div class="target-box">
         <div class="target-label">⬛ TARGET SCORE ⬛</div>
         <div class="target-value">S &gt; 70 POINTS</div>
-        <div style="font-size:12px;color:rgba(0,229,255,0.5);margin-top:8px;">Sweet spot: f = 107–112 MHz</div>
+        <div style="font-size:12px;color:rgba(0,229,255,0.5);margin-top:8px;"></div>
       </div>
     </div>
   </div>
