@@ -1,0 +1,16 @@
+stateDiagram-v2
+
+Login --> MainDatabase : login successful
+
+MainDatabase --> SearchResults : enter search
+SearchResults --> DetailsPage : select item
+
+DetailsPage --> Minigame : locked content
+Minigame --> UnlockedContent : puzzle completed
+UnlockedContent --> DetailsPage : view content
+
+MainDatabase --> AgentChat : open agent
+SearchResults --> AgentChat : open agent
+DetailsPage --> AgentChat : open agent
+
+AgentChat --> MainDatabase : close chat
