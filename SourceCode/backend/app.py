@@ -28,13 +28,13 @@ def _require_admin():
 def search():
     query = request.args.get('q', '')
     search_type = request.args.get('type', 'personnel')
-    user_rank = request.args.get('rank', 'rookie')
-    rank_levels = {'rookie': 0, 'veteran': 1, 'elite': 2}
+    user_rank = request.args.get('rank', 'nester')
+    rank_levels = {'nester': 0, 'hatchling': 1, 'chick': 2, 'fledgling': 3, 'wing commander': 4, 'squab leader': 5}
     user_level = rank_levels.get(user_rank, 0)
     entries = storage.search_database(query, search_type)
     filtered = []
     for entry in entries:
-        min_rank = entry.get('min_rank_required', 'rookie')
+        min_rank = entry.get('min_rank_required', 'nester')
         entry_level = rank_levels.get(min_rank, 0)
         if user_level >= entry_level:
             filtered.append(entry)
@@ -85,7 +85,7 @@ def create_user():
     username = data.get('username')
     password = data.get('password')
     role = data.get('role', 'User')
-    rank = data.get('rank', 'rookie')
+    rank = data.get('rank', 'nester')
     if not username or not password:
         return jsonify({'success': False, 'message': 'Username and password required.'}), 400
     try:
@@ -119,7 +119,7 @@ def create_agent():
             background_origins=data.get('background_origins', ''),
             symbolism_codename_meaning=data.get('symbolism_codename_meaning', ''),
             img=data.get('img', ''),
-            min_rank_required=data.get('min_rank_required', 'rookie')
+            min_rank_required=data.get('min_rank_required', 'nester')
         )
         return jsonify({'success': True, 'message': 'Agent created successfully.'})
     except Exception as e:
@@ -136,7 +136,7 @@ def create_location():
         data = request.form
     name = data.get('name')
     description = data.get('description', '')
-    min_rank_required = data.get('min_rank_required', 'rookie')
+    min_rank_required = data.get('min_rank_required', 'nester')
     if not name:
         return jsonify({'success': False, 'message': 'Location name required.'}), 400
     try:
@@ -155,7 +155,7 @@ def create_department():
     if not name:
         return jsonify({'success': False, 'message': 'Department name required.'}), 400
     try:
-        storage.insert_department(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        storage.insert_department(name, data.get('description', ''), data.get('min_rank_required', 'nester'))
         return jsonify({'success': True, 'message': 'Department created successfully.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
@@ -170,7 +170,7 @@ def create_faction():
     if not name:
         return jsonify({'success': False, 'message': 'Faction name required.'}), 400
     try:
-        storage.insert_faction(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        storage.insert_faction(name, data.get('description', ''), data.get('min_rank_required', 'nester'))
         return jsonify({'success': True, 'message': 'Faction created successfully.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
@@ -185,7 +185,7 @@ def create_suspect():
     if not name:
         return jsonify({'success': False, 'message': 'Suspect name required.'}), 400
     try:
-        storage.insert_suspect(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        storage.insert_suspect(name, data.get('description', ''), data.get('min_rank_required', 'nester'))
         return jsonify({'success': True, 'message': 'Suspect created successfully.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
@@ -200,7 +200,7 @@ def create_archive():
     if not name:
         return jsonify({'success': False, 'message': 'Archive entry name required.'}), 400
     try:
-        storage.insert_archive(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        storage.insert_archive(name, data.get('description', ''), data.get('min_rank_required', 'nester'))
         return jsonify({'success': True, 'message': 'Archive entry created successfully.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400
@@ -215,7 +215,7 @@ def create_glossary():
     if not name:
         return jsonify({'success': False, 'message': 'Glossary entry name required.'}), 400
     try:
-        storage.insert_glossary(name, data.get('description', ''), data.get('min_rank_required', 'rookie'))
+        storage.insert_glossary(name, data.get('description', ''), data.get('min_rank_required', 'nester'))
         return jsonify({'success': True, 'message': 'Glossary entry created successfully.'})
     except Exception as e:
         return jsonify({'success': False, 'message': str(e)}), 400

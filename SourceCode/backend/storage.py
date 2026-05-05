@@ -12,7 +12,7 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 def get_connection():
     return psycopg2.connect(DATABASE_URL)
 
-def insert_user(username, password, role='User', rank='rookie'):
+def insert_user(username, password, role='User', rank='nester'):
     hashed = bcrypt.hashpw(password.encode('utf-8'), bcrypt.gensalt()).decode('utf-8')
     conn = get_connection()
     cursor = conn.cursor(cursor_factory=RealDictCursor)

@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
   detailsContent.textContent = '';
 
   const user = JSON.parse(localStorage.getItem('doveUser') || '{}');
-  const userRank = user.rank || 'rookie';
+  const userRank = user.rank || 'nester';
 
   // Fields to never display as rows
   const hiddenFields = new Set(['name', 'title', 'id', 'ID', 'img', 'min_rank_required', 'agent_id', 'type', 'locked']);

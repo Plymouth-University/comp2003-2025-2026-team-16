@@ -141,7 +141,7 @@ if (!localStorage.getItem('doveUser')) window.location.href = 'index.html';
           
           // Fetch results from backend
           const user = JSON.parse(localStorage.getItem('doveUser') || '{}');
-          const userRank = user.rank || 'rookie';
+          const userRank = user.rank || 'nester';
           searchResults.innerHTML = `<p>Searching for <strong>${query}</strong> in ${currentSearchType}...</p>`;
           fetch(`https://comp2003-2025-2026-team-16.onrender.com/search?q=${encodeURIComponent(query)}&type=${encodeURIComponent(currentSearchType)}&rank=${encodeURIComponent(userRank)}`)
             .then(response => response.json())
